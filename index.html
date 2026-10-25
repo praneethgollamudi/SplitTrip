@@ -12,7 +12,7 @@
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 // Replace these two values with Supabase Project Settings → API values. The anon/publishable key is designed for browser use when RLS is enabled. NEVER put a service_role key here.
-const SUPABASE_URL='https://qyybdtadpbofekbujcgc.supabase.co/rest/v1/';
+const SUPABASE_URL='https://qyybdtadpbofekbujcgc.supabase.co/';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5eWJkdGFkcGJvZmVrYnVqY2djIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4OTkzMjMsImV4cCI6MjEwODQ3NTMyM30.wuEvghbSf-aZt-jyWGH3eJ6SfIMR0xo3ITUIW7xaOa8';
 const configured=SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON_KEY.includes('YOUR_');
 const $=id=>document.getElementById(id),money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}),escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
