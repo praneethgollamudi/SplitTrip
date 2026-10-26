@@ -220,6 +220,50 @@ input,select,textarea{max-width:100%}
 
 /* Release 6.1: dedicated Ask SplitTrip screen */
 .trip-assistant-card{margin:12px 0;padding:18px}.trip-assistant-card h2{font-size:22px}.trip-assistant-card .assistant-answer{margin-top:14px}.trip-assistant-card form .row{gap:8px}.trip-assistant-card input{flex:1;min-width:0;width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink)}.assistant-prompts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.assistant-prompts button{min-height:42px}@media(max-width:480px){.nav{grid-template-columns:repeat(6,minmax(0,1fr))}.nav button{font-size:10px;padding:8px 0}.trip-assistant-card{padding:15px}}
+
+/* SplitTrip mobile UX polish: visual-only overrides */
+@media(max-width:600px){
+  .shell{padding:8px 10px 18px}
+  .hero{padding:14px 15px;border-radius:18px}
+  .hero .brand{gap:10px}
+  .hero .logo{width:40px;height:40px}
+  .hero .brand>div:nth-child(2)>div:first-child{font-size:21px!important}
+  .hero #signedInAs{margin-top:8px!important}
+  .current-trip-card{padding:12px 14px;margin:10px 0}
+  .current-trip-card h2{font-size:18px;line-height:1.3}
+  .current-trip-card .trip-actions{margin-top:10px}
+  .nav{gap:3px;margin:10px 0;padding:4px 0;grid-template-columns:repeat(6,minmax(0,1fr));}
+  .nav button{font-size:11px;line-height:1.2;padding:8px 1px;min-height:42px;border-radius:10px;overflow-wrap:normal;word-break:normal}
+  .nav-count{display:block;width:max-content;margin:2px auto 0}
+  .dashboard-hero{padding:12px;margin:8px 0 10px;border-radius:16px}
+  .dashboard-hero> .row:first-child{gap:8px;align-items:flex-start}
+  .dashboard-hero h2#dashboardTripName{font-size:19px!important;line-height:1.25}
+  .home-expense-actions{display:flex;flex-direction:column;gap:6px;min-width:112px}
+  .dashboard-hero #dashboardAddExpense{font-size:13px;padding:10px 11px;min-height:42px}
+  .dashboard-hero #repeatLastExpense{font-size:13px;padding:9px 10px;min-height:40px}
+  .dashboard-hero .dashboard-stats{gap:8px;margin:9px 0}
+  .dashboard-hero .dashboard-stat{padding:10px;border-radius:12px}
+  .dashboard-hero .dashboard-stat strong{font-size:19px;line-height:1.25;overflow-wrap:anywhere}
+  .dashboard-hero .row.between:has(>#dashboardViewBalances){align-items:center;gap:7px;flex-wrap:wrap}
+  #dashboardViewBalances,#dashboardViewSettle,#dashboardViewExpenses{font-size:13px;padding:9px 10px;min-height:40px}
+  .dashboard-balance{gap:8px;padding:9px 0}
+  .dashboard-balance .bubble{width:36px;height:36px;flex:0 0 36px}
+  .dashboard-balance .amount{font-size:14px;white-space:normal;text-align:right;overflow-wrap:anywhere}
+  .dashboard-balance .muted{font-size:12px}
+  .card{margin:9px 0;padding:12px}
+}
+@media(max-width:380px){
+  .nav button{font-size:10px;letter-spacing:-.2px}
+  .dashboard-hero> .row:first-child{flex-wrap:wrap}
+  .home-expense-actions{width:100%;flex-direction:row;min-width:0}
+  .home-expense-actions button{flex:1;width:auto}
+  .dashboard-hero .dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:601px){
+  .hero{padding:20px}
+  .dashboard-hero{padding:16px}
+}
+
 </style></head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@company.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px">New here? Choose Create account to set your display name.</div></section>
