@@ -354,6 +354,18 @@ const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const configured=SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON_KEY.includes('YOUR_');
 const $=id=>document.getElementById(id),urlParams=new URLSearchParams(location.search),inviteFromUrl=urlParams.get("invite"),claimFromUrl=urlParams.get("claim"),money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}),escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let sb=null,user=null,trips=[],activeTrip=null,members=[],expenses=[],channel=null,shares=[],payments=[],editingExpenseId=null,claimAttempted=false,archivePreview=false;
+// Safely unsubscribe from the previous trip's realtime channel before switching trips.
+function cleanupChannel(){
+  if(!channel)return;
+  const previousChannel=channel;
+  channel=null;
+  try{
+    if(sb)sb.removeChannel(previousChannel);
+  }catch(err){
+    console.warn('Could not clean up the previous realtime channel:',err);
+  }
+}
+
 function notice(s,global=false){const el=$(global?'globalNotice':'notice');el.textContent=s;el.classList.remove('hidden')}
 function show(id,on){$(id).classList.toggle('hidden',!on)}
 function catIcon(c){return c==='Food & drinks'?'🍜':c==='Transport'?'🚕':c==='Accommodation'?'🛏️':c==='Activities'?'🎟️':'🧾'}
