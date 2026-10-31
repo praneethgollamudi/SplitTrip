@@ -302,6 +302,33 @@ input,select,textarea{max-width:100%}
 .expense-pagination button:disabled{opacity:.42;cursor:not-allowed}
 @media(max-width:480px){.expense-pagination{display:grid;grid-template-columns:1fr auto;gap:10px}.expense-page-controls{grid-column:1/-1;grid-row:2;justify-content:space-between}.expense-page-size-label{grid-column:2;grid-row:1;justify-self:end}.expense-pagination #expensePageSummary{grid-column:1;grid-row:1;font-size:12px}}
 #budgetRadarCard .stat{min-width:0}#budgetRadarCard .stat strong{overflow-wrap:anywhere}#budgetRadarCard .r8-track{background:#e8eee5}#budgetRadarProgress{transition:width .2s ease}#budgetRadarStatus.over{background:#fff0ed;color:#9a3326}#budgetRadarStatus.good{background:#e8f5df;color:#245c34}#budgetRadarStatus.neutral{background:#f1f3ef;color:#59685f}#settlementOptimizerSummary .pill{white-space:nowrap}.more-links{display:grid;gap:9px;margin-top:14px}.more-links button{text-align:left;min-height:46px}@media(max-width:480px){.more-links button{min-height:48px}}
+
+.trip-action-card{border:1px solid var(--line);border-radius:16px;padding:14px;margin:12px 0;background:#fff}
+.trip-card-top{display:flex;align-items:center;gap:12px}
+.trip-card-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:14px;background:#eaf2e4;font-size:23px;flex-shrink:0}
+.trip-open-action{width:100%;display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--ink);color:white}
+.trip-open-action span{font-size:20px}
+.trip-options{position:relative}
+.trip-options summary{list-style:none;cursor:pointer;color:var(--muted);padding:8px 10px;border-radius:10px;background:#f5f7f3}
+.trip-options summary::-webkit-details-marker{display:none}
+.trip-options[open]{z-index:4}
+.trip-options button{position:absolute;right:0;top:38px;white-space:nowrap;box-shadow:0 5px 20px #0002}
+.balance-summary-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.balance-summary-tag{font-size:11px;font-weight:700;padding:5px 8px;border-radius:99px;background:#e1edda;color:var(--ink)}
+.cross-balance-item{border-top:1px solid #dce5d9;padding:0;margin:0}
+.cross-balance-item summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:12px 0;cursor:pointer}
+.cross-balance-item summary::-webkit-details-marker{display:none}
+.cross-balance-item summary>span:first-child{font-weight:600;min-width:0}
+.cross-balance-item summary>strong{font-size:14px;text-align:right}
+.balance-expand-hint{grid-column:1/-1;font-size:11px;color:var(--muted)}
+.cross-balance-item[open] .balance-expand-hint{display:none}
+.cross-balance-breakdown{padding:0 0 10px 10px}
+.cross-balance-trip{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:9px 0;border-top:1px dashed #dce5d9}
+.cross-balance-trip>div{min-width:0}
+.cross-balance-trip>div strong{font-size:13px}
+.cross-balance-trip>button{padding:7px 10px;font-size:12px}
+.balance-footnote{margin-top:12px}
+@media(max-width:420px){.cross-balance-trip{grid-template-columns:minmax(0,1fr) auto}.cross-balance-trip>button{grid-column:1/-1;width:100%}}
 </style></head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px">New to SplitTrip? Create an account to start or join a trip.</div></section>
@@ -400,8 +427,8 @@ async function loadTrips(){
  if(!activeTrip&&!inviteFromUrl&&storedId&&trips.some(t=>String(t.id)===String(storedId))){await openTrip(storedId);return}
  show('tripPanel',!activeTrip);show('tripPicker',true);
  const count=$('tripCountPill');if(count)count.textContent=trips.length+' '+(trips.length===1?'trip':'trips');
- $('tripList').innerHTML=trips.map(t=>`<div class="person"><div class="bubble">✈</div><div class="grow"><strong>${escapeHtml(t.name||'Untitled trip')}</strong><div class="muted">${escapeHtml(t.role==='owner'?'Trip owner':'Trip member')}</div></div><div class="trip-card-actions"><button data-open-trip="${escapeHtml(t.id)}">Open</button>${t.role==='owner'?`<button class="danger" data-delete-trip="${escapeHtml(t.id)}" aria-label="Delete ${escapeHtml(t.name||'trip')}">Delete</button>`:''}</div></div>`).join('')||'<div class="empty">No trips yet. Create a trip or join one with an invite code.</div>';
- $('tripList').querySelectorAll('[data-open-trip]').forEach(b=>{b.type='button';b.onclick=async()=>{b.disabled=true;const old=b.textContent;b.textContent='Opening…';try{await openTrip(b.dataset.openTrip)}catch(err){console.error(err);notice('Could not open this trip: '+(err?.message||'Unknown error'),true)}finally{b.disabled=false;b.textContent=old}}});
+ $('tripList').innerHTML=trips.map(t=>{const memberCount=(t.member_count||0);return `<article class="trip-action-card"><div class="trip-card-top"><div class="trip-card-icon">✈</div><div class="grow"><strong>${escapeHtml(t.name||'Untitled trip')}</strong><div class="muted">${escapeHtml(t.role==='owner'?'Trip owner':'Trip member')}${memberCount?' · '+memberCount+' members':''}</div></div>${t.role==='owner'?`<details class="trip-options"><summary aria-label="Trip options">•••</summary><button type="button" class="danger" data-delete-trip="${escapeHtml(t.id)}">Delete trip</button></details>`:''}</div><button class="trip-open-action" type="button" data-open-trip="${escapeHtml(t.id)}">Open trip <span>→</span></button></article>`}).join('')||'<div class="empty">No trips yet. Create a trip or join one with an invite code.</div>';
+ $('tripList').querySelectorAll('[data-open-trip]').forEach(b=>{b.onclick=async()=>{b.disabled=true;const old=b.innerHTML;b.textContent='Opening…';try{await openTrip(b.dataset.openTrip)}catch(err){console.error(err);notice('Could not open this trip: '+(err?.message||'Unknown error'),true)}finally{b.disabled=false;b.innerHTML=old}}});
  $('tripList').querySelectorAll('[data-delete-trip]').forEach(b=>b.onclick=()=>deleteTrip(b.dataset.deleteTrip));
  await renderCrossTripBalances();setWorkspace(true)
 }
@@ -418,14 +445,19 @@ async function renderCrossTripBalances(){
  ]);
  const failed=[er,sr,pr,mr].find(x=>x.error);if(failed){host.innerHTML='<strong>Across all trips</strong><div class="muted">Could not calculate combined balances. Open a trip to view its balance.</div>';return}
  const nameById=new Map();(mr.data||[]).forEach(m=>{if(m.display_name)nameById.set(m.user_id,m.display_name)});
- const expenseById=new Map((er.data||[]).map(e=>[e.id,e]));const pairNet=new Map();
- const add=(debtor,creditor,amount)=>{if(!debtor||!creditor||debtor===creditor||!Number.isFinite(amount)||amount<=0)return;const k=debtor+'|'+creditor;pairNet.set(k,(pairNet.get(k)||0)+amount)};
- (sr.data||[]).forEach(sh=>{const e=expenseById.get(sh.expense_id);if(e&&e.payer_id!==sh.user_id)add(sh.user_id,e.payer_id,Number(sh.amount)||0)});
- // Payments reduce the original debtor-to-creditor balance.
- (pr.data||[]).forEach(pay=>{const k=pay.from_user_id+'|'+pay.to_user_id;pairNet.set(k,(pairNet.get(k)||0)-(Number(pay.amount)||0))});
- const totals=new Map();const seenPairs=new Set();pairNet.forEach((v,k)=>{const [a,b]=k.split('|');const pair=[a,b].sort().join('|');if(seenPairs.has(pair))return;seenPairs.add(pair);const net=(pairNet.get(a+'|'+b)||0)-(pairNet.get(b+'|'+a)||0);if(Math.abs(net)<0.005)return;const who=a===user.id?b:b===user.id?a:null;if(!who)return;const signed=a===user.id?-net:net;totals.set(who,(totals.get(who)||0)+signed)});
- const rows=[...totals].filter(([,v])=>Math.abs(v)>=0.01).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]));
- host.innerHTML='<strong>Across all trips</strong><div class="muted">Net balance with people you share trips with</div>'+(rows.length?rows.map(([id,v])=>`<div class="trip-balance-person"><span>${escapeHtml(nameById.get(id)||'Trip member')}</span><strong class="${v>0?'positive':'negative'}">${v>0?'Owes you ':'You owe '}${money(Math.abs(v))}</strong></div>`).join(''):'<div class="muted" style="margin-top:8px">No outstanding person-to-person balances across your trips.</div>')+'<div class="muted" style="margin-top:8px">Only linked accounts can be matched across trips. Unclaimed guest entries are kept separate.</div>';
+ const memberCounts=new Map();(mr.data||[]).forEach(m=>memberCounts.set(m.trip_id,(memberCounts.get(m.trip_id)||0)+1));
+ trips.forEach(t=>t.member_count=memberCounts.get(t.id)||0);
+ const tripById=new Map(trips.map(t=>[String(t.id),t]));
+ const expenseById=new Map((er.data||[]).map(e=>[e.id,e]));
+ const pairNetByTrip=new Map();
+ const add=(tripId,debtor,creditor,amount)=>{if(!tripId||!debtor||!creditor||debtor===creditor||!Number.isFinite(amount)||amount<=0)return;let net=pairNetByTrip.get(String(tripId));if(!net){net=new Map();pairNetByTrip.set(String(tripId),net)}const k=debtor+'|'+creditor;net.set(k,(net.get(k)||0)+amount)};
+ (sr.data||[]).forEach(sh=>{const e=expenseById.get(sh.expense_id);if(e&&e.payer_id!==sh.user_id)add(sh.trip_id,sh.user_id,e.payer_id,Number(sh.amount)||0)});
+ (pr.data||[]).forEach(pay=>{let net=pairNetByTrip.get(String(pay.trip_id));if(!net){net=new Map();pairNetByTrip.set(String(pay.trip_id),net)}const k=pay.from_user_id+'|'+pay.to_user_id;net.set(k,(net.get(k)||0)-(Number(pay.amount)||0))});
+ const personTotals=new Map(),personTrips=new Map();
+ pairNetByTrip.forEach((net,tripId)=>{const seen=new Set();net.forEach((v,k)=>{const [a,b]=k.split('|');const pair=[a,b].sort().join('|');if(seen.has(pair))return;seen.add(pair);const balance=(net.get(a+'|'+b)||0)-(net.get(b+'|'+a)||0);if(Math.abs(balance)<0.005)return;const who=a===user.id?b:b===user.id?a:null;if(!who)return;const signed=a===user.id?-balance:balance;personTotals.set(who,(personTotals.get(who)||0)+signed);if(!personTrips.has(who))personTrips.set(who,[]);personTrips.get(who).push({tripId,signed})})});
+ const rows=[...personTotals].filter(([,v])=>Math.abs(v)>=0.01).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]));
+ host.innerHTML='<div class="balance-summary-heading"><div><strong>Across all trips</strong><div class="muted">Your net balance with each linked person</div></div><span class="balance-summary-tag">'+rows.length+' people</span></div>'+(rows.length?rows.map(([id,v],i)=>{const details=(personTrips.get(id)||[]).filter(x=>Math.abs(x.signed)>=0.01).sort((a,b)=>Math.abs(b.signed)-Math.abs(a.signed));return `<details class="cross-balance-item"><summary><span>${escapeHtml(nameById.get(id)||'Trip member')}</span><strong class="${v>0?'positive':'negative'}">${v>0?'Owes you ':'You owe '}${money(Math.abs(v))}</strong><span class="balance-expand-hint">Trip details⌄</span></summary><div class="cross-balance-breakdown">${details.map(d=>{const t=tripById.get(String(d.tripId));return `<div class="cross-balance-trip"><div><strong>${escapeHtml(t?.name||'Trip')}</strong><div class="muted">${d.signed>0?'Owes you':'You owe'}</div></div><strong class="${d.signed>0?'positive':'negative'}">${money(Math.abs(d.signed))}</strong><button type="button" class="secondary" data-open-trip="${escapeHtml(d.tripId)}">Open</button></div>`}).join('')}</div></details>`}).join(''):'<div class="muted" style="margin-top:10px">No outstanding person-to-person balances across your trips.</div>')+'<div class="muted balance-footnote">Select a person to see which trips make up the balance. Record payments inside the relevant trip.</div>';
+ host.querySelectorAll('[data-open-trip]').forEach(b=>b.onclick=async()=>{b.disabled=true;try{await openTrip(b.dataset.openTrip)}catch(err){notice('Could not open this trip: '+(err?.message||'Unknown error'),true)}finally{b.disabled=false}});
 }
 async function deleteTrip(id){const trip=trips.find(t=>String(t.id)===String(id));if(!trip||trip.role!=='owner'){notice('Only a trip owner can delete this trip.',true);return}const label=trip.name||'this trip';if(!confirm(`Delete “${label}” and all its expenses, shares and settlements? This cannot be undone.`))return;const {error}=await sb.from('trips').delete().eq('id',trip.id);if(error){notice('Could not delete trip: '+error.message+'. The database may require a dedicated owner-delete policy or RPC.',true);return}if(activeTrip&&String(activeTrip.id)===String(trip.id)){activeTrip=null;cleanupChannel();try{localStorage.removeItem('splittrip:lastTrip:'+user.id)}catch{}setWorkspace(false)}notice('Trip deleted.');await loadTrips()}
 
