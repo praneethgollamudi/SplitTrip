@@ -393,6 +393,26 @@ input,select,textarea{max-width:100%}
   </section>
 </div>
 
+<script>
+(function(){
+  var pill=document.getElementById('modePill');
+  var hint=document.getElementById('authHint');
+  if(pill){pill.textContent='BROWSER SCRIPT OK';pill.classList.remove('hidden');}
+  function report(label,detail){
+    var message=label+(detail?': '+detail:'');
+    console.error('SplitTrip startup diagnostic:',message);
+    if(pill){pill.textContent='JS ERROR';pill.classList.remove('hidden');}
+    if(hint){hint.textContent=message;}
+  }
+  window.addEventListener('error',function(e){
+    report('Browser JavaScript error',e.message||(e.error&&e.error.message)||'Unknown error');
+  });
+  window.addEventListener('unhandledrejection',function(e){
+    var reason=e.reason;
+    report('Unhandled startup rejection',reason&&reason.message||String(reason||'Unknown error'));
+  });
+})();
+</script>
 <script type="module">
 // Load Supabase from a primary and fallback ESM CDN. Dynamic import lets us
 // surface a useful startup error instead of leaving the UI stuck on CONNECTING.
