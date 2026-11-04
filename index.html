@@ -394,7 +394,28 @@ input,select,textarea{max-width:100%}
 </div>
 
 <script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+// Load Supabase from a primary and fallback ESM CDN. Dynamic import lets us
+// surface a useful startup error instead of leaving the UI stuck on CONNECTING.
+let createClient;
+async function loadSupabaseClient(){
+ const sources=[
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm',
+  'https://esm.sh/@supabase/supabase-js@2'
+ ];
+ let lastError=null;
+ for(const source of sources){
+  try{
+   const mod=await import(source);
+   if(typeof mod.createClient!=='function')throw new Error('Supabase client export was not found.');
+   createClient=mod.createClient;
+   return;
+  }catch(err){
+   lastError=err;
+   console.error('Supabase CDN failed:',source,err);
+  }
+ }
+ throw new Error('Could not load the Supabase library from either CDN. Check your internet connection, browser content blockers, or CDN availability. '+(lastError?.message||''));
+}
 // Replace these two values with Supabase Project Settings → API values. The anon/publishable key is designed for browser use when RLS is enabled. NEVER put a service_role key here.
 const SUPABASE_URL='https://qyybdtadpbofekbujcgc.supabase.co';
 const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5eWJkdGFkcGJvZmVrYnVqY2djIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4OTkzMjMsImV4cCI6MjEwODQ3NTMyM30.wuEvghbSf-aZt-jyWGH3eJ6SfIMR0xo3ITUIW7xaOa8';
@@ -421,10 +442,12 @@ function openGlobalAccount(){if(!user)return;show('authPanel',false);show('tripP
 function closeGlobalAccount(){show('globalAccountPanel',false);if(user){if(activeTrip)show('workspace',true);else show('tripPanel',true)}else show('authPanel',true)}
 $('globalAccountOpen').onclick=openGlobalAccount;$('accountBack').onclick=closeGlobalAccount;
 async function init(){
+ $('modePill').textContent='STARTING…';$('modePill').classList.remove('hidden');
  if(!configured){$('modePill').textContent='SETUP REQUIRED';$('modePill').classList.remove('hidden');show('authPanel',false);notice('First connect this app to your Supabase project: edit index.html and replace SUPABASE_URL and SUPABASE_ANON_KEY. See README.md for the exact steps.',true);return}
  // Never leave the app stuck on CONNECTING if browser storage/session recovery stalls.
  $('modePill').textContent='SIGN IN';$('modePill').classList.remove('hidden');
  try{
+  await loadSupabaseClient();
   sb=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
   sb.auth.onAuthStateChange((_event,session)=>{user=session?.user||null;queueMicrotask(()=>refreshAuth().catch(err=>{console.error('Auth state refresh failed',err);showAuthRecovery(err)}))});
   const sessionResult=await Promise.race([
@@ -433,7 +456,7 @@ async function init(){
   ]);
   user=sessionResult?.data?.session?.user||null;
   await refreshAuth();
- }catch(err){console.error('SplitTrip initialization failed',err);user=null;$('modePill').textContent='SIGN IN';$('modePill').classList.remove('hidden');setWorkspace(false);show('authPanel',true);$('authHint').textContent='Could not restore your session: '+(err?.message||'Unknown error')+' You can try signing in again or refresh the page.';show('globalNotice',false)}
+ }catch(err){console.error('SplitTrip initialization failed',err);user=null;$('modePill').textContent='SIGN IN';$('modePill').classList.remove('hidden');setWorkspace(false);show('authPanel',true);$('authHint').textContent='SplitTrip could not finish starting: '+(err?.message||'Unknown error')+' Check your connection and refresh the page. If this persists, share this message with support.';show('globalNotice',false)}
 }
 function showAuthRecovery(err){$('modePill').textContent='SIGN IN';$('modePill').classList.remove('hidden');setWorkspace(false);show('authPanel',true);$('authHint').textContent='Session refresh failed: '+(err?.message||'Unknown error')+' Please try signing in again.'}
 
