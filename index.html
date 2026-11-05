@@ -1437,6 +1437,33 @@ body.modal-open{overflow:hidden!important;touch-action:none}
 }
 </style>
 
+
+<style id="r147315-theme-contrast-polish">
+/* R14.7.31.5 — semantic contrast and consistent interactive states in both themes */
+:root{color-scheme:light;--text-main:#17352a;--surface-raised:#ffffff;--surface-soft:#f0f5ef;--focus-ring:#287b61;--shadow-soft:0 8px 26px rgba(23,53,42,.08)}
+body{color:var(--text-main);background:var(--bg)}
+body[data-theme="dark"]{color-scheme:dark;--ink:#e8f2ef;--muted:#b8c9c4;--bg:#142326;--card:#1d3033;--line:#40575a;--red:#ff9c91;--green:#75dfb8;--primary:#54c9a9;--surface-raised:#203639;--surface-soft:#263d40;--text-main:#e8f2ef;--focus-ring:#83e4c5;--shadow-soft:0 8px 26px rgba(0,0,0,.24)}
+/* Muted copy remains readable without competing with primary content. */
+body .muted,body .hint,body .field small,body .quick-hint{color:var(--muted)}
+body[data-theme="dark"] .muted,body[data-theme="dark"] .hint,body[data-theme="dark"] .field small,body[data-theme="dark"] .quick-hint,body[data-theme="dark"] .sub{color:#b8c9c4}
+/* Keep common surfaces and separators tied to theme tokens. */
+body .card,body .stat,body .expense,body .person,body .trip-action-card,body .member-card{border-color:var(--line)}
+body[data-theme="dark"] .card,body[data-theme="dark"] .stat,body[data-theme="dark"] .expense,body[data-theme="dark"] .person,body[data-theme="dark"] .member-card,body[data-theme="dark"] .trip-card,body[data-theme="dark"] .panel{background:var(--card);color:var(--text-main);border-color:var(--line)}
+body[data-theme="dark"] .stat{background:var(--surface-raised)}
+body[data-theme="dark"] .stat .muted,body[data-theme="dark"] .expense .muted,body[data-theme="dark"] .person .muted{color:#b8c9c4}
+body[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),body[data-theme="dark"] select,body[data-theme="dark"] textarea{background:var(--surface-raised);color:var(--text-main);border-color:#52696b}
+body[data-theme="dark"] input::placeholder,body[data-theme="dark"] textarea::placeholder{color:#a8bbb5;opacity:1}
+body[data-theme="dark"] button.secondary,body[data-theme="dark"] .secondary{background:#2b4143;color:#e8f2ef;border:1px solid #52696b}
+body[data-theme="dark"] button.danger{background:#512f32;color:#ffd0ca;border:1px solid #75464a}
+body[data-theme="dark"] a{color:#8de2c4}
+body[data-theme="dark"] hr,body[data-theme="dark"] .divider{border-color:var(--line)}
+/* Consistent visible keyboard focus; never rely on color alone for focus. */
+:where(button,a,input,select,textarea,[tabindex]):focus-visible{outline:3px solid var(--focus-ring)!important;outline-offset:3px!important}
+body[data-theme="dark"] :where(button,a,input,select,textarea,[tabindex]):focus-visible{outline-color:#83e4c5!important}
+button:disabled{opacity:.58}
+@media(prefers-reduced-motion:no-preference){button,a,.card,.stat{transition:border-color .16s ease,background-color .16s ease,box-shadow .16s ease}}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
