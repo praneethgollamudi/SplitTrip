@@ -510,7 +510,7 @@ kbd{font:600 10px/1.4 system-ui,sans-serif;padding:2px 5px;border:1px solid #dce
 .activity-item .amount{white-space:nowrap}
 @media(max-width:480px){.group-activity-card>summary{padding:12px}.group-activity-list{padding:0 10px 8px}.activity-item{gap:8px}.activity-item .amount{font-size:13px}}
 
-/* R14.7 — Usability, Engagement & Community; R14.7.2 sign-in form validation and readiness fix */
+/* R14.7 — Usability, Engagement & Community; R14.7.3 classic-script startup compatibility fix */
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .trip-list-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,.55fr);gap:8px;margin:12px 0}
 .trip-list-controls input,.trip-list-controls select{width:100%;min-width:0;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink)}
@@ -641,7 +641,7 @@ body.sheet-open{overflow:hidden}
     var signIn=e.target&&e.target.closest&&e.target.closest('#passwordSignIn');
     if(!signIn)return;
     if(!window.SplitTripAuthReady&&hint){
-      hint.textContent='Sign-in is not ready yet: the authentication module has not initialized. Check your connection or browser content blocker, then refresh.';
+      hint.textContent='SplitTrip sign-in is still initializing. Please wait a moment and try again. If this persists, refresh the page.';
       hint.style.color='#9a4b20';
     }
   },true);
@@ -661,7 +661,7 @@ body.sheet-open{overflow:hidden}
   });
 })();
 </script>
-<script type="module">
+<script>
 // Load Supabase from a primary and fallback ESM CDN. Dynamic import lets us
 // surface a useful startup error instead of leaving the UI stuck on CONNECTING.
 let createClient;
