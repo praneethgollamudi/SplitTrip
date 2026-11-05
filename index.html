@@ -1068,6 +1068,52 @@ body[data-theme="dark"] #expenseForm .secondary{
 body[data-theme="dark"] #expenseForm button.quick-save{color:#fff!important}
 </style>
 
+
+<style id="r14728-member-account-polish">
+/* Member finance chips: dark-theme amount labels must retain strong contrast */
+body[data-theme="dark"] #tab-members #members .member-finance{
+ background:transparent!important;
+}
+body[data-theme="dark"] #tab-members #members .member-finance>span{
+ background:#263d40!important;border-color:#496064!important;color:#c2d3ce!important;
+}
+body[data-theme="dark"] #tab-members #members .member-finance>span strong{
+ color:#f0f7f4!important;
+}
+body[data-theme="dark"] #tab-members #members .member-finance>span.member-net.negative{
+ background:#493735!important;border-color:#76504b!important;color:#ffb0a5!important;
+}
+body[data-theme="dark"] #tab-members #members .member-finance>span.member-net.negative strong{
+ color:#ffb0a5!important;
+}
+body[data-theme="dark"] #tab-members #members .member-finance>span.member-net.positive{
+ background:#24463d!important;border-color:#426b5d!important;color:#9ae5c9!important;
+}
+body[data-theme="dark"] #tab-members #members .member-finance>span.member-net.positive strong{
+ color:#9ae5c9!important;
+}
+body[data-theme="dark"] #tab-members #members .member-finance>span.member-net.neutral{
+ background:#344447!important;border-color:#526568!important;color:#d2dfda!important;
+}
+body[data-theme="dark"] #tab-members #members .member-finance>span.member-net.neutral strong{
+ color:#edf6f2!important;
+}
+/* Account page: breathing room above Back and a tighter information hierarchy */
+#globalAccountPanel .account-heading{margin-top:16px!important;margin-bottom:14px!important;align-items:center}
+#globalAccountPanel .account-heading .section-title{margin:0!important}
+#globalAccountPanel> .card,
+#globalAccountPanel>#splitTripFeedbackCard,
+#globalAccountPanel>#splitTripSupportCard{margin-top:12px!important}
+#globalAccountPanel .card h3{margin-bottom:12px}
+#globalAccountPanel #splitTripFeedbackCard>p,
+#globalAccountPanel #splitTripSupportCard>p{margin:4px 0 12px}
+#globalAccountPanel .foot{margin-top:12px}
+@media(max-width:600px){
+ #globalAccountPanel .account-heading{margin-top:20px!important;margin-bottom:16px!important}
+ #globalAccountPanel .card{padding:14px!important}
+}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -1161,17 +1207,17 @@ body[data-theme="dark"] #expenseForm button.quick-save{color:#fff!important}
  <div class="muted" style="font-size:11px;margin:8px 2px">R14.7.24 foundation · Plans are currently saved in this browser for this account and trip. They are not yet shared with other trip members.</div>
 </section>
 <section id="tab-balances" class="hidden"><div class="finance-heading"><div><h2 class="section-title">Member balances</h2><p class="muted">Who owes and who is owed.</p></div><span class="finance-label">LIVE BALANCES</span></div><button type="button" class="secondary full" id="openSettleFromBalances">⇄ Settle up</button><div id="myTripFinanceSummary" class="card"></div><div class="card" id="balanceList"></div></section><section id="tab-settle" class="hidden"><div class="finance-heading"><div><h2 class="section-title">Settle up</h2><p class="muted">Suggested payments to settle the group.</p></div></div><div class="card" id="settlementOptimizerSummary" style="margin-bottom:10px"><div class="row between" style="align-items:flex-start"><div class="grow"><strong>Suggested payments</strong><div class="muted">These payments are based on current balances. Review each amount before recording it.</div></div><span class="pill" id="settlementTransferCount">Calculating…</span></div><div id="settlementOptimizerFootnote" class="muted" style="margin-top:8px">Suggested plan only. SplitTrip does not move money.</div></div><div class="card settlement-progress-card" id="settlementProgressSummary" aria-live="polite"></div><div class="card" id="settlements"></div><div class="grid"><button class="secondary full" id="copySettlements">Copy settlement plan</button><button class="secondary full" id="shareSettlementReminder">Share reminder</button></div><div class="muted" id="settlementShareHint" style="margin-top:8px"></div></section></section>
-<section id="globalAccountPanel" class="hidden"><div class="row between"><h2 class="section-title">Account</h2><button id="accountBack" class="secondary" type="button">Back</button></div><p class="muted">Manage your profile and sign-in settings from anywhere in SplitTrip.</p><p class="muted">Manage the name your trip members see and your sign-in password.</p><div class="card"><h3 style="margin-top:0">Profile</h3><div class="field"><label for="profileDisplayName">Name shown to trip members</label><input id="profileDisplayName" maxlength="40" placeholder="Your display name"></div><button id="saveProfile" class="secondary full" type="button">Save display name</button></div><div class="card"><h3 style="margin-top:0">Password</h3><div class="field"><label for="newPassword">Set or change password</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters"></div><button id="savePassword" class="secondary full" type="button">Set / change password</button><div class="muted" style="margin-top:8px">Use at least 8 characters. You can use this password for future sign-ins.</div></div><section class="card" id="splitTripFeedbackCard" aria-labelledby="splitTripFeedbackTitle"><h3 id="splitTripFeedbackTitle" style="margin-top:0">💡 Suggest an improvement</h3><p class="muted">Tell us what would make SplitTrip more useful. Nothing is sent automatically.</p><div class="field"><label for="splitTripFeedbackType">What is this about?</label><select id="splitTripFeedbackType"><option value="Feature idea">Feature idea</option><option value="Bug report">Bug report</option><option value="Usability improvement">Usability improvement</option><option value="Other">Other</option></select></div><div class="field"><label for="splitTripFeedbackText">Your suggestion</label><textarea id="splitTripFeedbackText" rows="4" maxlength="1500" placeholder="Describe your idea or the issue…" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;font:inherit;resize:vertical"></textarea></div><div class="field"><label for="splitTripFeedbackContact">Contact (optional)</label><input id="splitTripFeedbackContact" maxlength="120" placeholder="Email or phone, if you’d like a follow-up"></div><div class="row" style="flex-wrap:wrap"><button type="button" id="splitTripFeedbackEmail">Send feedback by email</button><button type="button" class="secondary" id="splitTripFeedbackCopy">Copy as backup</button></div><p class="muted" id="splitTripFeedbackStatus" aria-live="polite" style="margin-bottom:0">You choose whether and where to share your feedback.</p></section>
+<section id="globalAccountPanel" class="hidden"><div class="row between account-heading"><h2 class="section-title">Account</h2><button id="accountBack" class="secondary" type="button">Back</button></div><div class="card"><h3 style="margin-top:0">Profile</h3><div class="field"><label for="profileDisplayName">Name shown to trip members</label><input id="profileDisplayName" maxlength="40" placeholder="Your display name"></div><button id="saveProfile" class="secondary full" type="button">Save display name</button></div><div class="card"><h3 style="margin-top:0">Password</h3><div class="field"><label for="newPassword">Set or change password</label><input id="newPassword" type="password" minlength="8" autocomplete="new-password" placeholder="At least 8 characters"></div><button id="savePassword" class="secondary full" type="button">Set / change password</button></div><section class="card" id="splitTripFeedbackCard" aria-labelledby="splitTripFeedbackTitle"><h3 id="splitTripFeedbackTitle" style="margin-top:0">💡 Suggest an improvement</h3><p class="muted">Share a feature idea, bug or usability suggestion.</p><div class="field"><label for="splitTripFeedbackType">What is this about?</label><select id="splitTripFeedbackType"><option value="Feature idea">Feature idea</option><option value="Bug report">Bug report</option><option value="Usability improvement">Usability improvement</option><option value="Other">Other</option></select></div><div class="field"><label for="splitTripFeedbackText">Your suggestion</label><textarea id="splitTripFeedbackText" rows="4" maxlength="1500" placeholder="Describe your idea or the issue…" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;font:inherit;resize:vertical"></textarea></div><div class="field"><label for="splitTripFeedbackContact">Contact (optional)</label><input id="splitTripFeedbackContact" maxlength="120" placeholder="Email or phone, if you’d like a follow-up"></div><div class="row" style="flex-wrap:wrap"><button type="button" id="splitTripFeedbackEmail">Send feedback by email</button><button type="button" class="secondary" id="splitTripFeedbackCopy">Copy as backup</button></div><p class="muted" id="splitTripFeedbackStatus" aria-live="polite" style="margin-bottom:0">You choose whether and where to share your feedback.</p></section>
 <section class="card" id="splitTripSupportCard" aria-labelledby="splitTripSupportTitle">
   <h3 id="splitTripSupportTitle" style="margin-top:0">✈️ Contribute to My Next Trip</h3>
-  <p class="muted">If SplitTrip has made sharing expenses easier, you can help fund my next adventure. Every contribution is optional and appreciated.</p>
+  <p class="muted">Optional support for SplitTrip’s next adventure.</p>
   <div class="row" style="flex-wrap:wrap">
     <button type="button" id="splitTripDonateUPI">Contribute via UPI ❤️</button>
     <button type="button" class="secondary" id="splitTripCopyUPI">Copy UPI ID</button>
   </div>
   <p class="muted" id="splitTripSupportStatus" aria-live="polite" style="margin-bottom:0">UPI: 9493413121@upi</p>
 </section>
-<div class="card"><div class="row between"><div class="grow"><strong>Account</strong><div class="muted">Sign out when finished on a shared device.</div></div><button id="signOut" class="danger">Sign out</button></div></div></section>
+<div class="card"><div class="row between"><div class="grow"><strong>Account</strong></div><button id="signOut" class="danger">Sign out</button></div></div></section>
 <div id="globalNotice" class="notice hidden"></div><p class="foot">Shared storage with authenticated access controls. Payments are not initiated by SplitTrip. Only join trips you’re invited to.</p></main>
 
 <div id="memberMergeDialog" class="merge-dialog-backdrop hidden" role="presentation" aria-hidden="true">
