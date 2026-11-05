@@ -1024,6 +1024,50 @@ body[data-theme="dark"] .notice .negative{color:#ff9b91!important}
 body[data-theme="dark"] .notice .positive{color:#75dfb9!important}
 </style>
 
+
+<style id="r14728-dark-surface-final-pass">
+/* Correct the actual Home personal balance component */
+body[data-theme="dark"] .personal-trip-finance{
+ background:linear-gradient(135deg,#29453f,#263d40)!important;
+ border-color:#49645a!important;color:#edf6f2!important;
+}
+body[data-theme="dark"] .personal-trip-finance,
+body[data-theme="dark"] .personal-trip-finance *{color:#edf6f2}
+body[data-theme="dark"] .personal-trip-finance .muted,
+body[data-theme="dark"] .personal-trip-finance span{color:#c2d3ce!important}
+body[data-theme="dark"] .personal-trip-finance .pill{color:#8f3e43!important;background:#ffe5e4!important}
+body[data-theme="dark"] .personal-trip-finance .negative{color:#ff9b91!important}
+body[data-theme="dark"] .personal-trip-finance .positive{color:#75dfb9!important}
+body[data-theme="dark"] .personal-trip-finance-grid>div{
+ background:#20383b!important;border-color:#496064!important;color:#edf6f2!important;
+}
+body[data-theme="dark"] .personal-trip-finance-grid>div span{color:#c2d3ce!important}
+body[data-theme="dark"] .personal-trip-finance-grid>div strong{color:#f2f8f5!important}
+body[data-theme="dark"] .personal-trip-finance-grid>div strong.negative{color:#ff9b91!important}
+body[data-theme="dark"] .personal-trip-finance-grid>div strong.positive{color:#75dfb9!important}
+/* Expense form: remove white hard-coded panels and restore readable text */
+body[data-theme="dark"] .quick-hint,
+body[data-theme="dark"] .natural-entry,
+body[data-theme="dark"] .expense-split-preview,
+body[data-theme="dark"] .advanced-options,
+body[data-theme="dark"] .natural-entry-details{
+ background:#263d40!important;border-color:#496064!important;color:#edf6f2!important;
+}
+body[data-theme="dark"] .natural-entry-details>summary,
+body[data-theme="dark"] .advanced-options>summary{color:#edf6f2!important}
+body[data-theme="dark"] .natural-entry-details .muted,
+body[data-theme="dark"] .expense-split-preview .muted,
+body[data-theme="dark"] .quick-hint{color:#c2d3ce!important}
+body[data-theme="dark"] .expense-split-preview strong{color:#f2f8f5!important}
+body[data-theme="dark"] .expense-split-preview .split-preview-warning{color:#ff9b91!important}
+body[data-theme="dark"] .expense-split-preview .split-preview-good{color:#75dfb9!important}
+body[data-theme="dark"] #expenseForm button.secondary,
+body[data-theme="dark"] #expenseForm .secondary{
+ background:#263d40!important;color:#e8f2ef!important;border-color:#496064!important;
+}
+body[data-theme="dark"] #expenseForm button.quick-save{color:#fff!important}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
