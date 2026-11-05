@@ -2276,4 +2276,54 @@ document.querySelectorAll('[data-assistant-prompt]').forEach(b=>b.onclick=()=>{$
   <div id="expenseActionSheetContent" class="expense-sheet-actions"></div>
   <button type="button" class="secondary expense-sheet-cancel" onclick="closeExpenseActionSheet()">Cancel</button>
  </section>
-</div
+</div>
+
+
+<style id="r147313-card-density">
+/* R14.7.31.3 — reduce visual bulk in expense and member lists without removing information */
+#tab-expenses #allExpenses .expense{
+  gap:9px;
+  padding:9px 0;
+}
+#tab-expenses #allExpenses .expense>.bubble{
+  width:38px;height:38px;min-width:38px;border-radius:12px;font-size:18px;
+}
+#tab-expenses #allExpenses .expense>.grow>strong{
+  font-size:14px;line-height:1.25;margin-bottom:2px;
+}
+#tab-expenses #allExpenses .expense>.grow>.muted{
+  font-size:11px;line-height:1.3;
+}
+#tab-expenses #allExpenses .expense .amount{font-size:14px}
+#tab-expenses #allExpenses .expense .expense-actions{margin-top:4px;gap:5px}
+#tab-expenses #allExpenses .expense .expense-actions button{min-height:30px;padding:5px 8px}
+#tab-members #members .person{
+  padding:10px 6px;column-gap:9px;row-gap:6px;
+}
+#tab-members #members .person>.bubble{width:38px;height:38px;min-width:38px;border-radius:12px;font-size:18px}
+#tab-members #members .member-identity{gap:5px}
+#tab-members #members .member-identity>strong{font-size:14px;line-height:1.25;overflow-wrap:anywhere}
+#tab-members #members .member-role-badge{font-size:10px;padding:3px 7px}
+#tab-members #members .member-finance{gap:5px;margin:0}
+#tab-members #members .member-finance>span{padding:4px 7px;font-size:10px;gap:3px}
+#tab-members #members .member-finance strong{font-size:10px}
+#tab-members #members .member-actions button{min-height:32px;padding:6px 9px;font-size:11px}
+@media(max-width:600px){
+  #tab-expenses #allExpenses .expense{grid-template-columns:36px minmax(0,1fr) auto;gap:8px;padding:8px 0}
+  #tab-expenses #allExpenses .expense>.bubble{width:36px;height:36px;min-width:36px}
+  #tab-expenses #allExpenses .expense>.grow>strong{font-size:13px}
+  #tab-expenses #allExpenses .expense .amount{font-size:13px}
+  #tab-members #members .person{grid-template-columns:36px minmax(0,1fr);column-gap:8px;padding:9px 2px;row-gap:5px}
+  #tab-members #members .person>.bubble{width:36px;height:36px;min-width:36px}
+  #tab-members #members .member-finance{grid-column:2/-1;gap:4px}
+  #tab-members #members .member-finance>span{padding:4px 6px;font-size:9px}
+  #tab-members #members .member-finance strong{font-size:10px}
+  #tab-members #members .member-actions{grid-column:2/-1;margin:0;max-width:100%}
+  #tab-members #members .member-actions button{min-height:30px;padding:6px 8px}
+}
+@media(max-width:360px){
+  #tab-members #members .member-finance{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+  #tab-members #members .member-finance>span{justify-content:space-between;white-space:normal}
+  #tab-members #members .member-finance>span.member-net{grid-column:1/-1}
+}
+</style
