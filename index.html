@@ -1187,6 +1187,25 @@ body[data-theme="dark"] .nav button.active{
 }
 </style>
 
+
+<style id="r14729-contextual-expense-actions">
+#tab-expenses .expense{cursor:pointer}
+#tab-expenses .expense:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:12px}
+#tab-expenses .expense .expense-end{display:flex;flex-direction:column;align-items:flex-end;gap:8px;min-width:76px}
+#tab-expenses .expense .expense-more{width:38px;height:34px;min-height:34px;padding:0;border-radius:11px;letter-spacing:2px;font-weight:900}
+#tab-expenses .expense .expense-more span{display:block;transform:translateY(-2px)}
+.expense-sheet-backdrop{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.48);display:flex;align-items:flex-end;justify-content:center;padding:12px}
+.expense-sheet-backdrop.hidden{display:none!important}
+.expense-sheet{width:min(100%,560px);background:var(--card,#fff);color:var(--ink);border:1px solid var(--line);border-radius:22px;padding:12px 16px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -12px 44px rgba(0,0,0,.24)}
+.expense-sheet-handle{width:42px;height:4px;border-radius:9px;background:var(--muted);opacity:.55;margin:2px auto 14px}
+.expense-sheet-heading{font-size:17px;font-weight:800;margin-bottom:12px}
+.expense-sheet-actions{display:grid;gap:8px}
+.expense-sheet-actions button,.expense-sheet-cancel{width:100%;min-height:48px;text-align:left;padding:12px 15px}
+.expense-sheet-cancel{margin-top:10px;text-align:center}
+body[data-theme="dark"] .expense-sheet{background:#1d3436;color:#e8f2ef;border-color:#3a5052}
+@media(min-width:700px){.expense-sheet-backdrop{align-items:center}.expense-sheet{border-radius:20px}}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -1511,7 +1530,11 @@ function memberName(id){const m=members.find(x=>x.user_id===id);return m?.displa
 function calcBalances(){return members.map(m=>{const paid=expenses.filter(e=>e.payer_id===m.user_id).reduce((a,e)=>a+Number(e.amount),0);const share=shares.filter(s=>s.user_id===m.user_id).reduce((a,s)=>a+Number(s.amount),0);const sent=payments.filter(p=>p.from_user_id===m.user_id).reduce((a,p)=>a+Number(p.amount),0);const received=payments.filter(p=>p.to_user_id===m.user_id).reduce((a,p)=>a+Number(p.amount),0);return{...m,paid,share,sent,received,net:Math.round((paid-share+sent-received)*100)/100}})}
 function settlementsCalc(){let cr=calcBalances().filter(x=>x.net>.005).map(x=>({...x,left:x.net})).sort((a,b)=>b.left-a.left),db=calcBalances().filter(x=>x.net<-.005).map(x=>({...x,left:-x.net})).sort((a,b)=>b.left-a.left),out=[],i=0,j=0;while(i<db.length&&j<cr.length){const n=Math.round(Math.min(db[i].left,cr[j].left)*100)/100;if(n>.001)out.push({fromId:db[i].user_id,toId:cr[j].user_id,from:memberName(db[i].user_id),to:memberName(cr[j].user_id),amount:n});db[i].left=Math.round((db[i].left-n)*100)/100;cr[j].left=Math.round((cr[j].left-n)*100)/100;if(db[i].left<.01)i++;if(cr[j].left<.01)j++}return out}
 function canManageExpense(e){return e.created_by===user?.id||activeTrip?.role==='owner'}
-function expenseHTML(e,del=false){const payer=memberName(e.payer_id),count=shares.filter(s=>s.expense_id===e.id&&Number(s.amount)>0).length;const actions=`<div class="expense-actions"><button type="button" class="secondary" data-expense-detail="${e.id}">Details</button><button type="button" class="secondary" data-duplicate="${e.id}">Duplicate</button>${e.receipt_path?`<button type="button" class="secondary" data-receipt="${escapeHtml(e.receipt_path)}">Receipt</button>`:''}${del&&canManageExpense(e)?`<button type="button" class="secondary" data-edit="${e.id}">Edit</button><button type="button" class="danger" data-delete="${e.id}">Delete</button>`:''}</div>`;return `<div class="expense"><div class="bubble">${catIcon(e.category)}</div><div class="grow"><strong>${escapeHtml(e.description)}</strong><div class="muted">${escapeHtml(e.category||'Other')} · Paid by ${escapeHtml(payer)} · ${count} people${e.created_at?' · '+new Date(e.created_at).toLocaleDateString():''}</div>${actions}</div><div style="text-align:right"><div class="amount">${money(e.amount)}</div></div></div>`}
+function expenseHTML(e,del=false){
+ const payer=memberName(e.payer_id),count=shares.filter(s=>s.expense_id===e.id&&Number(s.amount)>0).length;
+ const actions=`<button type="button" class="expense-more secondary" aria-label="More actions for ${escapeHtml(e.description)}" data-expense-menu="${e.id}"><span aria-hidden="true">•••</span></button>`;
+ return `<div class="expense" data-expense-open="${e.id}" role="button" tabindex="0" aria-label="View ${escapeHtml(e.description)}"><div class="bubble">${catIcon(e.category)}</div><div class="grow"><strong>${escapeHtml(e.description)}</strong><div class="muted">${escapeHtml(e.category||'Other')} · Paid by ${escapeHtml(payer)} · ${count} people${e.created_at?' · '+new Date(e.created_at).toLocaleDateString():''}</div></div><div class="expense-end"><div class="amount">${money(e.amount)}</div>${actions}</div></div>`
+}
 
 function updateMemberCountUI(){const n=members.length;const nav=$('navMemberCount');if(nav)nav.textContent=String(n);const badge=$('membersTabCount');if(badge)badge.textContent=n+ (n===1?' member':' members');const stat=$('statMembers');if(stat)stat.textContent=String(n)}
 function tripBudgetStorageKey(){return activeTrip?'splittrip-budget-'+activeTrip.id:null}
@@ -1627,7 +1650,28 @@ function renderExpenseHistory(){
   }
   wireExpenseActions($('allExpenses'));
 }
-function wireExpenseActions(root=document){root.querySelectorAll('[data-expense-detail]').forEach(b=>b.onclick=()=>openExpenseDetail(b.dataset.expenseDetail));root.querySelectorAll('[data-duplicate]').forEach(b=>b.onclick=()=>startDuplicateExpense(b.dataset.duplicate));root.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteExpense(b.dataset.delete));root.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>startEditExpense(b.dataset.edit));root.querySelectorAll('[data-receipt]').forEach(b=>b.onclick=()=>viewReceipt(b.dataset.receipt))}
+function wireExpenseActions(root=document){
+ root.querySelectorAll('[data-expense-open]').forEach(row=>{
+  row.onclick=ev=>{if(ev.target.closest('[data-expense-menu]'))return;openExpenseDetail(row.dataset.expenseOpen)};
+  row.onkeydown=ev=>{if((ev.key==='Enter'||ev.key===' ')&&!ev.target.closest('button')){ev.preventDefault();openExpenseDetail(row.dataset.expenseOpen)}};
+ });
+ root.querySelectorAll('[data-expense-menu]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();openExpenseActionSheet(b.dataset.expenseMenu)});
+}
+function openExpenseActionSheet(id){
+ const e=expenses.find(x=>x.id===id);if(!e)return;
+ const sheet=$('expenseActionSheet'),content=$('expenseActionSheetContent');if(!sheet||!content)return;
+ const buttons=[`<button type="button" class="secondary" data-sheet-detail="${id}">View details</button>`,`<button type="button" class="secondary" data-sheet-duplicate="${id}">Duplicate expense</button>`];
+ if(e.receipt_path)buttons.push(`<button type="button" class="secondary" data-sheet-receipt="${escapeHtml(e.receipt_path)}">View receipt</button>`);
+ if(canManageExpense(e)){buttons.push(`<button type="button" class="secondary" data-sheet-edit="${id}">Edit expense</button>`,`<button type="button" class="danger" data-sheet-delete="${id}">Delete expense</button>`)}
+ content.innerHTML=buttons.join('');
+ sheet.classList.remove('hidden');sheet.setAttribute('aria-hidden','false');
+ content.querySelector('[data-sheet-detail]')?.addEventListener('click',()=>{closeExpenseActionSheet();openExpenseDetail(id)});
+ content.querySelector('[data-sheet-duplicate]')?.addEventListener('click',()=>{closeExpenseActionSheet();startDuplicateExpense(id)});
+ content.querySelector('[data-sheet-receipt]')?.addEventListener('click',()=>{const path=content.querySelector('[data-sheet-receipt]').dataset.sheetReceipt;closeExpenseActionSheet();viewReceipt(path)});
+ content.querySelector('[data-sheet-edit]')?.addEventListener('click',()=>{closeExpenseActionSheet();startEditExpense(id)});
+ content.querySelector('[data-sheet-delete]')?.addEventListener('click',()=>{closeExpenseActionSheet();deleteExpense(id)});
+}
+function closeExpenseActionSheet(){const sheet=$('expenseActionSheet');if(sheet){sheet.classList.add('hidden');sheet.setAttribute('aria-hidden','true')}}
 function openExpenseDetail(id){const e=expenses.find(x=>x.id===id);if(!e)return;const ownShares=shares.filter(x=>x.expense_id===id&&Number(x.amount)>0);const total=ownShares.reduce((a,x)=>a+Number(x.amount),0);const canEdit=canManageExpense(e);$('expenseDetailTitle').textContent=e.description;$('expenseDetailContent').innerHTML=`<div class="notice" style="margin-top:0"><div class="muted">Total expense</div><div style="font-size:28px;font-weight:850">${money(e.amount)}</div><div class="muted">${escapeHtml(e.category||'Other')} · Paid by ${escapeHtml(memberName(e.payer_id))}${e.created_by?' · Recorded by '+escapeHtml(memberName(e.created_by)):' · Recorder not available'}${e.created_at?' · '+new Date(e.created_at).toLocaleString():''}</div></div><h3 style="margin-bottom:4px">Who shares this expense?</h3>${ownShares.length?ownShares.map(sh=>`<div class="row between" style="padding:8px 0;border-bottom:1px solid var(--line)"><span>${escapeHtml(memberName(sh.user_id))}${sh.user_id===e.payer_id?' · payer':''}</span><strong>${money(sh.amount)}</strong></div>`).join(''):'<div class="muted">No share rows found for this expense.</div>'}<div class="row between" style="padding:10px 0"><span class="muted">Allocated total</span><strong class="${Math.abs(total-Number(e.amount))<0.011?'positive':'negative'}">${money(total)}${Math.abs(total-Number(e.amount))<0.011?' · balanced':' · review allocation'}</strong></div><div class="row" style="flex-wrap:wrap;margin-top:12px">${e.receipt_path?`<button type="button" class="secondary" id="detailViewReceipt">View receipt</button>`:''}<button type="button" class="secondary" id="detailDuplicateExpense">Duplicate expense</button>${canEdit?`<button type="button" class="secondary" id="detailEditExpense">Edit expense</button><button type="button" class="danger" id="detailDeleteExpense">Delete expense</button>`:''}</div>`;$('expenseDetailModal').classList.remove('hidden');$('closeExpenseDetail').focus();if($('detailViewReceipt'))$('detailViewReceipt').onclick=()=>viewReceipt(e.receipt_path);if($('detailDuplicateExpense'))$('detailDuplicateExpense').onclick=()=>{closeExpenseDetail();startDuplicateExpense(id)};if($('detailEditExpense'))$('detailEditExpense').onclick=()=>{closeExpenseDetail();startEditExpense(id)};if($('detailDeleteExpense'))$('detailDeleteExpense').onclick=()=>{closeExpenseDetail();deleteExpense(id)}}
 function closeExpenseDetail(){$('expenseDetailModal').classList.add('hidden')}
 function renderActivityTimeline(){if(!$('activityTimeline'))return;const items=[...expenses.map(e=>({kind:'expense',date:e.created_at||null,id:e.id,label:`${memberName(e.payer_id)} paid for ${e.description}`,actor:e.created_by?memberName(e.created_by):null,amount:Number(e.amount),category:e.category||'Other'})),...payments.map(p=>({kind:'payment',date:p.created_at||null,label:`${memberName(p.from_user_id)} paid ${memberName(p.to_user_id)}`,actor:p.recorded_by?memberName(p.recorded_by):null,amount:Number(p.amount)}))].sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).slice(0,20);$('activityTimeline').innerHTML=items.length?items.map(x=>`<div class="activity-item"><div class="bubble">${x.kind==='payment'?'✓':catIcon(x.category)}</div><div class="grow"><strong>${escapeHtml(x.label)}</strong><div class="muted">${x.date?new Date(x.date).toLocaleString():'Date unavailable'} · ${x.kind==='payment'?'Settlement recorded':'Expense added'}</div>${x.actor?`<div class="muted">Recorded by ${escapeHtml(x.actor)}</div>`:''}${x.kind==='expense'?`<button type="button" class="secondary role-action" data-expense-detail="${x.id}">View details</button>`:''}</div><strong class="amount">${money(x.amount)}</strong></div>`).join(''):'<div class="empty">New expenses and settlement payments will appear here.</div>';wireExpenseActions($('activityTimeline'))}
@@ -1949,4 +1993,14 @@ document.querySelectorAll('[data-assistant-prompt]').forEach(b=>b.onclick=()=>{$
    if(e.target.closest('.nav [data-tab]'))setTimeout(sync,0);
  },true);
 })();
-</script
+</script>
+
+
+<div id="expenseActionSheet" class="expense-sheet-backdrop hidden" aria-hidden="true" onclick="if(event.target===this)closeExpenseActionSheet()">
+ <section class="expense-sheet" role="dialog" aria-modal="true" aria-label="Expense actions">
+  <div class="expense-sheet-handle"></div>
+  <div class="expense-sheet-heading">Expense actions</div>
+  <div id="expenseActionSheetContent" class="expense-sheet-actions"></div>
+  <button type="button" class="secondary expense-sheet-cancel" onclick="closeExpenseActionSheet()">Cancel</button>
+ </section>
+</div
