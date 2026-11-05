@@ -782,6 +782,65 @@ body[data-theme="dark"] .negative{color:var(--red)}
 body[data-theme="dark"] .foot{color:var(--muted)}
 </style>
 
+
+<style id="r14728-ux-polish">
+/* Theme reliability + trip-home hierarchy refinements */
+html{color-scheme:light}
+body[data-theme="dark"]{color-scheme:dark;background:#142326!important;color:#e5f1ed!important}
+body[data-theme="dark"] main,body[data-theme="dark"] section,body[data-theme="dark"] .shell{color:var(--text-main)}
+body[data-theme="dark"] .current-trip-card,
+body[data-theme="dark"] .card,
+body[data-theme="dark"] .expense-card,
+body[data-theme="dark"] .member-card,
+body[data-theme="dark"] .balance-card,
+body[data-theme="dark"] .trip-list-card,
+body[data-theme="dark"] .modal,
+body[data-theme="dark"] .dialog,
+body[data-theme="dark"] .panel{background:var(--card)!important;color:var(--text-main)!important;border-color:var(--line)!important}
+body[data-theme="dark"] input,body[data-theme="dark"] textarea,body[data-theme="dark"] select{background:#203639!important;color:#e5f1ed!important;border-color:#40575a!important}
+body[data-theme="dark"] input::placeholder,body[data-theme="dark"] textarea::placeholder{color:#9eb2ae!important}
+body[data-theme="dark"] .current-trip-card strong,body[data-theme="dark"] .card strong,body[data-theme="dark"] label{color:var(--text-main)}
+body[data-theme="dark"] .current-trip-card .muted,body[data-theme="dark"] .card .muted{color:var(--muted)}
+body[data-theme="dark"] .nav{background:#1b3033!important;border-color:#34494b}
+body[data-theme="dark"] .nav button{color:#b8c9c4}
+body[data-theme="dark"] .nav button.active{background:#28574d!important;color:#c7f3e2!important}
+body[data-theme="dark"] .trip-details,body[data-theme="dark"] .trip-tools-entry{color:var(--text-main)}
+body[data-theme="dark"] .trip-details summary{color:var(--text-main)}
+body[data-theme="dark"] .theme-toggle{background:#36585a;color:#ffe3a0;border-color:#547174}
+body[data-theme="dark"] #splitTripQuickAdd{background:linear-gradient(135deg,#ff8066,#e86e70);color:#fff}
+body[data-theme="dark"] .dashboard-hero,body[data-theme="dark"] .dashboard-hero *{border-color:var(--line)}
+body[data-theme="dark"] .dashboard-hero .dashboard-balance{background:transparent}
+body[data-theme="dark"] .dashboard-hero .dashboard-stat{background:#203639!important;color:#e5f1ed!important}
+body[data-theme="dark"] .dashboard-hero .dashboard-stat strong{color:#e5f1ed!important}
+body[data-theme="dark"] .dashboard-hero .dashboard-transfer-stat{background:#263d40!important;color:#e5f1ed!important}
+body[data-theme="dark"] .dashboard-hero .dashboard-transfer-stat small{color:#a7bbb6!important}
+body[data-theme="dark"] .dashboard-hero .dashboard-balance .muted{color:#a7bbb6!important}
+body[data-theme="dark"] .dashboard-hero .dashboard-balance strong{color:#e5f1ed}
+body[data-theme="dark"] .dashboard-hero .positive{color:#67d4ad!important}
+body[data-theme="dark"] .dashboard-hero .negative{color:#ff9387!important}
+.current-trip-card{padding:16px 18px;margin-bottom:12px}
+.current-trip-card>.row:first-child{align-items:center;gap:10px}
+#activeTripName{font-size:19px;line-height:1.25;letter-spacing:-.45px}
+.current-trip-card .command-trigger{padding:9px 11px}
+.current-trip-card .trip-details{margin-top:12px}
+.dashboard-hero{border-radius:22px!important;box-shadow:var(--shadow-soft)}
+.dashboard-hero h2{letter-spacing:-.7px}
+.dashboard-hero .dashboard-stats{gap:10px}
+.dashboard-hero .dashboard-stat{border-radius:16px}
+#splitTripQuickAdd{bottom:calc(82px + env(safe-area-inset-bottom,0px));right:16px;z-index:20}
+.nav{z-index:25}
+@media(max-width:600px){
+ .current-trip-card{padding:13px 14px}
+ .current-trip-card>.row:first-child{flex-wrap:wrap}
+ .current-trip-card>.row:first-child>.row{width:100%;justify-content:space-between}
+ #activeTripName{font-size:18px}
+ .dashboard-hero{padding:15px!important;margin-top:10px}
+ .dashboard-hero .dashboard-stat{padding:10px!important}
+ .dashboard-hero .dashboard-stat strong{font-size:18px!important}
+ #splitTripQuickAdd{bottom:calc(88px + env(safe-area-inset-bottom,0px));right:12px}
+}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -1448,23 +1507,32 @@ document.querySelectorAll('[data-assistant-prompt]').forEach(b=>b.onclick=()=>{$
 
 <script id="r14728-theme-controller">
 (function(){
- const key='splittrip:appearance';
- const body=document.body;
- const toggle=document.getElementById('themeToggle');
- if(!toggle)return;
- let theme='light';
- try{theme=localStorage.getItem(key)==='dark'?'dark':'light'}catch(e){}
- function apply(next){
-   theme=next==='dark'?'dark':'light';
-   body.setAttribute('data-theme',theme);
-   toggle.textContent=theme==='dark'?'☀':'☾';
-   toggle.setAttribute('aria-label',theme==='dark'?'Switch to light mode':'Switch to dark mode');
-   toggle.setAttribute('title',theme==='dark'?'Switch to light mode':'Switch to dark mode');
-   const meta=document.querySelector('meta[name="theme-color"]');
-   if(meta)meta.setAttribute('content',theme==='dark'?'#142326':'#16a085');
-   try{localStorage.setItem(key,theme)}catch(e){}
+ const KEY='splittrip:appearance';
+ function init(){
+  const toggle=document.getElementById('themeToggle');
+  if(!toggle || toggle.dataset.themeReady==='1') return;
+  toggle.dataset.themeReady='1';
+  let current='light';
+  try{current=localStorage.getItem(KEY)==='dark'?'dark':'light'}catch(e){}
+  function apply(next){
+   current=next==='dark'?'dark':'light';
+   document.body.setAttribute('data-theme',current);
+   document.documentElement.style.colorScheme=current;
+   toggle.textContent=current==='dark'?'☀':'☾';
+   toggle.setAttribute('aria-label',current==='dark'?'Switch to light mode':'Switch to dark mode');
+   toggle.setAttribute('title',current==='dark'?'Switch to light mode':'Switch to dark mode');
+   try{localStorage.setItem(KEY,current)}catch(e){}
+  }
+  // Capture phase prevents parent/header handlers from swallowing the theme action.
+  toggle.addEventListener('click',function(ev){
+   ev.preventDefault();ev.stopPropagation();apply(current==='dark'?'light':'dark');
+  },true);
+  toggle.addEventListener('keydown',function(ev){
+   if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();apply(current==='dark'?'light':'dark')}
+  });
+  apply(current);
  }
- toggle.addEventListener('click',()=>apply(theme==='dark'?'light':'dark'));
- apply(theme);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+ else init();
 })();
 </script
