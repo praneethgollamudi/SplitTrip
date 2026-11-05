@@ -1,7 +1,9 @@
-const CACHE_NAME = 'splittrip-shell-r14-7-32';
+const CACHE_NAME = 'splittrip-shell-r14-7-32-1';
 const APP_SHELL = [
-  './SplitTrip_R14_7_32.html',
+  './index.html',
   './manifest.webmanifest',
+  './favicon.svg',
+  './favicon.svg',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './icons/icon-512-maskable.png'
@@ -34,12 +36,12 @@ self.addEventListener('fetch', event => {
         const response = await fetch(request);
         if (response && response.ok) {
           const cache = await caches.open(CACHE_NAME);
-          cache.put('./SplitTrip_R14_7_32.html', response.clone());
+          cache.put('./index.html', response.clone());
         }
         return response;
       } catch (error) {
         const cache = await caches.open(CACHE_NAME);
-        return (await cache.match('./SplitTrip_R14_7_32.html')) || Response.error();
+        return (await cache.match('./index.html')) || Response.error();
       }
     })());
     return;
