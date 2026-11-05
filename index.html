@@ -647,7 +647,7 @@ body.sheet-open{overflow:hidden}
     showMessage(message,true);
   }
   window.addEventListener('error',function(e){
-    report('Browser JavaScript error',e.message||(e.error&&e.error.message)||'Unknown error');
+    report('Browser JavaScript error',((e.message||(e.error&&e.error.message)||'Unknown error')+' ('+(e.filename||'app')+':'+(e.lineno||'?')+':'+(e.colno||'?')+')'));
   });
   window.addEventListener('unhandledrejection',function(e){
     var reason=e.reason;
@@ -708,7 +708,7 @@ body.sheet-open{overflow:hidden}
   },true);
 })();
 </script>
-<script>
+<script type="module">
 // Load Supabase from a primary and fallback ESM CDN. Dynamic import lets us
 // surface a useful startup error instead of leaving the UI stuck on CONNECTING.
 let createClient;
