@@ -923,6 +923,70 @@ body.st-expense-form-visible #splitTripQuickAdd{display:none!important}
 body:has(.nav [data-tab="expenses"].active) #splitTripQuickAdd{display:none!important}
 </style>
 
+
+<style id="r14728-consistency-pass">
+/* Shared dark-mode contrast tokens for financial and status surfaces */
+body[data-theme="dark"]{
+ --ink:#e8f2ef;--muted:#b5c7c2;--line:#3a5052;
+}
+body[data-theme="dark"] .stat,
+body[data-theme="dark"] .dashboard-stat,
+body[data-theme="dark"] .share-row,
+body[data-theme="dark"] .settlement-progress-stat,
+body[data-theme="dark"] .person,
+body[data-theme="dark"] .transfer{color:#e8f2ef}
+body[data-theme="dark"] .person .pill,
+body[data-theme="dark"] .person .role-badge{color:#173a35!important}
+body[data-theme="dark"] .person .negative,
+body[data-theme="dark"] .person .positive{font-weight:800}
+body[data-theme="dark"] .person .negative,
+body[data-theme="dark"] .balance-negative{color:#ff9b91!important}
+body[data-theme="dark"] .person .positive,
+body[data-theme="dark"] .balance-positive{color:#75dfb9!important}
+/* Neutralise pale financial chips that previously washed out in dark mode */
+body[data-theme="dark"] .member-finance,
+body[data-theme="dark"] .member-stat,
+body[data-theme="dark"] .finance-chip,
+body[data-theme="dark"] .balance-metric,
+body[data-theme="dark"] .balance-stat{
+ background:#263d40!important;color:#e8f2ef!important;border-color:#496064!important;
+}
+body[data-theme="dark"] .member-finance *,
+body[data-theme="dark"] .member-stat *,
+body[data-theme="dark"] .finance-chip *,
+body[data-theme="dark"] .balance-metric *,
+body[data-theme="dark"] .balance-stat *{color:inherit}
+body[data-theme="dark"] .your-balance,
+body[data-theme="dark"] .balance-highlight,
+body[data-theme="dark"] .balance-summary-highlight{
+ background:linear-gradient(135deg,#29453f,#263d40)!important;
+ color:#e8f2ef!important;border-color:#49645a!important;
+}
+body[data-theme="dark"] .your-balance *,
+body[data-theme="dark"] .balance-highlight *,
+body[data-theme="dark"] .balance-summary-highlight *{color:inherit}
+body[data-theme="dark"] .your-balance .negative,
+body[data-theme="dark"] .balance-highlight .negative{color:#ff9b91!important}
+body[data-theme="dark"] .your-balance .positive,
+body[data-theme="dark"] .balance-highlight .positive{color:#75dfb9!important}
+/* Member cards: tighter, aligned finance snapshots and action groups */
+.person{row-gap:8px}
+.person .member-actions{gap:7px}
+.person .member-actions button{min-height:34px;padding:8px 11px}
+.person .pill{white-space:nowrap}
+@media(max-width:600px){
+ .person{padding:11px 0;column-gap:9px;row-gap:6px}
+ .person>.grow{flex:1 1 calc(100% - 54px);min-width:0}
+ .person .member-actions{margin-left:49px;max-width:calc(100% - 49px);gap:6px}
+ .person .member-actions button{flex:0 1 auto;min-height:33px;padding:7px 9px;font-size:11px}
+ .person .member-finance,.person .member-stat,.person .finance-chip,.person .balance-metric,.person .balance-stat{
+   display:inline-flex;flex-wrap:wrap;max-width:100%;font-size:11px;padding:6px 8px;gap:4px
+ }
+}
+/* Keep the global expense action out of content-heavy tabs; Home remains its home */
+body.st-global-fab-hidden #splitTripQuickAdd{display:none!important}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -1652,6 +1716,30 @@ document.querySelectorAll('[data-assistant-prompt]').forEach(b=>b.onclick=()=>{$
  function sync(){
    var expensesActive=!!nav.querySelector('[data-tab="expenses"].active');
    fab.style.setProperty('display',expensesActive?'none':'flex','important');
+ }
+ sync();
+ if('MutationObserver' in window){
+   new MutationObserver(sync).observe(nav,{subtree:true,attributes:true,attributeFilter:['class']});
+ }
+ document.addEventListener('click',function(e){
+   if(e.target.closest('.nav [data-tab]'))setTimeout(sync,0);
+ },true);
+})();
+</script>
+
+
+<script id="r14728-contextual-fab-controller">
+(function(){
+ var nav=document.querySelector('.nav');
+ var fab=document.getElementById('splitTripQuickAdd');
+ if(!nav||!fab)return;
+ function sync(){
+   var active=nav.querySelector('[data-tab].active');
+   var tab=active&&active.getAttribute('data-tab');
+   var hide=!!tab&&tab!=='home';
+   document.body.classList.toggle('st-global-fab-hidden',hide);
+   if(hide)fab.style.setProperty('display','none','important');
+   else fab.style.removeProperty('display');
  }
  sync();
  if('MutationObserver' in window){
