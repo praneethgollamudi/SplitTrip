@@ -841,6 +841,38 @@ body[data-theme="dark"] .dashboard-hero .negative{color:#ff9387!important}
 }
 </style>
 
+
+<style id="r14728-expense-compact-patch">
+/* Compact transaction rows and keep the global action out of the way */
+.expense{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--line)}
+.expense:last-child{border-bottom:0}
+.expense>.bubble{width:44px;height:44px;min-width:44px;display:grid;place-items:center;border-radius:14px;font-size:20px}
+.expense>.grow{min-width:0}
+.expense>.grow>strong{display:block;font-size:15px;line-height:1.3;margin-bottom:3px}
+.expense>.grow>.muted{font-size:12px;line-height:1.35;overflow-wrap:anywhere}
+.expense>.grow .expense-actions{justify-content:flex-start;margin-top:7px;gap:5px}
+.expense-actions button{min-height:30px;padding:5px 8px;font-size:11px;border-radius:10px}
+.expense>.amount,.expense .amount{font-size:15px;font-weight:800;white-space:nowrap;max-width:none}
+#recent .expense{padding:13px 0}
+#recent .expense-actions{display:none}
+#recent .expense{cursor:pointer}
+#recent .expense:focus-within .expense-actions{display:flex}
+#tab-expenses #allExpenses .expense{padding:11px 0}
+#tab-expenses #allExpenses .expense-actions{margin-top:6px}
+#splitTripQuickAdd{bottom:calc(88px + env(safe-area-inset-bottom))}
+body.st-expenses #splitTripQuickAdd,
+body.st-expense-form-visible #splitTripQuickAdd{display:none!important}
+@media(max-width:600px){
+ .expense{grid-template-columns:40px minmax(0,1fr) auto;gap:9px;padding:10px 0}
+ .expense>.bubble{width:40px;height:40px;min-width:40px;border-radius:13px}
+ .expense>.grow>strong{font-size:14px}
+ .expense>.grow>.muted{font-size:11px}
+ .expense .amount{font-size:14px}
+ #tab-expenses #allExpenses .expense-actions button{min-height:32px}
+ #splitTripQuickAdd{right:14px;bottom:calc(94px + env(safe-area-inset-bottom))}
+}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -1534,5 +1566,29 @@ document.querySelectorAll('[data-assistant-prompt]').forEach(b=>b.onclick=()=>{$
  }
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
  else init();
+})();
+</script>
+
+
+<script id="r14728-expense-layout-controller">
+(function(){
+ function updateFabForTab(t){
+   document.body.classList.toggle('st-expenses',t==='expenses');
+ }
+ document.querySelectorAll('.nav [data-tab]').forEach(function(b){
+   b.addEventListener('click',function(){updateFabForTab(b.dataset.tab)});
+ });
+ var form=document.getElementById('expenseForm');
+ if(form&&'IntersectionObserver' in window){
+   var observer=new IntersectionObserver(function(entries){
+     var visible=entries.some(function(e){return e.isIntersecting&&e.intersectionRatio>.12});
+     document.body.classList.toggle('st-expense-form-visible',visible);
+   },{threshold:[0,.12,.35]});
+   observer.observe(form);
+ }
+ document.addEventListener('click',function(e){
+   var tab=e.target.closest('.nav [data-tab]');
+   if(tab)updateFabForTab(tab.dataset.tab);
+ },true);
 })();
 </script
