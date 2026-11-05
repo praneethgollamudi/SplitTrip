@@ -1206,6 +1206,35 @@ body[data-theme="dark"] .expense-sheet{background:#1d3436;color:#e8f2ef;border-c
 @media(min-width:700px){.expense-sheet-backdrop{align-items:center}.expense-sheet{border-radius:20px}}
 </style>
 
+
+<style id="r14729-sheet-safe-area-header-polish">
+/* Keep the action sheet within the visible viewport; actions scroll, Cancel never disappears */
+.expense-sheet-backdrop{padding:12px 12px calc(12px + env(safe-area-inset-bottom));}
+.expense-sheet{
+ display:flex;flex-direction:column;
+ max-height:calc(100dvh - 24px - env(safe-area-inset-top));
+ overflow:hidden;
+ padding-bottom:calc(12px + env(safe-area-inset-bottom));
+}
+.expense-sheet-heading{flex:0 0 auto}
+.expense-sheet-actions{
+ min-height:0;overflow-y:auto;overscroll-behavior:contain;
+ padding:2px 2px 8px;
+}
+.expense-sheet-actions button{flex:0 0 auto}
+.expense-sheet-cancel{
+ flex:0 0 auto;position:sticky;bottom:0;
+ margin-top:8px;background:var(--soft-mint,#edf5f0)!important;
+ text-align:center!important;
+}
+body[data-theme="dark"] .expense-sheet-cancel{
+ background:#294346!important;color:#e8f2ef!important;
+ border-color:#496064!important;
+}
+/* App branding is deliberately part of normal page flow, not a persistent sticky header */
+#workspace>.hero{position:relative!important;top:auto!important}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
