@@ -1541,6 +1541,19 @@ body[data-theme="dark"] .expense-split-preview #expenseSplitStatus{
 }
 </style>
 
+
+<style id="r147332-offline-outbox">
+#splitTripOfflineOutbox{position:fixed;z-index:1200;left:14px;right:14px;bottom:calc(74px + env(safe-area-inset-bottom));max-width:620px;margin:0 auto;padding:12px 14px;background:#173b35;color:#e9f7f1;border:1px solid #3c7668;border-radius:16px;box-shadow:0 8px 28px #0005}
+#splitTripOfflineOutbox.hidden{display:none!important}
+#splitTripOfflineOutbox .st-outbox-head,#splitTripOfflineOutbox .st-outbox-item{display:flex;align-items:center;justify-content:space-between;gap:12px}
+#splitTripOfflineOutbox .st-outbox-head{font-size:14px;margin-bottom:6px}
+#splitTripOfflineOutbox .st-outbox-head span{background:#285c50;border-radius:99px;padding:3px 9px;font-weight:800}
+#splitTripOfflineOutbox .st-outbox-item{font-size:13px;padding:3px 0}
+#splitTripOfflineOutbox small{display:block;color:#b8d4ca;margin-top:6px;line-height:1.35}
+body[data-theme="light"] #splitTripOfflineOutbox{background:#e9f7f1;color:#17483c;border-color:#9bcbbb}
+body[data-theme="light"] #splitTripOfflineOutbox small{color:#52776b}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo" aria-label="SplitTrip linked-rings logo"><svg viewBox="0 0 64 40" role="img" aria-hidden="true"><path d="M25 8H19a12 12 0 0 0 0 24h10a12 12 0 0 0 9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M39 8h6a12 12 0 0 1 0 24H35a12 12 0 0 1-9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/></svg></div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -1712,6 +1725,46 @@ let sb=null,user=null,trips=[],activeTrip=null,members=[],expenses=[],channel=nu
 let pendingCreateExpenseId=null,pendingCreateReceiptPath=null,pendingCreateFingerprint=null;
 // Request sequencing prevents slower responses for an old trip (or older refresh) overwriting newer state.
 let tripDataRequestId=0,realtimeRefreshTimer=null;
+
+// R14.7.33.2 — durable, device-local expense outbox. This stage stores only; sync is added separately.
+const SPLITTRIP_OUTBOX_DB='splittrip-offline-outbox-v1',SPLITTRIP_OUTBOX_STORE='expenses';
+let splitTripOutboxDbPromise=null;
+function openSplitTripOutbox(){
+ if(!('indexedDB' in window))return Promise.reject(new Error('This browser does not support offline storage.'));
+ if(!splitTripOutboxDbPromise)splitTripOutboxDbPromise=new Promise((resolve,reject)=>{
+  const request=indexedDB.open(SPLITTRIP_OUTBOX_DB,1);
+  request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(SPLITTRIP_OUTBOX_STORE))db.createObjectStore(SPLITTRIP_OUTBOX_STORE,{keyPath:'id'})};
+  request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||new Error('Could not open offline storage.'));
+ });
+ return splitTripOutboxDbPromise;
+}
+async function putOfflineExpense(record){
+ const db=await openSplitTripOutbox();
+ return new Promise((resolve,reject)=>{const tx=db.transaction(SPLITTRIP_OUTBOX_STORE,'readwrite');tx.objectStore(SPLITTRIP_OUTBOX_STORE).put(record);tx.oncomplete=()=>resolve(record);tx.onerror=()=>reject(tx.error||new Error('Could not save this expense on the device.'));tx.onabort=()=>reject(tx.error||new Error('Offline save was interrupted.'))});
+}
+async function getOfflineExpenses(){
+ const db=await openSplitTripOutbox();
+ return new Promise((resolve,reject)=>{const tx=db.transaction(SPLITTRIP_OUTBOX_STORE,'readonly'),req=tx.objectStore(SPLITTRIP_OUTBOX_STORE).getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error||new Error('Could not read saved offline expenses.'))});
+}
+function ensureOfflineOutboxPanel(){
+ let panel=document.getElementById('splitTripOfflineOutbox');
+ if(panel)return panel;
+ panel=document.createElement('aside');panel.id='splitTripOfflineOutbox';panel.setAttribute('aria-live','polite');panel.className='hidden';
+ panel.innerHTML='<div class="st-outbox-head"><strong>Saved on this device</strong><span id="stOutboxCount">0</span></div><div id="stOutboxItems"></div><small>Not yet shared with your trip. Keep this device and browser data until sync is available.</small>';
+ document.body.appendChild(panel);return panel;
+}
+async function renderOfflineOutbox(){
+ const panel=ensureOfflineOutboxPanel();
+ if(!user||!activeTrip){panel.classList.add('hidden');return}
+ try{
+  const all=await getOfflineExpenses(),items=all.filter(x=>String(x.user_id)===String(user.id)&&String(x.trip_id)===String(activeTrip.id));
+  panel.classList.toggle('hidden',!items.length);
+  const count=panel.querySelector('#stOutboxCount'),list=panel.querySelector('#stOutboxItems');
+  if(count)count.textContent=String(items.length);
+  if(list)list.innerHTML=items.slice().sort((a,b)=>a.created_at.localeCompare(b.created_at)).map(x=>'<div class="st-outbox-item"><span>'+escapeHtml(x.description)+'</span><strong>'+money(x.amount)+'</strong></div>').join('');
+ }catch(err){console.warn('Offline outbox display unavailable:',err);panel.classList.add('hidden')}
+}
+
 // Safely unsubscribe from the previous trip's realtime channel before switching trips.
 function cleanupChannel(){
   if(realtimeRefreshTimer){clearTimeout(realtimeRefreshTimer);realtimeRefreshTimer=null;}
@@ -1822,7 +1875,7 @@ function queueRealtimeRefresh(){
 async function openTrip(id){
  const trip=trips.find(t=>String(t.id)===String(id));
  if(!trip){notice('This trip is not in your accessible trip list. Refresh and try again.',true);return}
- activeTrip=trip;loadItineraryLocal();tripDataRequestId++;
+ activeTrip=trip;loadItineraryLocal();renderOfflineOutbox();tripDataRequestId++;
  try{localStorage.setItem('splittrip:lastTrip:'+user.id,String(trip.id))}catch{}
  cleanupChannel();if(realtimeRefreshTimer){clearTimeout(realtimeRefreshTimer);realtimeRefreshTimer=null}
  setWorkspace(true);$('activeTripName').textContent=trip.name||'Trip';$('activeInvite').textContent=trip.invite_code||'—';$('syncPill').textContent='LOADING…';
@@ -2128,6 +2181,19 @@ $('expenseForm').onsubmit=async e=>{
   pendingCreateFingerprint=createFingerprint;
  }
  const expenseId=editingExpenseId||pendingCreateExpenseId;
+ if(!navigator.onLine){
+  if(editing){setExpenseValidation('Editing an existing expense offline is not available yet. Reconnect to update it.');return}
+  if(file){setExpenseValidation('Receipt attachments are not available offline yet. Remove the receipt or reconnect before saving.','receiptFile');return}
+  try{
+   await putOfflineExpense({id:expenseId,trip_id:activeTrip.id,user_id:user.id,description,amount,category:$('category').value,payer_id:$('payer').value,shares:rows.map(r=>({user_id:r.user_id,amount:Number(r.amount)})),created_at:new Date().toISOString(),status:'pending'});
+   pendingCreateExpenseId=null;pendingCreateReceiptPath=null;pendingCreateFingerprint=null;
+   resetExpenseForm();await renderOfflineOutbox();
+   notice('Saved on this device — not yet shared.');
+   if(saveAndAddAnotherRequested){$('desc').focus({preventScroll:true})}else{closeQuickExpenseModal()}
+  }catch(err){setExpenseValidation('Could not save offline: '+(err?.message||'Device storage unavailable.'))}
+  saveAndAddAnotherRequested=false;
+  return;
+ }
  clearExpenseValidation();
  const oldLabel=saveButton.textContent;
  saveButton.disabled=true;
@@ -2627,7 +2693,7 @@ body[data-theme="dark"] .new-user-trip-guide button.secondary {
   function show(text,buttonText,handler){message.textContent=text;action.hidden=!buttonText;action.textContent=buttonText||'';action.onclick=handler||null;bar.dataset.visible='true';}
   function hide(){bar.dataset.visible='false';}
   dismiss.addEventListener('click',hide);
-  function networkState(){if(!navigator.onLine)show('You are offline. Existing trip data may be unavailable; new expenses are not saved offline yet.');else if(bar.dataset.kind==='offline'){hide();bar.dataset.kind='';}}
+  function networkState(){if(!navigator.onLine)show('You are offline. Existing trip data may be unavailable. New expenses can be saved on this device, but will not be shared until synced.');else if(bar.dataset.kind==='offline'){hide();bar.dataset.kind='';}}
   window.addEventListener('offline',()=>{bar.dataset.kind='offline';show('You are offline. Existing trip data may be unavailable; new expenses are not saved offline yet.');});
   window.addEventListener('online',()=>{if(bar.dataset.kind==='offline'){bar.dataset.kind='';show('You are back online.');setTimeout(()=>{if(bar.dataset.kind!=='update')hide();},2600);}});
   window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;show('Install SplitTrip for quicker access.','Install',async()=>{if(!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;hide();});});
