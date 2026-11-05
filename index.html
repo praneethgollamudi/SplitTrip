@@ -1476,90 +1476,6 @@ button:disabled{opacity:.58}
   #dashboardActivity .expense>.amount{font-size:14px}
 }
 </style>
-
-<style id="r147324-mobile-bottom-spacing">
-/* R14.7.32.4: remove duplicated mobile bottom clearance while preserving fixed controls. */
-@media (max-width:760px){
-  .shell{padding-bottom:8px!important}
-  #workspace{padding-bottom:calc(82px + env(safe-area-inset-bottom))!important}
-  #workspace .foot{margin-bottom:10px!important}
-}
-</style>
-
-
-<style id="r147331-dark-contrast-fix">
-/* R14.7.33.1 visual fix: dark-theme trip totals and split status */
-body[data-theme="dark"] #tripBalanceSummary{
-  background:linear-gradient(110deg,#203f3a,#2a3548)!important;
-  color:#e5f1ed!important;
-  border:1px solid #40575a!important;
-}
-body[data-theme="dark"] #tripBalanceSummary .cross-trip-compact{
-  background:#203639!important;
-  border-color:#40575a!important;
-  color:#e5f1ed!important;
-}
-body[data-theme="dark"] #tripBalanceSummary .cross-trip-compact summary,
-body[data-theme="dark"] #tripBalanceSummary .cross-trip-compact summary span,
-body[data-theme="dark"] #tripBalanceSummary .cross-trip-compact summary strong{
-  color:#e5f1ed!important;
-}
-body[data-theme="dark"] #tripBalanceSummary .cross-trip-compact summary small,
-body[data-theme="dark"] #tripBalanceSummary .balance-expand-hint,
-body[data-theme="dark"] #tripBalanceSummary .all-trip-totals span{
-  color:#a7bbb6!important;
-}
-body[data-theme="dark"] #tripBalanceSummary .all-trip-totals>div{
-  background:#263d40!important;
-  border-color:#40575a!important;
-  color:#e5f1ed!important;
-}
-body[data-theme="dark"] #tripBalanceSummary .all-trip-totals strong{
-  color:#e5f1ed!important;
-}
-body[data-theme="dark"] .expense-split-preview{
-  background:#203639!important;
-  border-color:#40575a!important;
-  color:#e5f1ed!important;
-}
-body[data-theme="dark"] .expense-split-preview strong,
-body[data-theme="dark"] .expense-split-preview .expense-split-preview-row span{
-  color:#e5f1ed;
-}
-body[data-theme="dark"] .expense-split-preview #expenseSplitStatus{
-  background:#28574d!important;
-  color:#d1f5e6!important;
-  border:1px solid #397a69;
-  flex:0 0 auto;
-  max-width:48%;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-@media(max-width:380px){
-  .expense-split-preview>.row:first-child{align-items:flex-start;gap:8px}
-  .expense-split-preview #expenseSplitStatus{white-space:normal;line-height:1.2;text-align:center}
-}
-</style>
-
-
-<style id="r147332-offline-outbox">
-#splitTripOfflineOutbox{position:fixed;z-index:1200;left:14px;right:14px;bottom:calc(74px + env(safe-area-inset-bottom));max-width:620px;margin:0 auto;padding:12px 14px;background:#173b35;color:#e9f7f1;border:1px solid #3c7668;border-radius:16px;box-shadow:0 8px 28px #0005}
-#splitTripOfflineOutbox.hidden{display:none!important}
-#splitTripOfflineOutbox .st-outbox-head,#splitTripOfflineOutbox .st-outbox-item{display:flex;align-items:center;justify-content:space-between;gap:12px}
-#splitTripOfflineOutbox .st-outbox-head{font-size:14px;margin-bottom:6px}
-#splitTripOfflineOutbox .st-outbox-head span{background:#285c50;border-radius:99px;padding:3px 9px;font-weight:800}
-#splitTripOfflineOutbox .st-outbox-item{font-size:13px;padding:3px 0}
-#splitTripOfflineOutbox small{display:block;color:#b8d4ca;margin-top:6px;line-height:1.35}
-body[data-theme="light"] #splitTripOfflineOutbox{background:#e9f7f1;color:#17483c;border-color:#9bcbbb}
-body[data-theme="light"] #splitTripOfflineOutbox small{color:#52776b}
-</style>
-
-
-<style id="r147333-outbox-sync">
-#splitTripOfflineOutbox .st-outbox-item small{font-size:.78em;line-height:1.35;margin-top:3px;color:var(--muted,#b7c9c4)}
-#splitTripOfflineOutbox .st-outbox-item{gap:10px}
-</style>
-
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo" aria-label="SplitTrip linked-rings logo"><svg viewBox="0 0 64 40" role="img" aria-hidden="true"><path d="M25 8H19a12 12 0 0 0 0 24h10a12 12 0 0 0 9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M39 8h6a12 12 0 0 1 0 24H35a12 12 0 0 1-9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/></svg></div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -1727,114 +1643,8 @@ const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const configured=SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('YOUR_') && !SUPABASE_ANON_KEY.includes('YOUR_');
 const $=id=>document.getElementById(id),urlParams=new URLSearchParams(location.search),inviteFromUrl=urlParams.get("invite"),claimFromUrl=urlParams.get("claim"),money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}),escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let sb=null,user=null,trips=[],activeTrip=null,members=[],expenses=[],channel=null,shares=[],payments=[],editingExpenseId=null,claimAttempted=false,archivePreview=false;
-// A create retry must reuse its client UUID and uploaded receipt until the server confirms success.
-let pendingCreateExpenseId=null,pendingCreateReceiptPath=null,pendingCreateFingerprint=null;
 // Request sequencing prevents slower responses for an old trip (or older refresh) overwriting newer state.
 let tripDataRequestId=0,realtimeRefreshTimer=null;
-
-// R14.7.33.2 — durable, device-local expense outbox. This stage stores only; sync is added separately.
-const SPLITTRIP_OUTBOX_DB='splittrip-offline-outbox-v1',SPLITTRIP_OUTBOX_STORE='expenses';
-let splitTripOutboxDbPromise=null;
-function openSplitTripOutbox(){
- if(!('indexedDB' in window))return Promise.reject(new Error('This browser does not support offline storage.'));
- if(!splitTripOutboxDbPromise)splitTripOutboxDbPromise=new Promise((resolve,reject)=>{
-  const request=indexedDB.open(SPLITTRIP_OUTBOX_DB,1);
-  request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(SPLITTRIP_OUTBOX_STORE))db.createObjectStore(SPLITTRIP_OUTBOX_STORE,{keyPath:'id'})};
-  request.onsuccess=()=>resolve(request.result);request.onerror=()=>reject(request.error||new Error('Could not open offline storage.'));
- });
- return splitTripOutboxDbPromise;
-}
-async function putOfflineExpense(record){
- const db=await openSplitTripOutbox();
- return new Promise((resolve,reject)=>{const tx=db.transaction(SPLITTRIP_OUTBOX_STORE,'readwrite');tx.objectStore(SPLITTRIP_OUTBOX_STORE).put(record);tx.oncomplete=()=>resolve(record);tx.onerror=()=>reject(tx.error||new Error('Could not save this expense on the device.'));tx.onabort=()=>reject(tx.error||new Error('Offline save was interrupted.'))});
-}
-async function getOfflineExpenses(){
- const db=await openSplitTripOutbox();
- return new Promise((resolve,reject)=>{const tx=db.transaction(SPLITTRIP_OUTBOX_STORE,'readonly'),req=tx.objectStore(SPLITTRIP_OUTBOX_STORE).getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error||new Error('Could not read saved offline expenses.'))});
-}
-async function deleteOfflineExpense(id){
- const db=await openSplitTripOutbox();
- return new Promise((resolve,reject)=>{const tx=db.transaction(SPLITTRIP_OUTBOX_STORE,'readwrite');tx.objectStore(SPLITTRIP_OUTBOX_STORE).delete(id);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error||new Error('Could not remove synced expense from the local outbox.'))});
-}
-async function updateOfflineExpense(record){
- const db=await openSplitTripOutbox();
- return new Promise((resolve,reject)=>{const tx=db.transaction(SPLITTRIP_OUTBOX_STORE,'readwrite');tx.objectStore(SPLITTRIP_OUTBOX_STORE).put(record);tx.oncomplete=()=>resolve(record);tx.onerror=()=>reject(tx.error||new Error('Could not update local sync status.'))});
-}
-function ensureOfflineOutboxPanel(){
- let panel=document.getElementById('splitTripOfflineOutbox');
- if(panel)return panel;
- panel=document.createElement('aside');panel.id='splitTripOfflineOutbox';panel.setAttribute('aria-live','polite');panel.className='hidden';
- panel.innerHTML='<div class="st-outbox-head"><strong>Saved on this device</strong><span id="stOutboxCount">0</span></div><div id="stOutboxItems"></div><small id="stOutboxHint">Not yet shared with your trip. We will retry when a connection is available. Keep this device and browser data until sync completes.</small>';
- document.body.appendChild(panel);return panel;
-}
-async function renderOfflineOutbox(){
- const panel=ensureOfflineOutboxPanel();
- if(!user||!activeTrip){panel.classList.add('hidden');return}
- try{
-  const all=await getOfflineExpenses(),items=all.filter(x=>String(x.user_id)===String(user.id)&&String(x.trip_id)===String(activeTrip.id));
-  panel.classList.toggle('hidden',!items.length);
-  const count=panel.querySelector('#stOutboxCount'),list=panel.querySelector('#stOutboxItems');
-  if(count)count.textContent=String(items.length);
-  if(list)list.innerHTML=items.slice().sort((a,b)=>a.created_at.localeCompare(b.created_at)).map(x=>'<div class="st-outbox-item"><span>'+escapeHtml(x.description)+'<small style="display:block;opacity:.75">'+(x.status==='syncing'?'Syncing…':x.last_error?'Sync pending — '+escapeHtml(x.last_error):'Waiting to sync')+'</small></span><strong>'+money(x.amount)+'</strong></div>').join('');
-  const syncPill=document.getElementById('syncPill');
-  if(syncPill&&items.length)syncPill.textContent=navigator.onLine?'PENDING UPLOAD':'OFFLINE';
-  else if(syncPill&&syncPill.textContent==='PENDING UPLOAD'&&navigator.onLine)syncPill.textContent='LIVE SYNC';
-  const hint=panel.querySelector('#stOutboxHint');if(hint)hint.textContent=items.some(x=>x.last_error)?'Some expenses could not be synced yet. They remain safely stored on this device; correct the issue or retry when ready.':'Not yet shared with your trip. Sync will retry when a connection is available. Keep this device and browser data until sync completes.';
- }catch(err){console.warn('Offline outbox display unavailable:',err);panel.classList.add('hidden')}
-}
-
-
-// R14.7.33.3 — sync locally queued expenses once the authenticated session is online.
-let splitTripOutboxSyncRunning=false;
-async function syncOfflineExpenses(){
- if(splitTripOutboxSyncRunning||!navigator.onLine||!user||!activeTrip||!sb)return;
- splitTripOutboxSyncRunning=true;
- try{
-  const all=await getOfflineExpenses();
-  const pending=all.filter(x=>String(x.user_id)===String(user.id)&&String(x.trip_id)===String(activeTrip.id));
-  for(const item of pending){
-   if(!navigator.onLine||!user||String(item.user_id)!==String(user.id)||String(item.trip_id)!==String(activeTrip?.id))break;
-   item.status='syncing';item.last_error=null;
-   await updateOfflineExpense(item);await renderOfflineOutbox();
-   try{
-    const {data,error}=await sb.rpc('create_expense_idempotent',{
-     p_expense_id:item.id,
-     p_trip_id:item.trip_id,
-     p_description:item.description,
-     p_amount:item.amount,
-     p_category:item.category,
-     p_payer_id:item.payer_id,
-     p_receipt_path:null,
-     p_shares:item.shares
-    });
-    if(error)throw error;
-    await deleteOfflineExpense(item.id);
-    try{rememberSplitMode(data||item.id,'equal')}catch{}
-    await renderOfflineOutbox();
-   }catch(err){
-    item.status='pending';
-    item.last_error=String(err?.message||'Could not sync yet').slice(0,140);
-    await updateOfflineExpense(item);
-    console.warn('Offline expense sync deferred:',item.id,err);
-    await renderOfflineOutbox();
-    // Preserve ordering: do not continue past a failed expense.
-    break;
-   }
-  }
-  if(pending.length){
-   const remaining=(await getOfflineExpenses()).filter(x=>String(x.user_id)===String(user.id)&&String(x.trip_id)===String(activeTrip?.id));
-   if(!remaining.length){
-    notice('Offline expenses synced and shared with the trip.');
-    await loadTripData();
-   }
-  }
- }catch(err){console.warn('Offline outbox sync could not start:',err)}
- finally{splitTripOutboxSyncRunning=false;await renderOfflineOutbox()}
-}
-window.addEventListener('online',()=>{setTimeout(()=>syncOfflineExpenses(),800)});
-window.addEventListener('focus',()=>{if(navigator.onLine)syncOfflineExpenses()});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&navigator.onLine)syncOfflineExpenses()});
-
 // Safely unsubscribe from the previous trip's realtime channel before switching trips.
 function cleanupChannel(){
   if(realtimeRefreshTimer){clearTimeout(realtimeRefreshTimer);realtimeRefreshTimer=null;}
@@ -1937,7 +1747,6 @@ async function refreshActiveTrip(){
  const pill=$('syncPill');if(pill)pill.textContent='REFRESHING…';
  const ok=await loadTripData();
  if(pill&&activeTrip)pill.textContent=ok?'LIVE SYNC':'RETRY NEEDED';
- if(ok&&navigator.onLine)syncOfflineExpenses();
 }
 function queueRealtimeRefresh(){
  if(realtimeRefreshTimer)clearTimeout(realtimeRefreshTimer);
@@ -1946,7 +1755,7 @@ function queueRealtimeRefresh(){
 async function openTrip(id){
  const trip=trips.find(t=>String(t.id)===String(id));
  if(!trip){notice('This trip is not in your accessible trip list. Refresh and try again.',true);return}
- activeTrip=trip;loadItineraryLocal();renderOfflineOutbox();tripDataRequestId++;
+ activeTrip=trip;loadItineraryLocal();tripDataRequestId++;
  try{localStorage.setItem('splittrip:lastTrip:'+user.id,String(trip.id))}catch{}
  cleanupChannel();if(realtimeRefreshTimer){clearTimeout(realtimeRefreshTimer);realtimeRefreshTimer=null}
  setWorkspace(true);$('activeTripName').textContent=trip.name||'Trip';$('activeInvite').textContent=trip.invite_code||'—';$('syncPill').textContent='LOADING…';
@@ -1965,7 +1774,6 @@ async function openTrip(id){
     pill.title='Sync status: '+status+'. Activate to refresh trip data.';
    });
   render();
-  if(navigator.onLine)syncOfflineExpenses();
  }catch(err){console.error(err);notice('Trip opened, but its data could not be refreshed: '+(err?.message||'Unknown error'),true);setWorkspace(true)}
 }
 async function loadTripData(rerender=true){
@@ -2197,7 +2005,7 @@ let quickExpenseModal=null,quickExpenseCard=null,quickExpensePlaceholder=null,qu
 function ensureQuickExpenseModal(){if(quickExpenseModal)return quickExpenseModal;const backdrop=document.createElement('div');backdrop.id='quickExpenseModal';backdrop.className='quick-expense-backdrop hidden';backdrop.innerHTML='<section class="quick-expense-dialog" role="dialog" aria-modal="true" aria-labelledby="quickExpenseModalTitle"><div class="quick-expense-dialog-head"><h2 id="quickExpenseModalTitle">Add an expense</h2><button type="button" class="secondary" id="closeQuickExpenseModal">Close ✕</button></div><div id="quickExpenseModalContent"></div></section>';document.body.appendChild(backdrop);backdrop.addEventListener('click',e=>{if(e.target===backdrop)closeQuickExpenseModal()});backdrop.querySelector('#closeQuickExpenseModal').addEventListener('click',closeQuickExpenseModal);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&quickExpenseModal&&!quickExpenseModal.classList.contains('hidden'))closeQuickExpenseModal()});quickExpenseModal=backdrop;return backdrop}
 function openQuickExpenseModal(){const modal=ensureQuickExpenseModal(),form=$('expenseForm');if(!form)return;const card=form.closest('.layout')?.querySelector(':scope > .card');if(!card){notice('The expense form is unavailable. Refresh the page and try again.',true);return}if(!quickExpenseCard){quickExpenseCard=card;quickExpensePlaceholder=document.createComment('SplitTrip expense form location');card.parentNode.insertBefore(quickExpensePlaceholder,card)}modal.querySelector('#quickExpenseModalContent').appendChild(quickExpenseCard);modal.classList.remove('hidden');document.body.classList.add('quick-expense-open');modal.querySelector('#quickExpenseModalTitle').textContent=editingExpenseId?'Edit expense':'Add an expense';window.setTimeout(()=>$(editingExpenseId?'desc':'desc')?.focus({preventScroll:true}),80)}
 function closeQuickExpenseModal(){if(!quickExpenseModal||quickExpenseModal.classList.contains('hidden'))return;if(quickExpenseCard&&quickExpensePlaceholder?.parentNode)quickExpensePlaceholder.parentNode.insertBefore(quickExpenseCard,quickExpensePlaceholder);quickExpenseModal.classList.add('hidden');document.body.classList.remove('quick-expense-open');quickExpenseReturnFocus?.focus?.({preventScroll:true})}
-function splitMetaKey(tripId){return 'splittrip:splitModes:'+tripId}function readSplitModeMeta(tripId){try{return JSON.parse(localStorage.getItem(splitMetaKey(tripId))||'{}')}catch{return {}}}function rememberSplitMode(expenseId,mode){if(!activeTrip||!expenseId)return;try{const meta=readSplitModeMeta(activeTrip.id);meta[expenseId]=mode;localStorage.setItem(splitMetaKey(activeTrip.id),JSON.stringify(meta))}catch(e){console.warn('Could not persist split method metadata',e)}}function rememberedSplitMode(expenseId){return readSplitModeMeta(activeTrip?.id)[expenseId]||null}function updateSplitPresetState(){document.querySelectorAll('[data-split-preset]').forEach(b=>b.classList.toggle('active',b.dataset.splitPreset===$('splitMode').value))}function resetExpenseForm(){if(pendingCreateReceiptPath&&sb){sb.storage.from('splittrip-receipts').remove([pendingCreateReceiptPath]).catch(()=>{});}pendingCreateExpenseId=null;pendingCreateReceiptPath=null;pendingCreateFingerprint=null;clearReceiptSelection();restoreExpensePrefs();editingExpenseId=null;expenseDraftDirty=false;$('expenseForm').reset();$('splitMode').value='equal';$('category').value=lastExpenseCategory; if(lastExpensePayer&&members.some(m=>m.user_id===lastExpensePayer))$('payer').value=lastExpensePayer;renderShareInputs(members.map(m=>m.user_id));$('advancedExpenseOptions').open=false;$('expenseFormTitle').textContent='Quick add expense';$('amt').setAttribute('placeholder','0.00');$('saveExpenseButton').textContent='＋ Quick add expense';$('cancelEditExpense').classList.add('hidden');$('saveAndAddAnother').classList.remove('hidden');$('receiptHint').textContent='Private to members of this trip.';$('quickAddHint').textContent='Quick Add · equal split across everyone, using your last payer and category.'}
+function splitMetaKey(tripId){return 'splittrip:splitModes:'+tripId}function readSplitModeMeta(tripId){try{return JSON.parse(localStorage.getItem(splitMetaKey(tripId))||'{}')}catch{return {}}}function rememberSplitMode(expenseId,mode){if(!activeTrip||!expenseId)return;try{const meta=readSplitModeMeta(activeTrip.id);meta[expenseId]=mode;localStorage.setItem(splitMetaKey(activeTrip.id),JSON.stringify(meta))}catch(e){console.warn('Could not persist split method metadata',e)}}function rememberedSplitMode(expenseId){return readSplitModeMeta(activeTrip?.id)[expenseId]||null}function updateSplitPresetState(){document.querySelectorAll('[data-split-preset]').forEach(b=>b.classList.toggle('active',b.dataset.splitPreset===$('splitMode').value))}function resetExpenseForm(){clearReceiptSelection();restoreExpensePrefs();editingExpenseId=null;expenseDraftDirty=false;$('expenseForm').reset();$('splitMode').value='equal';$('category').value=lastExpenseCategory; if(lastExpensePayer&&members.some(m=>m.user_id===lastExpensePayer))$('payer').value=lastExpensePayer;renderShareInputs(members.map(m=>m.user_id));$('advancedExpenseOptions').open=false;$('expenseFormTitle').textContent='Quick add expense';$('amt').setAttribute('placeholder','0.00');$('saveExpenseButton').textContent='＋ Quick add expense';$('cancelEditExpense').classList.add('hidden');$('saveAndAddAnother').classList.remove('hidden');$('receiptHint').textContent='Private to members of this trip.';$('quickAddHint').textContent='Quick Add · equal split across everyone, using your last payer and category.'}
 function startDuplicateExpense(id){const e=expenses.find(x=>x.id===id);if(!e||!activeTrip){notice('This expense is no longer available. Refresh and try again.',true);return}const old=shares.filter(x=>x.expense_id===id&&members.some(m=>m.user_id===x.user_id));if(!old.length){notice('Could not find the original split. Refresh trip data and try again.',true);return}editingExpenseId=null;resetExpenseForm();$('desc').value=e.description;$('amt').value='';$('payer').value=members.some(m=>m.user_id===e.payer_id)?e.payer_id:(lastExpensePayer||members[0]?.user_id||'');$('category').value=e.category||'Other';const ids=old.map(x=>x.user_id);const amountMap=Object.fromEntries(old.map(x=>[x.user_id,Number(x.amount).toFixed(2)]));const total=cents(old.reduce((a,x)=>a+Number(x.amount),0));const equal=old.length>0&&old.every(x=>cents(x.amount)===cents(old[0].amount))&&total===cents(e.amount);const storedMode=rememberedSplitMode(id);const copiedMode=storedMode|| (equal?'equal':'custom');$('splitMode').value=copiedMode;renderShareInputs(ids,amountMap);$('advancedExpenseOptions').open=copiedMode!=='equal';updateSplitPresetState();$('expenseFormTitle').textContent='Duplicate expense · new draft';$('quickAddHint').textContent='Copied from “'+e.description+'”. '+(storedMode?'Original split method restored: '+({'equal':'Split equally','custom':'Custom amounts','percent':'Percentages','shares':'Weighted shares'}[copiedMode])+'. ':'Saved allocations were copied; this older expense does not have its split method saved on this device, so review the method. ')+'This is a new draft. Enter the new amount; the original expense and receipt are unchanged.';$('saveExpenseButton').textContent='＋ Save duplicated expense';$('cancelEditExpense').classList.add('hidden');$('amt').setAttribute('placeholder','Enter new amount');$('receiptFile').value='';$('receiptHint').textContent='The original receipt was not copied. Attach a receipt only if it belongs to this new expense.';lastExpenseTemplate={description:e.description,amount:Number(e.amount),payerId:$('payer').value,category:$('category').value,shareIds:ids,shareAmounts:amountMap,splitMode:$('splitMode').value};persistExpensePrefs();document.querySelector('[data-tab="home"]').click();$('expenseForm').scrollIntoView({behavior:'smooth',block:'start'});$('amt').focus({preventScroll:true});notice('Expense copied into a new draft. Enter the new amount and review the payer and split before saving.')}function repeatLastExpense(){if(!activeTrip||!lastExpenseTemplate){notice('Add or duplicate an expense first; then you can repeat it here.',true);return}resetExpenseForm();const t=lastExpenseTemplate;$('desc').value=t.description;$('amt').value=Number(t.amount).toFixed(2);$('payer').value=members.some(m=>m.user_id===t.payerId)?t.payerId:(lastExpensePayer||members[0]?.user_id||'');$('category').value=t.category||'Other';$('splitMode').value=t.splitMode||'equal';const ids=(t.shareIds||members.map(m=>m.user_id)).filter(id=>members.some(m=>m.user_id===id));renderShareInputs(ids,t.shareAmounts||{});$('advancedExpenseOptions').open=$('splitMode').value!=='equal';$('expenseFormTitle').textContent='Repeat last expense · new draft';$('quickAddHint').textContent='Copied your last expense settings. Review before saving; no expense has been created yet.';$('saveExpenseButton').textContent='＋ Save repeated expense';$('receiptFile').value='';$('receiptHint').textContent='Receipts are not repeated automatically.';document.querySelector('[data-tab="home"]').click();$('expenseForm').scrollIntoView({behavior:'smooth',block:'start'});$('desc').focus({preventScroll:true})}function startEditExpense(id){const e=expenses.find(x=>x.id===id);if(!e||!canManageExpense(e)){notice('Only the expense creator or trip owner can edit this expense.',true);return}editingExpenseId=id;$('advancedExpenseOptions').open=true;$('desc').value=e.description;$('amt').value=Number(e.amount).toFixed(2);$('payer').value=e.payer_id;$('category').value=e.category;const old=shares.filter(x=>x.expense_id===id);const ids=old.map(x=>x.user_id);const amountMap=Object.fromEntries(old.map(x=>[x.user_id,Number(x.amount).toFixed(2)]));const isEqual=old.length>0&&old.every(x=>cents(x.amount)===cents(old[0].amount))&&cents(old.reduce((a,x)=>a+Number(x.amount),0))===cents(e.amount);$('splitMode').value=isEqual?'equal':'custom';renderShareInputs(ids,amountMap);$('expenseFormTitle').textContent='Edit expense';$('quickAddHint').textContent='Editing an existing expense · advanced options are expanded.';$('saveExpenseButton').textContent='Save changes';$('cancelEditExpense').classList.remove('hidden');$('saveAndAddAnother').classList.add('hidden');$('receiptHint').textContent=e.receipt_path?'A receipt is attached. Choose a new photo to replace it.':'No receipt attached yet.';document.querySelector('[data-tab="home"]').click();$('expenseForm').scrollIntoView({behavior:'smooth',block:'start'})}
 $('cancelEditExpense').onclick=resetExpenseForm;
 async function viewReceipt(path){const popup=window.open('about:blank','_blank');const {data,error}=await sb.storage.from('splittrip-receipts').createSignedUrl(path,60);if(error){if(popup)popup.close();notice('Could not open receipt: '+error.message,true);return}if(popup)popup.location=data.signedUrl;else location.href=data.signedUrl}
@@ -2226,80 +2034,7 @@ let picked=null;const priority=candidates.filter(c=>/(grand total|amount paid|ne
 $('runReceiptImport').onclick=async()=>{const files=[...($('receiptImportFiles').files||[])];if(!files.length){notice('Choose one or more receipt images first.',true);return}if(files.length>10){notice('Choose no more than 10 images at a time.',true);return}for(const f of files){if(!['image/jpeg','image/png','image/webp'].includes(f.type)||f.size>5*1024*1024){notice('Each image must be JPG, PNG, or WebP and no larger than 5 MB.',true);return}}const btn=$('runReceiptImport');btn.disabled=true;btn.textContent='Scanning…';$('receiptImportStatus').classList.remove('hidden');$('receiptImportStatus').textContent='Loading on-device OCR…';$('receiptImportProgress').textContent='';$('receiptOcrDetails').classList.add('hidden');let rawAll=[];let parsed=[];try{const Tesseract=await loadTesseract();const worker=await Tesseract.createWorker('eng',1,{logger:m=>{if(m.status==='recognizing text')$('receiptImportProgress').textContent=`Reading receipt ${Math.min(files.length,parsed.length+1)} of ${files.length} · ${Math.round((m.progress||0)*100)}%`}});try{for(let i=0;i<files.length;i++){ $('receiptImportProgress').textContent=`Reading receipt ${i+1} of ${files.length}…`;const result=await worker.recognize(files[i]);const raw=result.data.text||'';rawAll.push(`--- ${files[i].name} ---\n${raw}`);parsed.push(parseReceiptText(raw,i+1))}}finally{await worker.terminate()}$('receiptOcrText').textContent=rawAll.join('\n\n');$('receiptOcrDetails').classList.remove('hidden');$('bulkPanel').classList.remove('hidden');if(!$('bulkRows').children.length)addBulkRow();const current=[...document.querySelectorAll('.bulk-row')];if(current.length===1&&!current[0].querySelector('.bulk-desc').value&&!current[0].querySelector('.bulk-amount').value)current[0].remove();for(const item of parsed)addBulkRow(item.description,item.amount,$('bulkDefaultPayer').value||user.id,$('bulkDefaultCategory').value);$('receiptImportStatus').textContent=`Scanned ${parsed.length} image(s). Review the new rows in Bulk Add: ${parsed.filter(x=>x.amountFound).length} amount(s) detected. OCR can be wrong; confirm each amount before saving.`;$('bulkPanel').scrollIntoView({behavior:'smooth',block:'start'});updateBulkTotal()}catch(err){$('receiptImportStatus').textContent='Could not scan receipts: '+(err?.message||'Unknown error');}finally{btn.disabled=false;btn.textContent='Scan receipts'}};
 $('saveBulk').onclick=async()=>{if(!activeTrip||!user)return;const btn=$('saveBulk');if(btn.disabled)return;const rows=[...document.querySelectorAll('.bulk-row')].map(r=>({description:r.querySelector('.bulk-desc').value.trim(),amount:Math.round(Number(r.querySelector('.bulk-amount').value)*100)/100,payer_id:r.querySelector('.bulk-payer').value,category:r.querySelector('.bulk-category').value,shares:members.map(m=>m.user_id).map(id=>({user_id:id,amount:0}))}));if(!rows.length||rows.length>50){notice('Add between 1 and 50 expenses per batch.',true);return}for(let i=0;i<rows.length;i++){if(!rows[i].description||rows[i].description.length>160||!Number.isFinite(rows[i].amount)||rows[i].amount<=0||!members.some(m=>m.user_id===rows[i].payer_id)){notice(`Check row ${i+1}: description, amount, and payer are required.`,true);return}const cents=Math.round(rows[i].amount*100),n=members.length;if(!n){notice('Add a member before recording expenses.',true);return}let base=Math.floor(cents/n),rem=cents-base*n;rows[i].shares=members.map((m,j)=>({user_id:m.user_id,amount:(base+(j<rem?1:0))/100}))}btn.disabled=true;btn.textContent='Saving batch…';try{const {data,error}=await sb.rpc('save_expense_batch_with_shares',{p_trip_id:activeTrip.id,p_expenses:rows});if(error)throw error;$('bulkRows').innerHTML='';$('bulkPanel').classList.add('hidden');await loadTripData();notice(`${rows.length} expenses saved successfully.`)}catch(err){notice('Batch was not saved: '+(err?.message||'Unknown error'),true)}finally{btn.disabled=false;btn.textContent='Save all expenses'}};
 let saveAndAddAnotherRequested=false;$('saveAndAddAnother').addEventListener('click',()=>{saveAndAddAnotherRequested=true;$('expenseForm').requestSubmit()});
-$('expenseForm').onsubmit=async e=>{
- e.preventDefault();
- const saveButton=$('saveExpenseButton');
- if(saveButton.disabled)return;
- if(!activeTrip||!user){setExpenseValidation('Open a trip and wait for it to finish loading before saving.');return}
- const description=$('desc').value.trim();
- if(!description||description.length>160){setExpenseValidation('Enter an expense description between 1 and 160 characters.','desc');return}
- const amount=Math.round(Number($('amt').value)*100)/100;
- if(!Number.isFinite(amount)||amount<=0){setExpenseValidation('Enter an amount greater than ₹0.00.','amt');return}
- if(!members.some(m=>m.user_id===$('payer').value)){setExpenseValidation('Choose who paid for this expense.','payer');return}
- let rows;
- try{rows=selectedShareRows(amount)}catch(err){setExpenseValidation((err?.message||'Check the selected participants and split amounts.')+' Review the Split & receipt options before saving.','splitMode');return}
- const file=$('receiptFile').files?.[0]||null;
- if(file&&(file.size>5*1024*1024||!['image/jpeg','image/png','image/webp','image/heic'].includes(file.type))){setExpenseValidation('Receipt must be JPG, PNG, WebP or HEIC and no larger than 5 MB. Remove the file or choose a valid image.','receiptFile');return}
- const editing=!!editingExpenseId;
- const existing=editing?expenses.find(x=>x.id===editingExpenseId):null;
- if(editing&&(!existing||!canManageExpense(existing))){notice('You do not have permission to edit this expense.',true);return}
- const createFingerprint=JSON.stringify({tripId:activeTrip.id,description,amount,category:$('category').value,payerId:$('payer').value,shares:rows.map(r=>({user_id:r.user_id,amount:Number(r.amount)})),file:file?{name:file.name,size:file.size,type:file.type,lastModified:file.lastModified}:null});
- if(!editing){
-  if(pendingCreateExpenseId&&pendingCreateFingerprint!==createFingerprint){
-   if(pendingCreateReceiptPath)try{await sb.storage.from('splittrip-receipts').remove([pendingCreateReceiptPath])}catch(err){console.warn('Could not remove superseded pending receipt',err)}
-   pendingCreateExpenseId=null;pendingCreateReceiptPath=null;pendingCreateFingerprint=null;
-  }
-  if(!pendingCreateExpenseId)pendingCreateExpenseId=crypto.randomUUID();
-  pendingCreateFingerprint=createFingerprint;
- }
- const expenseId=editingExpenseId||pendingCreateExpenseId;
- if(!navigator.onLine){
-  if(editing){setExpenseValidation('Editing an existing expense offline is not available yet. Reconnect to update it.');return}
-  if(file){setExpenseValidation('Receipt attachments are not available offline yet. Remove the receipt or reconnect before saving.','receiptFile');return}
-  try{
-   await putOfflineExpense({id:expenseId,trip_id:activeTrip.id,user_id:user.id,description,amount,category:$('category').value,payer_id:$('payer').value,shares:rows.map(r=>({user_id:r.user_id,amount:Number(r.amount)})),created_at:new Date().toISOString(),status:'pending'});
-   pendingCreateExpenseId=null;pendingCreateReceiptPath=null;pendingCreateFingerprint=null;
-   resetExpenseForm();await renderOfflineOutbox();
-   notice('Saved on this device — not yet shared.');
-   if(saveAndAddAnotherRequested){$('desc').focus({preventScroll:true})}else{closeQuickExpenseModal()}
-  }catch(err){setExpenseValidation('Could not save offline: '+(err?.message||'Device storage unavailable.'))}
-  saveAndAddAnotherRequested=false;
-  return;
- }
- clearExpenseValidation();
- const oldLabel=saveButton.textContent;
- saveButton.disabled=true;
- saveButton.textContent=file&&!pendingCreateReceiptPath&&!editing?'Uploading receipt…':'Saving…';
- let receiptPath=editing?null:pendingCreateReceiptPath;
- if(file&&!receiptPath){
-  try{
-   receiptPath=await uploadReceipt(file,`${activeTrip.id}/${user.id}/${expenseId}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`);
-   if(!editing)pendingCreateReceiptPath=receiptPath;
-  }catch(err){notice(err.message,true);saveButton.disabled=false;saveButton.textContent=oldLabel;return}
- }
- saveButton.textContent='Saving…';
- try{
-  const {data,error}=await sb.rpc(editing?'save_expense_with_shares':'create_expense_idempotent',{p_expense_id:expenseId,p_trip_id:activeTrip.id,p_description:description,p_amount:amount,p_category:$('category').value,p_payer_id:$('payer').value,p_receipt_path:receiptPath,p_shares:rows.map(r=>({user_id:r.user_id,amount:Number(r.amount)}))});
-  if(error)throw error;
-  const savedSplitMode=$('splitMode').value;
-  const returnedExpenseId=typeof data==='string'?data:(data?.id||data?.expense_id||null);
-  if(editing)rememberSplitMode(expenseId,savedSplitMode);
-  else{
-   rememberSplitMode(returnedExpenseId||expenseId,savedSplitMode);
-   pendingCreateExpenseId=null;pendingCreateReceiptPath=null;pendingCreateFingerprint=null;
-  }
-  if(receiptPath&&existing?.receipt_path&&existing.receipt_path!==receiptPath)await sb.storage.from('splittrip-receipts').remove([existing.receipt_path]);
-  lastExpensePayer=$('payer').value;lastExpenseCategory=$('category').value;
-  lastExpenseTemplate={description,amount,payerId:$('payer').value,category:$('category').value,shareIds:rows.map(r=>r.user_id),shareAmounts:Object.fromEntries(rows.map(r=>[r.user_id,Number(r.amount).toFixed(2)])),splitMode:$('splitMode').value};
-  persistExpensePrefs();resetExpenseForm();await loadTripData();
-  if(!editing&&!returnedExpenseId){const candidate=expenses.filter(x=>x.description===description&&Number(x.amount)===Number(amount)&&x.payer_id===$('payer').value).sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0))[0];if(candidate)rememberSplitMode(candidate.id,savedSplitMode)}
-  setExpenseValidation('');notice(editing?'Expense updated.':saveAndAddAnotherRequested?'Expense saved. Add the next one.':'Expense shared with the group.');
-  if(saveAndAddAnotherRequested){$('desc').focus({preventScroll:true});$('desc').scrollIntoView({behavior:'smooth',block:'center'})}else{closeQuickExpenseModal()}
- }catch(err){
-  if(receiptPath&&editing)await sb.storage.from('splittrip-receipts').remove([receiptPath]);
-  notice('Could not save expense: '+(err?.message||'Unknown error')+'. '+(editing?'Your previous expense and split were not changed.':'Your draft ID and receipt are retained so retrying the same expense cannot create a duplicate.'),true)
- }finally{saveButton.disabled=false;saveButton.textContent=oldLabel;saveAndAddAnotherRequested=false}
-};function openQuickAddExpense(){if(!activeTrip||!user){notice('Open a trip and wait for it to finish loading before adding an expense.',true);return}const form=$('expenseForm');if(!form){notice('The expense form is unavailable. Refresh the page and try again.',true);return}quickExpenseReturnFocus=document.activeElement;if(!editingExpenseId)resetExpenseForm();openQuickExpenseModal()}const quickAddButton=$('dashboardAddExpense');if(quickAddButton){quickAddButton.type='button';quickAddButton.addEventListener('click',openQuickAddExpense)}const stickyAddButton=$('splitTripQuickAdd');if(stickyAddButton)stickyAddButton.addEventListener('click',openQuickAddExpense);$('cancelEditExpense')?.addEventListener('click',closeQuickExpenseModal);$('openSettleFromBalances')?.addEventListener('click',()=>document.querySelector('[data-tab="settle"]').click());const repeatButton=$('repeatLastExpense');if(repeatButton)repeatButton.addEventListener('click',repeatLastExpense);$('dashboardViewBalances').onclick=()=>document.querySelector('[data-tab="balances"]').click();$('dashboardViewExpenses').onclick=()=>document.querySelector('[data-tab="expenses"]').click();$('dashboardViewSettle').onclick=()=>document.querySelector('[data-tab="settle"]').click();const transferStat=$('dashboardTransferStat');if(transferStat)transferStat.onclick=()=>document.querySelector('[data-tab="settle"]').click();
+$('expenseForm').onsubmit=async e=>{e.preventDefault();const saveButton=$('saveExpenseButton');if(saveButton.disabled)return;if(!activeTrip||!user){setExpenseValidation('Open a trip and wait for it to finish loading before saving.');return}const description=$('desc').value.trim();if(!description||description.length>160){setExpenseValidation('Enter an expense description between 1 and 160 characters.','desc');return}const amount=Math.round(Number($('amt').value)*100)/100;if(!Number.isFinite(amount)||amount<=0){setExpenseValidation('Enter an amount greater than ₹0.00.','amt');return}if(!members.some(m=>m.user_id===$('payer').value)){setExpenseValidation('Choose who paid for this expense.','payer');return}let rows;try{rows=selectedShareRows(amount)}catch(err){setExpenseValidation((err?.message||'Check the selected participants and split amounts.')+' Review the Split & receipt options before saving.','splitMode');return}const file=$('receiptFile').files?.[0]||null;if(file&&(file.size>5*1024*1024||!['image/jpeg','image/png','image/webp','image/heic'].includes(file.type))){setExpenseValidation('Receipt must be JPG, PNG, WebP or HEIC and no larger than 5 MB. Remove the file or choose a valid image.','receiptFile');return}const editing=!!editingExpenseId;const existing=editing?expenses.find(x=>x.id===editingExpenseId):null;if(editing&&(!existing||!canManageExpense(existing))){notice('You do not have permission to edit this expense.',true);return}const expenseId=editingExpenseId||crypto.randomUUID();clearExpenseValidation();const oldLabel=saveButton.textContent;saveButton.disabled=true;saveButton.textContent=file?'Uploading receipt…':'Saving…';let receiptPath=null;if(file){try{receiptPath=await uploadReceipt(file,`${activeTrip.id}/${user.id}/${expenseId}/${crypto.randomUUID()}-${file.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`)}catch(err){notice(err.message,true);saveButton.disabled=false;saveButton.textContent=oldLabel;return}}saveButton.textContent='Saving…';try{const {data,error}=await sb.rpc('save_expense_with_shares',{p_expense_id:editing?expenseId:null,p_trip_id:activeTrip.id,p_description:description,p_amount:amount,p_category:$('category').value,p_payer_id:$('payer').value,p_receipt_path:receiptPath,p_shares:rows.map(r=>({user_id:r.user_id,amount:Number(r.amount)}))});if(error)throw error;const savedSplitMode=$('splitMode').value;const returnedExpenseId=typeof data==='string'?data:(data?.id||data?.expense_id||null);if(editing)rememberSplitMode(expenseId,savedSplitMode);else if(returnedExpenseId)rememberSplitMode(returnedExpenseId,savedSplitMode);if(receiptPath&&existing?.receipt_path&&existing.receipt_path!==receiptPath)await sb.storage.from('splittrip-receipts').remove([existing.receipt_path]);lastExpensePayer=$('payer').value;lastExpenseCategory=$('category').value;lastExpenseTemplate={description,amount,payerId:$('payer').value,category:$('category').value,shareIds:rows.map(r=>r.user_id),shareAmounts:Object.fromEntries(rows.map(r=>[r.user_id,Number(r.amount).toFixed(2)])),splitMode:$('splitMode').value};persistExpensePrefs();resetExpenseForm();await loadTripData();if(!editing&&!returnedExpenseId){const candidate=expenses.filter(x=>x.description===description&&Number(x.amount)===Number(amount)&&x.payer_id===$('payer').value).sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0))[0];if(candidate)rememberSplitMode(candidate.id,savedSplitMode)}setExpenseValidation('');notice(editing?'Expense updated.':saveAndAddAnotherRequested?'Expense saved. Add the next one.':'Expense shared with the group.');if(saveAndAddAnotherRequested){$('desc').focus({preventScroll:true});$('desc').scrollIntoView({behavior:'smooth',block:'center'})}else{closeQuickExpenseModal()}}catch(err){if(receiptPath)await sb.storage.from('splittrip-receipts').remove([receiptPath]);notice('Could not save expense: '+(err?.message||'Unknown error')+'. Your previous expense and split were not changed.',true)}finally{saveButton.disabled=false;saveButton.textContent=oldLabel;saveAndAddAnotherRequested=false}};function openQuickAddExpense(){if(!activeTrip||!user){notice('Open a trip and wait for it to finish loading before adding an expense.',true);return}const form=$('expenseForm');if(!form){notice('The expense form is unavailable. Refresh the page and try again.',true);return}quickExpenseReturnFocus=document.activeElement;if(!editingExpenseId)resetExpenseForm();openQuickExpenseModal()}const quickAddButton=$('dashboardAddExpense');if(quickAddButton){quickAddButton.type='button';quickAddButton.addEventListener('click',openQuickAddExpense)}const stickyAddButton=$('splitTripQuickAdd');if(stickyAddButton)stickyAddButton.addEventListener('click',openQuickAddExpense);$('cancelEditExpense')?.addEventListener('click',closeQuickExpenseModal);$('openSettleFromBalances')?.addEventListener('click',()=>document.querySelector('[data-tab="settle"]').click());const repeatButton=$('repeatLastExpense');if(repeatButton)repeatButton.addEventListener('click',repeatLastExpense);$('dashboardViewBalances').onclick=()=>document.querySelector('[data-tab="balances"]').click();$('dashboardViewExpenses').onclick=()=>document.querySelector('[data-tab="expenses"]').click();$('dashboardViewSettle').onclick=()=>document.querySelector('[data-tab="settle"]').click();const transferStat=$('dashboardTransferStat');if(transferStat)transferStat.onclick=()=>document.querySelector('[data-tab="settle"]').click();
 function parseNaturalExpense(){const raw=$('naturalExpense').value.trim();if(!raw){$('naturalExpenseFeedback').textContent='Type an expense description first.';return}const amountMatch=raw.match(/(?:₹|rs\.?\s*|inr\s*)?([0-9]{1,3}(?:[, ][0-9]{3})+(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i);if(!amountMatch){$('naturalExpenseFeedback').textContent='Could not find an amount. You can still fill the fields manually.';return}const amount=Number(amountMatch[1].replace(/[, ]/g,''));if(!Number.isFinite(amount)||amount<=0){$('naturalExpenseFeedback').textContent='Please check the amount in your sentence.';return}let desc=raw.replace(amountMatch[0],' ').replace(/\b(split\s+(equally|evenly|among\s+everyone|between\s+everyone))\b/ig,' ').replace(/\b(paid\s+by|from)\s+[^,;]+/ig,' ').replace(/\b(equal\s+split|split\s+among\s+\d+)\b/ig,' ').replace(/[,-]+/g,' ').replace(/\s+/g,' ').trim();let payer=null;const payerMatch=raw.match(/\bpaid\s+by\s+([^,;]+)/i);if(payerMatch){const candidate=payerMatch[1].replace(/\b(split\s+.*|and\s+split.*)$/i,'').trim();payer=members.find(m=>memberName(m.user_id).toLowerCase()===candidate.toLowerCase())||members.find(m=>memberName(m.user_id).toLowerCase().includes(candidate.toLowerCase())&&candidate.length>=2);if(!payer){$('naturalExpenseFeedback').textContent='Amount detected, but payer “'+candidate+'” did not match a member. Please choose the payer manually.'}}const lower=raw.toLowerCase();let category='Other';if(/dinner|lunch|breakfast|food|restaurant|coffee|snack|drink|grocer|pizza|meal/.test(lower))category='Food & drinks';else if(/taxi|cab|uber|ola|fuel|petrol|parking|toll|bus|train|flight|transport/.test(lower))category='Transport';else if(/hotel|stay|room|resort|accommodation|airbnb/.test(lower))category='Accommodation';else if(/ticket|activity|museum|tour|boat|casino|club|entry/.test(lower))category='Activities';$('amt').value=amount.toFixed(2);$('desc').value=desc||raw.replace(amountMatch[0],'').trim()||'Group expense';$('category').value=category;if(payer)$('payer').value=payer.user_id;const countMatch=raw.match(/\bsplit\s+among\s+(\d+)\b/i);if(countMatch&&Number(countMatch[1])!==members.length){$('advancedExpenseOptions').open=true;$('naturalExpenseFeedback').textContent='Filled amount and description. The sentence says split among '+countMatch[1]+', but there are '+members.length+' trip members. Choose the exact participants in Split & receipt options before saving.'}else{$('naturalExpenseFeedback').textContent='Fields filled. Check the payer and participants, then save.'}document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('preset-selected',b.dataset.category===category&&b.dataset.preset.toLowerCase()===($('desc').value||'').toLowerCase()));$('expenseForm').scrollIntoView({behavior:'smooth',block:'start'})}$('parseNaturalExpense').onclick=parseNaturalExpense;$('naturalExpense').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();parseNaturalExpense()}});
 function resetExpensePageAndRender(){expenseCurrentPage=1;renderExpenseHistory()}
 ['expenseSearch','expensePayerFilter','expenseCategoryFilter','expenseDateFilter'].forEach(id=>$(id)?.addEventListener('input',resetExpensePageAndRender));
@@ -2765,7 +2500,7 @@ body[data-theme="dark"] .new-user-trip-guide button.secondary {
   function show(text,buttonText,handler){message.textContent=text;action.hidden=!buttonText;action.textContent=buttonText||'';action.onclick=handler||null;bar.dataset.visible='true';}
   function hide(){bar.dataset.visible='false';}
   dismiss.addEventListener('click',hide);
-  function networkState(){if(!navigator.onLine)show('You are offline. Existing trip data may be unavailable. New expenses can be saved on this device, but will not be shared until synced.');else if(bar.dataset.kind==='offline'){hide();bar.dataset.kind='';}}
+  function networkState(){if(!navigator.onLine)show('You are offline. Existing trip data may be unavailable; new expenses are not saved offline yet.');else if(bar.dataset.kind==='offline'){hide();bar.dataset.kind='';}}
   window.addEventListener('offline',()=>{bar.dataset.kind='offline';show('You are offline. Existing trip data may be unavailable; new expenses are not saved offline yet.');});
   window.addEventListener('online',()=>{if(bar.dataset.kind==='offline'){bar.dataset.kind='';show('You are back online.');setTimeout(()=>{if(bar.dataset.kind!=='update')hide();},2600);}});
   window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstall=event;show('Install SplitTrip for quicker access.','Install',async()=>{if(!deferredInstall)return;deferredInstall.prompt();await deferredInstall.userChoice;deferredInstall=null;hide();});});
