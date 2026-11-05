@@ -1486,6 +1486,61 @@ button:disabled{opacity:.58}
 }
 </style>
 
+
+<style id="r147331-dark-contrast-fix">
+/* R14.7.33.1 visual fix: dark-theme trip totals and split status */
+body[data-theme="dark"] #tripBalanceSummary{
+  background:linear-gradient(110deg,#203f3a,#2a3548)!important;
+  color:#e5f1ed!important;
+  border:1px solid #40575a!important;
+}
+body[data-theme="dark"] #tripBalanceSummary .cross-trip-compact{
+  background:#203639!important;
+  border-color:#40575a!important;
+  color:#e5f1ed!important;
+}
+body[data-theme="dark"] #tripBalanceSummary .cross-trip-compact summary,
+body[data-theme="dark"] #tripBalanceSummary .cross-trip-compact summary span,
+body[data-theme="dark"] #tripBalanceSummary .cross-trip-compact summary strong{
+  color:#e5f1ed!important;
+}
+body[data-theme="dark"] #tripBalanceSummary .cross-trip-compact summary small,
+body[data-theme="dark"] #tripBalanceSummary .balance-expand-hint,
+body[data-theme="dark"] #tripBalanceSummary .all-trip-totals span{
+  color:#a7bbb6!important;
+}
+body[data-theme="dark"] #tripBalanceSummary .all-trip-totals>div{
+  background:#263d40!important;
+  border-color:#40575a!important;
+  color:#e5f1ed!important;
+}
+body[data-theme="dark"] #tripBalanceSummary .all-trip-totals strong{
+  color:#e5f1ed!important;
+}
+body[data-theme="dark"] .expense-split-preview{
+  background:#203639!important;
+  border-color:#40575a!important;
+  color:#e5f1ed!important;
+}
+body[data-theme="dark"] .expense-split-preview strong,
+body[data-theme="dark"] .expense-split-preview .expense-split-preview-row span{
+  color:#e5f1ed;
+}
+body[data-theme="dark"] .expense-split-preview #expenseSplitStatus{
+  background:#28574d!important;
+  color:#d1f5e6!important;
+  border:1px solid #397a69;
+  flex:0 0 auto;
+  max-width:48%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+@media(max-width:380px){
+  .expense-split-preview>.row:first-child{align-items:flex-start;gap:8px}
+  .expense-split-preview #expenseSplitStatus{white-space:normal;line-height:1.2;text-align:center}
+}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo" aria-label="SplitTrip linked-rings logo"><svg viewBox="0 0 64 40" role="img" aria-hidden="true"><path d="M25 8H19a12 12 0 0 0 0 24h10a12 12 0 0 0 9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M39 8h6a12 12 0 0 1 0 24H35a12 12 0 0 1-9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/></svg></div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
