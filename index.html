@@ -510,7 +510,7 @@ kbd{font:600 10px/1.4 system-ui,sans-serif;padding:2px 5px;border:1px solid #dce
 .activity-item .amount{white-space:nowrap}
 @media(max-width:480px){.group-activity-card>summary{padding:12px}.group-activity-list{padding:0 10px 8px}.activity-item{gap:8px}.activity-item .amount{font-size:13px}}
 
-/* R14.7 — Usability, Engagement & Community */
+/* R14.7 — Usability, Engagement & Community; R14.7.1 auth feedback fix */
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .trip-list-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,.55fr);gap:8px;margin:12px 0}
 .trip-list-controls input,.trip-list-controls select{width:100%;min-width:0;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink)}
@@ -635,7 +635,7 @@ body.sheet-open{overflow:hidden}
 (function(){
   var pill=document.getElementById('modePill');
   var hint=document.getElementById('authHint');
-  if(pill){pill.textContent='BROWSER SCRIPT OK';pill.classList.remove('hidden');}
+  if(pill){pill.textContent='APP SCRIPT LOADED';pill.classList.remove('hidden');}
   function report(label,detail){
     var message=label+(detail?': '+detail:'');
     console.error('SplitTrip startup diagnostic:',message);
@@ -901,7 +901,34 @@ async function deleteExpense(id){const e=expenses.find(x=>x.id===id);if(!e||!can
 
 let creatingAccount=false;function setAuthMode(signup){creatingAccount=signup;$('authTitle').textContent=signup?'Create your SplitTrip account':'Sign in to SplitTrip';$('authDescription').textContent=signup?'Choose a display name, email, and password.':'Sign in with your email and password.';show('authNameField',signup);show('passwordSignIn',!signup);show('passwordSignUp',true);show('backToSignIn',signup);$('passwordSignUp').type=signup?'submit':'button';$('passwordSignUp').textContent='Create account';$('authPassword').autocomplete=signup?'new-password':'current-password';$('authPassword').placeholder=signup?'At least 8 characters':'Your password';$('authHint').textContent=signup?'Your display name is what trip members will see.':'New to SplitTrip? Create an account to start or join a trip.';}
 $('passwordSignUp').onclick=()=>{if(!creatingAccount)setAuthMode(true)};$('backToSignIn').onclick=()=>setAuthMode(false);
-$('passwordAuthForm').onsubmit=async e=>{e.preventDefault();const email=$('email').value.trim(),password=$('authPassword').value;if(creatingAccount){const name=$('authDisplayName').value.trim();if(name.length<2||name.length>40){$('authHint').textContent='Enter a display name between 2 and 40 characters.';return}const {data,error}=await sb.auth.signUp({email,password,options:{data:{name}}});if(error){$('authHint').textContent='Could not create account: '+error.message;return}if(data.session){$('authHint').textContent='Account created.';await refreshAuth()}else{$('authHint').textContent='Account created, but Supabase is still requiring email confirmation. Disable Confirm email in Supabase Auth settings, then try again.'}return}const {data,error}=await sb.auth.signInWithPassword({email,password});if(error){$('authHint').textContent='Sign-in failed: '+error.message+' If this account was previously magic-link-only, use an existing session to set a password in Profile, or use account recovery.';return}if(data.user){$('authHint').textContent='Signed in successfully.';await refreshAuth()}};
+$('passwordAuthForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const form=$('passwordAuthForm'),button=$('passwordSignIn'),hint=$('authHint'),email=$('email').value.trim(),password=$('authPassword').value;
+ if(!email||!password){hint.textContent='Enter your email address and password.';return}
+ if(!sb||!sb.auth){hint.textContent='Sign-in is still starting. Check your connection and try again in a moment.';return}
+ const submitButton=creatingAccount?$('passwordSignUp'):button,originalText=submitButton.textContent;
+ submitButton.disabled=true;submitButton.textContent=creatingAccount?'Creating account…':'Signing in…';hint.textContent='Connecting securely to SplitTrip…';
+ try{
+  if(creatingAccount){
+   const name=$('authDisplayName').value.trim();
+   if(name.length<2||name.length>40){hint.textContent='Enter a display name between 2 and 40 characters.';return}
+   const {data,error}=await sb.auth.signUp({email,password,options:{data:{name}}});
+   if(error)throw error;
+   if(data.session){hint.textContent='Account created. Loading your trips…';await refreshAuth()}
+   else hint.textContent='Account created, but email confirmation is required. Check your inbox to continue.';
+   return;
+  }
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  if(error)throw error;
+  if(data.user){hint.textContent='Signed in successfully. Loading your trips…';await refreshAuth()}
+  else hint.textContent='No user session was returned. Please try again.';
+ }catch(err){
+  console.error('SplitTrip authentication failed:',err);
+  hint.textContent=(creatingAccount?'Could not create account: ':'Sign-in failed: ')+(err?.message||'Unexpected authentication error')+'. Check your connection and try again.';
+ }finally{
+  submitButton.disabled=false;submitButton.textContent=originalText;
+ }
+});
 $('saveProfile').onclick=async()=>{const name=$('profileDisplayName').value.trim();if(name.length<2||name.length>40){notice('Display name must be 2–40 characters.',true);return}const {error:authError}=await sb.auth.updateUser({data:{name}});if(authError){notice('Could not save profile: '+authError.message,true);return}const {error}=await sb.rpc('update_my_display_name',{p_display_name:name});if(error){notice('Profile saved to your account, but trip names could not be updated. Apply the profile migration SQL first: '+error.message,true);return}if(activeTrip)await loadTripData();$('signedInAs').textContent='Signed in as '+name;notice('Display name updated for your trips.')};
 $('savePassword').onclick=async()=>{const password=$('newPassword').value;if(password.length<8){notice('Password must be at least 8 characters.',true);return}const {error}=await sb.auth.updateUser({password});if(error){notice('Could not set password: '+error.message,true);return}$('newPassword').value='';notice('Password set. You can use email + password next time.')};
 $('createTrip').onclick=async()=>{const name=$('tripName').value.trim()||'New trip',code=Array.from(crypto.getRandomValues(new Uint8Array(6))).map(x=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[x%32]).join('');const {data,error}=await sb.rpc('create_trip',{p_name:name,p_invite_code:code});if(error){notice('Could not create trip: '+error.message,true);return}await loadTrips();await openTrip(data);notice('Trip created. Share the invite code with trip members.')};
