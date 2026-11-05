@@ -873,6 +873,56 @@ body.st-expense-form-visible #splitTripQuickAdd{display:none!important}
 }
 </style>
 
+
+<style id="r14728-expense-density-fix">
+/* R14.7.28.3: compact action rail; retain all existing expense actions */
+#tab-expenses .expense{
+  grid-template-columns:40px minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  padding:12px 0;
+}
+#tab-expenses .expense>.grow{min-width:0}
+#tab-expenses .expense .expense-actions{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  justify-content:flex-start!important;
+  gap:6px;
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  padding:2px 1px 5px;
+  margin-top:6px;
+}
+#tab-expenses .expense .expense-actions::-webkit-scrollbar{display:none}
+#tab-expenses .expense .expense-actions button{
+  flex:0 0 auto;
+  min-height:30px;
+  padding:5px 9px;
+  font-size:11px;
+  white-space:nowrap;
+}
+#tab-expenses .expense .amount{
+  white-space:nowrap;
+  font-size:14px;
+  max-width:none;
+}
+#tab-expenses .expense>.bubble{
+  width:40px;height:40px;min-width:40px;
+  display:grid;place-items:center;
+}
+@media(max-width:600px){
+  #tab-expenses .expense{grid-template-columns:38px minmax(0,1fr) auto;gap:8px;padding:10px 0}
+  #tab-expenses .expense>.bubble{width:38px;height:38px;min-width:38px}
+  #tab-expenses .expense .amount{font-size:13px}
+  #tab-expenses .expense .expense-actions button{min-height:29px;padding:5px 8px}
+}
+/* CSS fallback plus JS observer below keeps the global FAB off the Expenses tab */
+body:has(.nav [data-tab="expenses"].active) #splitTripQuickAdd{display:none!important}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -1589,6 +1639,26 @@ document.querySelectorAll('[data-assistant-prompt]').forEach(b=>b.onclick=()=>{$
  document.addEventListener('click',function(e){
    var tab=e.target.closest('.nav [data-tab]');
    if(tab)updateFabForTab(tab.dataset.tab);
+ },true);
+})();
+</script>
+
+
+<script id="r14728-expense-fab-state-fix">
+(function(){
+ var nav=document.querySelector('.nav');
+ var fab=document.getElementById('splitTripQuickAdd');
+ if(!nav||!fab)return;
+ function sync(){
+   var expensesActive=!!nav.querySelector('[data-tab="expenses"].active');
+   fab.style.setProperty('display',expensesActive?'none':'flex','important');
+ }
+ sync();
+ if('MutationObserver' in window){
+   new MutationObserver(sync).observe(nav,{subtree:true,attributes:true,attributeFilter:['class']});
+ }
+ document.addEventListener('click',function(e){
+   if(e.target.closest('.nav [data-tab]'))setTimeout(sync,0);
  },true);
 })();
 </script
