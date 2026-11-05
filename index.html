@@ -665,8 +665,125 @@ details>summary{cursor:pointer}
 #tab-members #members .member-finance .member-net.neutral{background:#f2f6f0;border-color:#e0e8dc;color:#52634d}
 @media(max-width:520px){#tab-members #members .member-finance{grid-column:2/-1;gap:5px}#tab-members #members .member-finance>span{font-size:10px;padding:5px 6px}#tab-members #members .member-finance strong{font-size:10px}}
 </style>
+
+<style id="r14728-playful-design-system">
+/* R14.7.28 — playful travel companion design system */
+:root{
+ --ink:#243b40;--muted:#667b7c;--lime:#ffb84d;--bg:#f7f9f6;--card:#fff;--line:#e4ebe6;
+ --red:#d76558;--green:#16866f;--primary:#16a085;--coral:#ff8066;--lavender:#8b7cf6;
+ --soft-mint:#e8f6f1;--soft-yellow:#fff5df;--soft-coral:#fff0eb;--soft-lavender:#f1efff;
+ --surface-raised:#fff;--surface-soft:#f4f8f5;--text-main:#243b40;--shadow-soft:0 8px 26px rgba(36,59,64,.07);
+ --radius-card:20px;
+}
+body{background:var(--bg);color:var(--text-main);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:-.01em}
+.shell{max-width:1080px;padding:20px}
+.hero{background:linear-gradient(125deg,#203f46 0%,#226b68 58%,#27977f 100%);border:0;border-radius:26px;padding:24px;box-shadow:0 12px 30px rgba(22,90,83,.16)}
+.logo{background:linear-gradient(135deg,#ffcf70,#ff987e);color:#263f42;border-radius:16px;box-shadow:0 5px 14px rgba(0,0,0,.12)}
+.hero .total{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(8px)}
+.hero input{background:rgba(255,255,255,.12)}
+button{background:var(--primary);border-radius:14px;box-shadow:0 2px 0 rgba(18,70,65,.08);transition:transform .16s ease,box-shadow .16s ease,background .16s ease}
+button:hover{transform:translateY(-1px);box-shadow:0 5px 13px rgba(36,59,64,.12)}
+button:active{transform:translateY(0)}
+button.secondary{background:var(--surface-soft);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+button.danger{background:var(--soft-coral);color:var(--red);border:1px solid #f5d8d1;box-shadow:none}
+.card,.auth,.trip-list-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-card);box-shadow:var(--shadow-soft)}
+.section-title{font-weight:800;letter-spacing:-.035em}
+.field input,.field select,.expense-filters input,.expense-filters select{border-radius:13px;border-color:var(--line);background:var(--surface-raised);color:var(--text-main);min-height:44px}
+.field input:focus,.field select:focus,.expense-filters input:focus,.expense-filters select:focus{outline:3px solid rgba(22,160,133,.18);border-color:var(--primary)}
+.nav{background:var(--surface-soft);padding:6px;border-radius:16px;gap:5px}
+.nav button{border-radius:12px;font-weight:750;transition:background .15s ease,color .15s ease}
+.nav button.active{background:linear-gradient(135deg,#d9f5e9,#e9f8f1);color:#147b69;box-shadow:inset 0 0 0 1px rgba(22,160,133,.1)}
+.bubble{background:var(--soft-lavender);border-radius:15px}
+.pill{background:var(--soft-mint);color:#167b68}
+.notice{background:var(--soft-yellow);border:1px solid #f5e5bd;color:var(--ink);border-radius:14px}
+.empty{background:var(--surface-soft);border:1px dashed var(--line);border-radius:16px;margin:8px 0}
+.trips-welcome{position:relative;overflow:hidden;padding:24px;border-radius:24px;background:linear-gradient(120deg,#fff0e9 0%,#fff6df 48%,#e7f7f1 100%);border:1px solid #f3e7d9;margin:8px 0 16px;color:#263f42}
+.trips-welcome:after{content:"✦";position:absolute;right:26px;top:10px;font-size:76px;line-height:1;color:rgba(255,128,102,.2);transform:rotate(12deg);pointer-events:none}
+.trips-welcome h2{font-size:30px!important;letter-spacing:-1.1px!important;position:relative;z-index:1}
+.trips-welcome>.muted{color:#617575}
+.trip-start-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px;position:relative;z-index:1}
+.trip-start-actions button{min-height:44px;padding:11px 17px}
+.trip-start-actions #showCreateTrip{background:#ff8066;color:#fff}
+.trip-start-actions #showJoinTrip{background:rgba(255,255,255,.78);border-color:#f0d9cf;color:#34545a}
+.trip-list-card{padding:18px;margin-top:14px}
+.trip-list-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.35fr);gap:9px;margin:14px 0}
+.trip-list-controls input,.trip-list-controls select{border:1px solid var(--line);border-radius:13px;background:var(--surface-raised);color:var(--text-main);padding:11px 13px;min-height:44px}
+#tripBalanceSummary{background:linear-gradient(110deg,var(--soft-mint),var(--soft-lavender));border:0;border-radius:15px;padding:13px 15px}
+.trip-action-card{border:1px solid var(--line);border-radius:18px;padding:15px;margin:10px 0;background:var(--surface-raised);box-shadow:0 4px 14px rgba(36,59,64,.045);transition:transform .16s ease,box-shadow .16s ease}
+.trip-action-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(36,59,64,.09)}
+.trip-card-icon{width:46px;height:46px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(135deg,#fff0e9,#fff5df);font-size:23px}
+.trip-card-top{gap:12px}
+.trip-card-top strong{font-size:16px;letter-spacing:-.3px}
+.trip-open-action{width:100%;margin-top:12px;display:flex;align-items:center;justify-content:space-between;background:var(--soft-mint);color:#167b68;box-shadow:none}
+.trip-open-action:hover{background:#d9f2e8;box-shadow:none}
+.new-user-trip-guide{background:linear-gradient(135deg,var(--soft-yellow),var(--soft-coral));border:1px solid #f4e4ce;border-radius:20px;padding:16px}
+.new-user-choice-grid article{background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.85);border-radius:16px;padding:15px}
+.trip-form-card{box-shadow:var(--shadow-soft)}
+#splitTripQuickAdd{background:linear-gradient(135deg,#ff8066,#f46f69);box-shadow:0 8px 20px rgba(255,128,102,.28)}
+.theme-toggle{width:40px;height:40px;min-width:40px;padding:0;border-radius:50%;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.24);color:white;box-shadow:none;font-size:19px;display:inline-flex;align-items:center;justify-content:center}
+.theme-toggle:hover{background:rgba(255,255,255,.24);box-shadow:none}
+#globalAccountOpen{border-color:rgba(255,255,255,.35)}
+@media(min-width:760px){
+ .trip-list-card{padding:22px}
+ #tripList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ #tripList .trip-action-card{margin:0;display:flex;flex-direction:column;justify-content:space-between}
+ .trips-welcome{padding:30px}
+}
+@media(max-width:600px){
+ .shell{padding:12px}
+ .hero{padding:18px;border-radius:21px}
+ .trips-welcome{padding:19px}
+ .trips-welcome h2{font-size:26px!important}
+ .trip-list-card{padding:13px}
+ .trip-list-controls{grid-template-columns:1fr}
+ .trip-start-actions{display:grid;grid-template-columns:1fr 1fr}
+ .trip-start-actions button{padding:10px 8px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+/* Dark theme: semantic surfaces and controls */
+body[data-theme="dark"]{
+ --ink:#e5f1ed;--muted:#a7bbb6;--bg:#142326;--card:#1d3033;--line:#34494b;--red:#ff9387;--green:#67d4ad;
+ --primary:#36b99b;--surface-raised:#203639;--surface-soft:#263d40;--text-main:#e5f1ed;
+ --soft-mint:#23483f;--soft-yellow:#4b422c;--soft-coral:#4c3432;--soft-lavender:#383452;
+ --shadow-soft:0 8px 26px rgba(0,0,0,.18);
+ background:var(--bg);color:var(--text-main)
+}
+body[data-theme="dark"] .trips-welcome{background:linear-gradient(120deg,#493a38,#49432e 48%,#23463e);border-color:#594d42;color:#f3f4eb}
+body[data-theme="dark"] .trips-welcome>.muted{color:#d1d8ce}
+body[data-theme="dark"] .trips-welcome:after{color:rgba(255,184,77,.18)}
+body[data-theme="dark"] .trip-start-actions #showJoinTrip{background:#30474a;color:#e5f1ed;border-color:#526467}
+body[data-theme="dark"] .trip-action-card,body[data-theme="dark"] .new-user-choice-grid article{background:var(--card);border-color:var(--line)}
+body[data-theme="dark"] .trip-card-icon{background:linear-gradient(135deg,#4c3b38,#51462d)}
+body[data-theme="dark"] .trip-open-action{background:#244b43;color:#a8edda}
+body[data-theme="dark"] .nav{background:#1b3033}
+body[data-theme="dark"] .nav button.active{background:#28574d;color:#baf0dc}
+body[data-theme="dark"] .hero{background:linear-gradient(125deg,#172e34 0%,#20504e 58%,#216b5d 100%)}
+body[data-theme="dark"] .hero .total{background:rgba(0,0,0,.18)}
+body[data-theme="dark"] .field input,body[data-theme="dark"] .field select,body[data-theme="dark"] .expense-filters input,body[data-theme="dark"] .expense-filters select,body[data-theme="dark"] .trip-list-controls input,body[data-theme="dark"] .trip-list-controls select,body[data-theme="dark"] .bulk-row input,body[data-theme="dark"] .bulk-row select,body[data-theme="dark"] .natural-entry input{background:var(--surface-raised);color:var(--text-main);border-color:var(--line)}
+body[data-theme="dark"] .stat,body[data-theme="dark"] .dashboard-stat,body[data-theme="dark"] .share-row,body[data-theme="dark"] .settlement-progress-stat{background:var(--surface-raised);border-color:var(--line);color:var(--text-main)}
+body[data-theme="dark"] .dashboard-hero{background:linear-gradient(135deg,#203639,#263f3d);border-color:var(--line)}
+body[data-theme="dark"] .dashboard-transfer-stat,body[data-theme="dark"] .natural-entry,body[data-theme="dark"] .split-helper{background:var(--surface-soft);border-color:var(--line)}
+body[data-theme="dark"] .share-row.selected{background:#294b42;border-color:#397a69}
+body[data-theme="dark"] .expense-presets .preset-chip{background:var(--surface-soft);color:var(--text-main);border-color:var(--line)}
+body[data-theme="dark"] .expense-presets .preset-chip.preset-selected{background:#28574d}
+body[data-theme="dark"] .notice,body[data-theme="dark"] .empty{color:var(--text-main)}
+body[data-theme="dark"] .pill{background:#28574d;color:#baf0dc}
+body[data-theme="dark"] .auth,body[data-theme="dark"] .card{background:var(--card);border-color:var(--line)}
+body[data-theme="dark"] .muted,body[data-theme="dark"] .section-title{color:var(--muted)}
+body[data-theme="dark"] .member-invite-card,body[data-theme="dark"] .settlement-progress-card{background:var(--surface-soft);border-color:var(--line)}
+body[data-theme="dark"] button.secondary{background:var(--surface-soft);color:var(--text-main);border-color:var(--line)}
+body[data-theme="dark"] button.danger{background:var(--soft-coral);color:var(--red);border-color:var(--line)}
+body[data-theme="dark"] .bubble{background:var(--soft-lavender)}
+body[data-theme="dark"] .trip-tools-entry{background:var(--surface-soft);border-color:var(--line)}
+body[data-theme="dark"] .detail-panel,body[data-theme="dark"] .command-backdrop{background:rgba(0,0,0,.68)}
+body[data-theme="dark"] #expenseValidation{background:#512f30;color:#ffd4ce;border-color:#754443}
+body[data-theme="dark"] .positive{color:var(--green)}
+body[data-theme="dark"] .negative{color:var(--red)}
+body[data-theme="dark"] .foot{color:var(--muted)}
+</style>
+
 </head><body><main class="shell">
-<header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
+<header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
 <section id="tripPanel" class="hidden"><div class="trips-welcome"><div class="muted" style="font-weight:750;letter-spacing:.08em;text-transform:uppercase">YOUR SPACE</div><h2 style="margin:5px 0 4px;font-size:25px;letter-spacing:-.5px">Your trips</h2><div class="muted">Open a trip or check your combined balances.</div><div class="trip-start-actions"><button type="button" id="showCreateTrip">＋ Create a trip</button><button type="button" class="secondary" id="showJoinTrip">Join with code</button></div></div><div id="newUserTripGuide" class="new-user-trip-guide hidden"><div class="new-user-guide-heading"><span class="new-user-guide-icon">✈</span><div><strong>Let’s get your trip started</strong><div class="muted">Choose the option that matches your situation.</div></div></div><div class="new-user-choice-grid"><article><span class="choice-number">01</span><strong>You're organizing the trip</strong><p>Create a trip, then share its invite code or link with everyone. You can add expenses for the group.</p><button type="button" data-new-user-create>＋ Create your first trip</button></article><article><span class="choice-number">02</span><strong>Someone invited you</strong><p>Use the invite code or link they shared. You’ll join their trip and see its shared expenses.</p><button type="button" class="secondary" data-new-user-join>Join with an invite code</button></article></div><div class="new-user-footnote">You can invite people who haven’t signed up yet, too.</div></div><div class="card trip-form-card hidden" id="createTripPanel"><div class="row between"><h3 style="margin:0">Create a trip</h3><button type="button" class="secondary trip-form-close" data-close-trip-form>Close</button></div><div class="field"><label for="tripName">Trip name</label><input id="tripName" value="" maxlength="60" placeholder="e.g. Goa weekend" aria-describedby="tripNameHelp"><div class="muted" id="tripNameHelp">Give your group a name everyone will recognise.</div></div><button id="createTrip" class="full">Create trip & invite code</button></div><div class="card trip-form-card hidden" id="joinTripPanel"><div class="row between"><h3 style="margin:0">Join a trip</h3><button type="button" class="secondary trip-form-close" data-close-trip-form>Close</button></div><div class="field"><label for="inviteCode">Invite code</label><input id="inviteCode" placeholder="Paste trip invite code" autocomplete="off"></div><button id="joinTrip" class="full">Join existing trip</button><div class="muted" style="margin-top:10px">Enter an invite code shared by a trip owner or trip member.</div></div><div id="tripPicker" class="trip-list-card"><div class="row between"><h3 style="margin:0">All trips</h3><span class="pill" id="tripCountPill">0 trips</span></div><div id="tripBalanceSummary" class="notice">Your balances across all trips.</div><div class="trip-list-controls"><input id="tripSearch" type="search" placeholder="Search your trips…" aria-label="Search trips"><select id="tripRoleFilter" aria-label="Filter trips"><option value="all">All trips</option><option value="owner">Trips I own</option><option value="member">Trips I joined</option></select></div><div id="tripList"><div class="empty">Loading your trips…</div></div></div></section>
 <section id="workspace" class="hidden"><button type="button" id="splitTripQuickAdd" aria-label="Add an expense"><span class="fab-plus" aria-hidden="true">＋</span><span>Add expense</span></button><div class="card current-trip-card"><div class="row between"><div class="grow"><div class="muted">TRIP</div><strong id="activeTripName">Trip overview</strong></div><div class="row" style="gap:8px"><button id="openCommandPalette" class="secondary command-trigger" type="button" aria-haspopup="dialog" aria-controls="commandPalette"><span aria-hidden="true">⌕</span> Search <kbd>Ctrl K</kbd></button><button id="leaveTrip" class="secondary" type="button">All trips</button><span class="pill" id="syncPill" role="button" tabindex="0" title="Tap to refresh trip data" aria-label="Sync status. Activate to refresh trip data">LIVE SYNC</span></div></div><details class="trip-details"><summary>Trip details & invites</summary><div class="trip-invite-row" style="margin-top:12px"><div class="trip-invite-code"><div class="muted">Invite code</div><strong id="activeInvite">—</strong></div></div><div class="trip-actions"><button id="copyInvite" class="secondary">Copy code</button><button id="copyInviteLink" class="secondary">Share trip link</button><button id="deleteActiveTrip" class="danger hidden" type="button">Delete trip</button></div><div class="trip-tools-entry"><div class="grow"><strong>Itinerary &amp; bookings</strong><div class="muted">Flights, stays, activities and reservations</div></div><button id="openTripItinerary" type="button" class="secondary">Open</button></div></details></div>
@@ -1327,4 +1444,27 @@ document.querySelectorAll('[data-assistant-prompt]').forEach(b=>b.onclick=()=>{$
   });
 
 })();
-</scrip
+</script>
+
+<script id="r14728-theme-controller">
+(function(){
+ const key='splittrip:appearance';
+ const body=document.body;
+ const toggle=document.getElementById('themeToggle');
+ if(!toggle)return;
+ let theme='light';
+ try{theme=localStorage.getItem(key)==='dark'?'dark':'light'}catch(e){}
+ function apply(next){
+   theme=next==='dark'?'dark':'light';
+   body.setAttribute('data-theme',theme);
+   toggle.textContent=theme==='dark'?'☀':'☾';
+   toggle.setAttribute('aria-label',theme==='dark'?'Switch to light mode':'Switch to dark mode');
+   toggle.setAttribute('title',theme==='dark'?'Switch to light mode':'Switch to dark mode');
+   const meta=document.querySelector('meta[name="theme-color"]');
+   if(meta)meta.setAttribute('content',theme==='dark'?'#142326':'#16a085');
+   try{localStorage.setItem(key,theme)}catch(e){}
+ }
+ toggle.addEventListener('click',()=>apply(theme==='dark'?'light':'dark'));
+ apply(theme);
+})();
+</script
