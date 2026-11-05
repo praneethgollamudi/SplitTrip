@@ -1554,6 +1554,12 @@ body[data-theme="light"] #splitTripOfflineOutbox{background:#e9f7f1;color:#17483
 body[data-theme="light"] #splitTripOfflineOutbox small{color:#52776b}
 </style>
 
+
+<style id="r147333-outbox-sync">
+#splitTripOfflineOutbox .st-outbox-item small{font-size:.78em;line-height:1.35;margin-top:3px;color:var(--muted,#b7c9c4)}
+#splitTripOfflineOutbox .st-outbox-item{gap:10px}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo" aria-label="SplitTrip linked-rings logo"><svg viewBox="0 0 64 40" role="img" aria-hidden="true"><path d="M25 8H19a12 12 0 0 0 0 24h10a12 12 0 0 0 9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M39 8h6a12 12 0 0 1 0 24H35a12 12 0 0 1-9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/></svg></div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -1746,11 +1752,19 @@ async function getOfflineExpenses(){
  const db=await openSplitTripOutbox();
  return new Promise((resolve,reject)=>{const tx=db.transaction(SPLITTRIP_OUTBOX_STORE,'readonly'),req=tx.objectStore(SPLITTRIP_OUTBOX_STORE).getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error||new Error('Could not read saved offline expenses.'))});
 }
+async function deleteOfflineExpense(id){
+ const db=await openSplitTripOutbox();
+ return new Promise((resolve,reject)=>{const tx=db.transaction(SPLITTRIP_OUTBOX_STORE,'readwrite');tx.objectStore(SPLITTRIP_OUTBOX_STORE).delete(id);tx.oncomplete=()=>resolve(true);tx.onerror=()=>reject(tx.error||new Error('Could not remove synced expense from the local outbox.'))});
+}
+async function updateOfflineExpense(record){
+ const db=await openSplitTripOutbox();
+ return new Promise((resolve,reject)=>{const tx=db.transaction(SPLITTRIP_OUTBOX_STORE,'readwrite');tx.objectStore(SPLITTRIP_OUTBOX_STORE).put(record);tx.oncomplete=()=>resolve(record);tx.onerror=()=>reject(tx.error||new Error('Could not update local sync status.'))});
+}
 function ensureOfflineOutboxPanel(){
  let panel=document.getElementById('splitTripOfflineOutbox');
  if(panel)return panel;
  panel=document.createElement('aside');panel.id='splitTripOfflineOutbox';panel.setAttribute('aria-live','polite');panel.className='hidden';
- panel.innerHTML='<div class="st-outbox-head"><strong>Saved on this device</strong><span id="stOutboxCount">0</span></div><div id="stOutboxItems"></div><small>Not yet shared with your trip. Keep this device and browser data until sync is available.</small>';
+ panel.innerHTML='<div class="st-outbox-head"><strong>Saved on this device</strong><span id="stOutboxCount">0</span></div><div id="stOutboxItems"></div><small id="stOutboxHint">Not yet shared with your trip. We will retry when a connection is available. Keep this device and browser data until sync completes.</small>';
  document.body.appendChild(panel);return panel;
 }
 async function renderOfflineOutbox(){
@@ -1761,9 +1775,65 @@ async function renderOfflineOutbox(){
   panel.classList.toggle('hidden',!items.length);
   const count=panel.querySelector('#stOutboxCount'),list=panel.querySelector('#stOutboxItems');
   if(count)count.textContent=String(items.length);
-  if(list)list.innerHTML=items.slice().sort((a,b)=>a.created_at.localeCompare(b.created_at)).map(x=>'<div class="st-outbox-item"><span>'+escapeHtml(x.description)+'</span><strong>'+money(x.amount)+'</strong></div>').join('');
+  if(list)list.innerHTML=items.slice().sort((a,b)=>a.created_at.localeCompare(b.created_at)).map(x=>'<div class="st-outbox-item"><span>'+escapeHtml(x.description)+'<small style="display:block;opacity:.75">'+(x.status==='syncing'?'Syncing…':x.last_error?'Sync pending — '+escapeHtml(x.last_error):'Waiting to sync')+'</small></span><strong>'+money(x.amount)+'</strong></div>').join('');
+  const syncPill=document.getElementById('syncPill');
+  if(syncPill&&items.length)syncPill.textContent=navigator.onLine?'PENDING UPLOAD':'OFFLINE';
+  else if(syncPill&&syncPill.textContent==='PENDING UPLOAD'&&navigator.onLine)syncPill.textContent='LIVE SYNC';
+  const hint=panel.querySelector('#stOutboxHint');if(hint)hint.textContent=items.some(x=>x.last_error)?'Some expenses could not be synced yet. They remain safely stored on this device; correct the issue or retry when ready.':'Not yet shared with your trip. Sync will retry when a connection is available. Keep this device and browser data until sync completes.';
  }catch(err){console.warn('Offline outbox display unavailable:',err);panel.classList.add('hidden')}
 }
+
+
+// R14.7.33.3 — sync locally queued expenses once the authenticated session is online.
+let splitTripOutboxSyncRunning=false;
+async function syncOfflineExpenses(){
+ if(splitTripOutboxSyncRunning||!navigator.onLine||!user||!activeTrip||!sb)return;
+ splitTripOutboxSyncRunning=true;
+ try{
+  const all=await getOfflineExpenses();
+  const pending=all.filter(x=>String(x.user_id)===String(user.id)&&String(x.trip_id)===String(activeTrip.id));
+  for(const item of pending){
+   if(!navigator.onLine||!user||String(item.user_id)!==String(user.id)||String(item.trip_id)!==String(activeTrip?.id))break;
+   item.status='syncing';item.last_error=null;
+   await updateOfflineExpense(item);await renderOfflineOutbox();
+   try{
+    const {data,error}=await sb.rpc('create_expense_idempotent',{
+     p_expense_id:item.id,
+     p_trip_id:item.trip_id,
+     p_description:item.description,
+     p_amount:item.amount,
+     p_category:item.category,
+     p_payer_id:item.payer_id,
+     p_receipt_path:null,
+     p_shares:item.shares
+    });
+    if(error)throw error;
+    await deleteOfflineExpense(item.id);
+    try{rememberSplitMode(data||item.id,'equal')}catch{}
+    await renderOfflineOutbox();
+   }catch(err){
+    item.status='pending';
+    item.last_error=String(err?.message||'Could not sync yet').slice(0,140);
+    await updateOfflineExpense(item);
+    console.warn('Offline expense sync deferred:',item.id,err);
+    await renderOfflineOutbox();
+    // Preserve ordering: do not continue past a failed expense.
+    break;
+   }
+  }
+  if(pending.length){
+   const remaining=(await getOfflineExpenses()).filter(x=>String(x.user_id)===String(user.id)&&String(x.trip_id)===String(activeTrip?.id));
+   if(!remaining.length){
+    notice('Offline expenses synced and shared with the trip.');
+    await loadTripData();
+   }
+  }
+ }catch(err){console.warn('Offline outbox sync could not start:',err)}
+ finally{splitTripOutboxSyncRunning=false;await renderOfflineOutbox()}
+}
+window.addEventListener('online',()=>{setTimeout(()=>syncOfflineExpenses(),800)});
+window.addEventListener('focus',()=>{if(navigator.onLine)syncOfflineExpenses()});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&navigator.onLine)syncOfflineExpenses()});
 
 // Safely unsubscribe from the previous trip's realtime channel before switching trips.
 function cleanupChannel(){
@@ -1867,6 +1937,7 @@ async function refreshActiveTrip(){
  const pill=$('syncPill');if(pill)pill.textContent='REFRESHING…';
  const ok=await loadTripData();
  if(pill&&activeTrip)pill.textContent=ok?'LIVE SYNC':'RETRY NEEDED';
+ if(ok&&navigator.onLine)syncOfflineExpenses();
 }
 function queueRealtimeRefresh(){
  if(realtimeRefreshTimer)clearTimeout(realtimeRefreshTimer);
@@ -1894,6 +1965,7 @@ async function openTrip(id){
     pill.title='Sync status: '+status+'. Activate to refresh trip data.';
    });
   render();
+  if(navigator.onLine)syncOfflineExpenses();
  }catch(err){console.error(err);notice('Trip opened, but its data could not be refreshed: '+(err?.message||'Unknown error'),true);setWorkspace(true)}
 }
 async function loadTripData(rerender=true){
@@ -2711,4 +2783,6 @@ body[data-theme="dark"] .new-user-trip-guide button.secondary {
     });
   }
 })();
-</script
+</script>
+
+</body></html>
