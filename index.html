@@ -1,5 +1,5 @@
-<!-- SplitTrip R14.6: collaboration clarity, group activity feed, guest/account-claim guidance. Based on validated R14.5. -->
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#16a085"><title>SplitTrip — shared trip expenses</title><style>
+<!-- SplitTrip R14.7.4: independent auth recovery added; baseline R14.6: collaboration clarity, group activity feed, guest/account-claim guidance. Based on validated R14.5. -->
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#16a085"><title>SplitTrip R14.7.4</title><style>
 :root{--ink:#17352a;--muted:#6d7d75;--lime:#d7f58a;--bg:#f5f7f3;--card:#fff;--line:#e2e9e2;--red:#b64242;--green:#27734d}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#1b2922;font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;background:var(--ink);color:#fff;font-weight:650}button.secondary{background:#eef3eb;color:var(--ink);border:1px solid var(--line)}button.danger{background:#fff0f0;color:var(--red)}button:disabled{opacity:.5;cursor:not-allowed}.shell{max-width:900px;margin:auto;padding:16px}.hero{background:var(--ink);color:white;padding:22px;border-radius:22px}.brand{display:flex;align-items:center;gap:12px}.logo{width:45px;height:45px;border-radius:14px;background:var(--lime);color:var(--ink);display:grid;place-items:center;font-size:24px}.sub{color:#c3d3c8;font-size:13px}.hero input{background:#29493b;color:white;border:1px solid #496454}.hero input::placeholder{color:#c3d3c8}.total{background:#29493b;padding:16px;border-radius:16px;margin-top:18px}.total strong{display:block;font-size:30px;letter-spacing:-1px}.row{display:flex;align-items:center;gap:10px}.between{justify-content:space-between}.grow{flex:1;min-width:0}.nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin:16px 0}.nav button{background:transparent;color:var(--muted);padding:10px 3px}.nav button.active{background:#e4f2d3;color:var(--ink)}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat{padding:14px;border:1px solid var(--line);border-radius:15px;background:#fff;color:inherit;text-align:left;min-width:0}.stat strong{font-size:22px;display:block}.stat-action{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;cursor:pointer;font-weight:400}.stat-action:active{background:#f1f6ec}.stat-action:focus-visible{outline:3px solid #9bc96b;outline-offset:2px}.stat-action strong{font-weight:800}.members-card-focus{outline:3px solid #d7f58a;outline-offset:2px;transition:outline-color .3s}.muted{color:var(--muted);font-size:13px}.section-title{font-size:18px;margin:18px 0 8px}.field{display:grid;gap:6px;margin:10px 0}.field label{font-size:13px;color:var(--muted);font-weight:650}.field input,.field select,.hero input{width:100%;padding:12px;border-radius:11px;border:1px solid var(--line);background:#fff;color:#1b2922;outline-color:#719b60}.full{width:100%}.expense,.person,.transfer{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.person{flex-wrap:wrap;min-width:0}.person>.grow{flex:1 1 180px;min-width:0}.member-actions{display:flex;flex:1 1 100%;gap:8px;flex-wrap:wrap;margin-left:54px;margin-top:0}.member-actions button{width:auto;max-width:100%;min-width:0;flex:0 1 auto;padding:9px 12px;font-size:13px;line-height:1.25;white-space:normal}.member-actions .merge-action{border-color:#d8e2d6;background:#f7faf5}.member-actions .claim-action{background:#edf3e9}.person .pill{margin-left:auto}.expense:last-child,.person:last-child,.transfer:last-child{border-bottom:0}.bubble{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:#eef3eb;font-size:20px;flex-shrink:0}.amount{font-weight:750;white-space:nowrap}.positive{color:var(--green)}.negative{color:var(--red)}.pill{font-size:11px;padding:4px 8px;border-radius:99px;background:#e4f2d3;color:var(--ink);font-weight:700}.empty{text-align:center;padding:24px;color:var(--muted)}.notice{padding:12px;border-radius:12px;background:#eef3eb;margin:10px 0;font-size:13px}.foot{font-size:12px;color:var(--muted);margin:20px 4px}.hidden{display:none!important}.auth{background:white;border:1px solid var(--line);border-radius:18px;padding:18px;margin:14px 0}.status{font-size:12px;color:#c3d3c8}.split-options{display:flex;gap:10px;flex-wrap:wrap}.trip-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:14px}.trip-actions button{min-width:0;width:100%;padding:11px 8px;white-space:normal;overflow-wrap:anywhere}.trip-invite-row{display:flex;align-items:center;gap:10px;min-width:0}.trip-invite-code{min-width:0;overflow-wrap:anywhere;word-break:break-word}.nav{min-width:0}.nav button{min-width:0;white-space:normal;overflow-wrap:anywhere}.split-options label{display:flex;gap:5px;align-items:center;font-size:13px}.share-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0 10px}.share-toolbar .muted{font-size:12px}.share-actions{display:flex;gap:6px}.share-actions button{padding:6px 9px;font-size:12px}.share-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.share-row{display:flex;flex-direction:column;gap:8px;align-items:stretch;min-width:0;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff}.share-row.selected{border-color:#a7c78b;background:#f5faef}.share-row label{display:flex;gap:8px;align-items:center;min-width:0;font-size:13px;font-weight:650;color:#34463b}.share-row label span{overflow-wrap:anywhere}.share-row input[type=checkbox]{width:18px;height:18px;flex-shrink:0;accent-color:var(--ink)}.share-row input[type=number]{width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:9px}.split-helper{padding:10px 12px;background:#f5f7f3;border-radius:10px;margin-top:10px}.split-helper strong{color:var(--ink)}.avatar-button{width:44px;height:44px;min-width:44px;padding:0;border:1px solid rgba(255,255,255,.22);border-radius:50%;background:#d8f58a;color:#17382d;font-weight:800;font-size:17px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}.avatar-button:focus-visible{outline:3px solid #d8f58a;outline-offset:3px}.receipt-link{font-size:12px;padding:6px 9px;margin-top:6px}.expense-actions{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}.home-expense-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.home-expense-actions button{white-space:nowrap}.expense-actions button{min-height:36px}.expense-actions button{font-size:12px;padding:6px 8px}.bulk-row{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(90px,.7fr) minmax(120px,1fr) minmax(100px,.8fr) 36px;gap:7px;align-items:center;margin:8px 0}.bulk-row input,.bulk-row select{width:100%;min-width:0;padding:9px;border:1px solid var(--line);border-radius:9px;background:white;color:#1b2922}.bulk-head{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(90px,.7fr) minmax(120px,1fr) minmax(100px,.8fr) 36px;gap:7px;font-size:11px;color:var(--muted);font-weight:700}.role-action{font-size:12px;padding:7px 9px}.quick-hint{font-size:12px;color:var(--muted);margin:-2px 0 12px}.advanced-options{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:12px 0}.advanced-options summary{font-weight:700;color:var(--ink);cursor:pointer;padding:3px}.advanced-options[open] summary{margin-bottom:8px}.quick-save{padding:15px;font-size:16px}#expenseValidation{background:#fff0f0;color:#8f2525;border:1px solid #e7b5b5;font-weight:650}#expenseForm [aria-invalid=true]{border-color:#b64242;outline-color:#b64242}@media(max-width:600px){.bulk-head{display:none}.bulk-row{grid-template-columns:minmax(0,1fr) minmax(95px,.7fr) 36px}.bulk-row .bulk-payer,.bulk-row .bulk-category{grid-column:span 1}.bulk-row .bulk-category{grid-column:1 / 2}.bulk-row .bulk-payer{grid-column:2 / 3}.bulk-row .bulk-remove{grid-column:3;grid-row:1}}@media(max-width:380px){.share-list{grid-template-columns:1fr}.share-row{padding:9px}}@media(max-width:480px){.trip-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.trip-actions button:last-child{grid-column:1 / -1}.trip-invite-row{align-items:flex-start;flex-direction:column;gap:4px}.nav{grid-template-columns:repeat(4,minmax(0,1fr));gap:2px}.nav button{font-size:11px;padding:10px 1px;min-width:0}.nav-count{display:inline-block;font-size:10px;line-height:1.4;padding:0 4px;border-radius:8px;background:#eef3eb;color:var(--ink)}}@media(min-width:700px){.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.layout .card{margin-top:0}.shell{padding:24px}}
  .dashboard-hero{background:linear-gradient(135deg,#fff 0%,#f2f7ec 100%);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}.dashboard-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.dashboard-stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px;min-width:0}.dashboard-stat strong{display:block;font-size:18px;overflow-wrap:anywhere}.dashboard-transfer-stat{font:inherit;text-align:left;cursor:pointer;color:var(--ink);background:#f7faf4}.dashboard-transfer-stat small{display:block;font-size:11px;color:var(--muted);margin-top:3px}.dashboard-transfer-stat:focus-visible{outline:3px solid #9bc96b;outline-offset:2px}.dashboard-hero h2#dashboardTripName{font-size:20px!important}.dashboard-hero .row.between:has(>#dashboardAddExpense){align-items:center;gap:12px}.dashboard-hero #dashboardBalances{margin-top:2px!important}.dashboard-balance{padding:8px 0}.dashboard-hero .dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-average-stat{display:none!important}.dashboard-hero .dashboard-stat{padding:12px}.dashboard-hero .dashboard-stat strong{font-size:20px}.dashboard-stat span{font-size:11px;color:var(--muted)}.dashboard-balance{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}.dashboard-balance:first-child{border-top:0}.natural-entry{background:#f5f8f1;border:1px solid #dfe8d8;border-radius:13px;padding:12px;margin:10px 0 14px}.natural-entry .row{align-items:stretch}.natural-entry input{flex:1;min-width:0;padding:11px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink)}.natural-entry button{white-space:nowrap}@media(max-width:420px){.home-expense-actions{flex-direction:column}.home-expense-actions button{width:100%}.dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-stats .dashboard-stat:last-child{grid-column:1/-1}.natural-entry .row{flex-direction:column}}.expense-presets{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:2px 0 12px}.preset-chip{background:#f5f8f1;color:var(--ink);border:1px solid var(--line);padding:8px 10px;border-radius:999px;font-size:12px;font-weight:700}.preset-chip:active,.preset-chip:focus-visible,.preset-chip.preset-selected{background:var(--lime);outline:2px solid #9bc96b;outline-offset:1px}.card:focus{outline:2px solid #a7c78b;outline-offset:2px}button,input,select{touch-action:manipulation}input,select{max-width:100%}@media(max-width:480px){.shell{padding:10px}.hero{padding:17px;border-radius:18px}.total{padding:14px}.total strong{font-size:27px}.card{padding:13px;border-radius:15px}.nav{position:sticky;top:0;z-index:5;background:var(--bg);padding:5px 0}.nav button{min-height:42px}.expense,.person,.transfer{gap:9px}.expense-presets{gap:6px}.preset-chip{padding:9px 10px}.split-options button{min-height:44px}.field input,.field select{min-height:44px}}.expense-filters{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:8px;margin:10px 0}.expense-filters input,.expense-filters select{min-width:0;width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink)}.detail-panel{position:fixed;inset:0;z-index:30;background:rgba(10,20,14,.48);display:flex;align-items:flex-end;justify-content:center;padding:12px}.detail-sheet{background:white;width:min(100%,620px);max-height:88vh;overflow:auto;border-radius:22px;padding:18px;box-shadow:0 16px 50px rgba(0,0,0,.2)}.detail-sheet h2{margin:0}.activity-item{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.activity-item:last-child{border-bottom:0}@media(max-width:560px){.expense-filters{grid-template-columns:1fr 1fr}.expense-filters input{grid-column:1/-1}}@media(min-width:700px){.detail-panel{align-items:center}} .release7-actions{display:flex;gap:8px;flex-wrap:wrap}.release7-status{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#f7f9f5;margin:8px 0;font-size:13px}.release7-status.error{background:#fff0f0;border-color:#f1cccc;color:var(--red)}
 .r8-bars{display:grid;gap:9px;margin-top:10px}.r8-bar-row{display:grid;grid-template-columns:minmax(85px,1fr) minmax(90px,2fr) auto;gap:8px;align-items:center;font-size:12px}.r8-track{height:10px;background:#edf2e9;border-radius:99px;overflow:hidden}.r8-fill{height:100%;background:#719b60;border-radius:99px}.r8-role-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.r8-role{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff}.r8-archive{border:1px solid #e4c77d;background:#fff9e8;border-radius:14px;padding:13px;margin:12px 0}.r8-archive.preview{border-color:#b64242;background:#fff1f1}.r8-readonly{pointer-events:none;opacity:.62}@media(max-width:480px){.r8-bar-row{grid-template-columns:85px minmax(50px,1fr);}.r8-bar-row .r8-val{grid-column:2;text-align:right}.r8-role-grid{grid-template-columns:1fr}}
@@ -635,22 +635,16 @@ body.sheet-open{overflow:hidden}
 (function(){
   var pill=document.getElementById('modePill');
   var hint=document.getElementById('authHint');
+  var fallbackBusy=false;
   if(pill){pill.textContent='APP SCRIPT LOADED';pill.classList.remove('hidden');}
-  // Immediate feedback even if the later Supabase ES module never initializes.
-  document.addEventListener('click',function(e){
-    var signIn=e.target&&e.target.closest&&e.target.closest('#passwordSignIn');
-    if(!signIn)return;
-    if(!window.SplitTripAuthReady&&hint){
-      hint.textContent='SplitTrip sign-in is still initializing. Please wait a moment and try again. If this persists, refresh the page.';
-      hint.style.color='#9a4b20';
-    }
-  },true);
-
+  function showMessage(message,isError){
+    if(hint){hint.textContent=message;hint.style.color=isError?'#9a4b20':'';}
+    if(pill){pill.textContent=isError?'AUTH CHECK':'APP SCRIPT LOADED';pill.classList.remove('hidden');}
+  }
   function report(label,detail){
     var message=label+(detail?': '+detail:'');
     console.error('SplitTrip startup diagnostic:',message);
-    if(pill){pill.textContent='JS ERROR';pill.classList.remove('hidden');}
-    if(hint){hint.textContent=message;}
+    showMessage(message,true);
   }
   window.addEventListener('error',function(e){
     report('Browser JavaScript error',e.message||(e.error&&e.error.message)||'Unknown error');
@@ -659,6 +653,59 @@ body.sheet-open{overflow:hidden}
     var reason=e.reason;
     report('Unhandled startup rejection',reason&&reason.message||String(reason||'Unknown error'));
   });
+
+  // Independent authentication recovery. This is only used if the main app
+  // did not register its own form handler.
+  document.addEventListener('submit',async function(e){
+    if(!e.target||e.target.id!=='passwordAuthForm'||window.SplitTripAuthReady||fallbackBusy)return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    var email=document.getElementById('email');
+    var password=document.getElementById('authPassword');
+    var signIn=document.getElementById('passwordSignIn');
+    var signUp=document.getElementById('passwordSignUp');
+    var creating=!!(signUp&&signUp.type==='submit');
+    var button=creating?signUp:signIn;
+    var original=button?button.textContent:'Sign in';
+    var emailValue=email&&email.value.trim(),passwordValue=password&&password.value;
+    if(!emailValue||!passwordValue){showMessage('Enter your email address and password.',true);return;}
+    if(creating){
+      showMessage('Account creation is temporarily unavailable while the main app is recovering. Please use Sign in or try again after refresh.',true);
+      return;
+    }
+    fallbackBusy=true;
+    if(button){button.disabled=true;button.textContent='Connecting…';}
+    showMessage('Main app startup failed. Trying secure sign-in recovery…',false);
+    try{
+      var sources=[
+        'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm',
+        'https://esm.sh/@supabase/supabase-js@2'
+      ];
+      var createClient=null,lastError=null;
+      for(var i=0;i<sources.length;i++){
+        try{
+          var mod=await import(sources[i]);
+          if(typeof mod.createClient!=='function')throw new Error('Supabase client export missing');
+          createClient=mod.createClient;break;
+        }catch(err){lastError=err;console.error('Fallback Supabase CDN failed:',sources[i],err);}
+      }
+      if(!createClient)throw new Error('Could not load Supabase authentication library. '+(lastError&&lastError.message||''));
+      var client=createClient('https://qyybdtadpbofekbujcgc.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5eWJkdGFkcGJvZmVrYnVqY2djIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4OTkzMjMsImV4cCI6MjEwODQ3NTMyM30.wuEvghbSf-aZt-jyWGH3eJ6SfIMR0xo3ITUIW7xaOa8',{
+        auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
+      });
+      if(!client||!client.auth)throw new Error('Supabase authentication client could not be created.');
+      var result=await client.auth.signInWithPassword({email:emailValue,password:passwordValue});
+      if(result.error)throw result.error;
+      if(!result.data||!result.data.session)throw new Error('Supabase did not return an authenticated session.');
+      showMessage('Signed in. Restoring SplitTrip…',false);
+      window.location.reload();
+    }catch(err){
+      console.error('SplitTrip independent sign-in recovery failed:',err);
+      showMessage('Sign-in recovery failed: '+(err&&err.message||'Unknown error')+'. Your account and trip data have not been changed.',true);
+      if(button){button.disabled=false;button.textContent=original;}
+      fallbackBusy=false;
+    }
+  },true);
 })();
 </script>
 <script>
