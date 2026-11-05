@@ -1235,6 +1235,67 @@ body[data-theme="dark"] .expense-sheet-cancel{
 #workspace>.hero{position:relative!important;top:auto!important}
 </style>
 
+
+<style id="r147301-sheet-and-balance-fixes">
+/* Keep the modal above the app navigation and reserve space for the bottom nav. */
+#expenseActionSheet.expense-sheet-backdrop{
+ position:fixed!important;inset:0!important;z-index:10000!important;
+ display:flex;align-items:flex-end;justify-content:center;
+ padding:12px 12px calc(82px + env(safe-area-inset-bottom))!important;
+ background:rgba(0,0,0,.50);
+}
+#expenseActionSheet.expense-sheet-backdrop.hidden{display:none!important}
+#expenseActionSheet .expense-sheet{
+ display:flex;flex-direction:column;overflow:hidden;
+ width:min(100%,560px);
+ max-height:calc(100dvh - 104px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+ padding:12px 16px 12px;
+}
+#expenseActionSheet .expense-sheet-heading,
+#expenseActionSheet .expense-sheet-handle{flex:0 0 auto}
+#expenseActionSheet .expense-sheet-actions{
+ display:flex;flex-direction:column;gap:8px;
+ flex:0 1 auto;min-height:0;overflow-y:auto;
+ overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+ padding:2px 2px 8px;
+}
+#expenseActionSheet .expense-sheet-actions button{flex:0 0 auto;min-height:50px}
+#expenseActionSheet .expense-sheet-cancel{
+ display:block;position:relative;flex:0 0 auto;min-height:50px;
+ margin:8px 0 0!important;text-align:center!important;
+ background:var(--soft-mint,#edf5f0)!important;
+}
+body[data-theme="dark"] #expenseActionSheet .expense-sheet-cancel{
+ background:#294346!important;color:#e8f2ef!important;border-color:#496064!important;
+}
+@media(min-width:700px){
+ #expenseActionSheet.expense-sheet-backdrop{align-items:center;padding:20px!important}
+ #expenseActionSheet .expense-sheet{max-height:calc(100dvh - 40px)}
+}
+/* Compact balance rows: use the otherwise-empty right side for each member's net. */
+#balanceList>.person{
+ display:grid!important;
+ grid-template-columns:44px minmax(0,1fr) auto;
+ align-items:start!important;column-gap:12px;row-gap:8px;
+ flex-wrap:unset!important;
+}
+#balanceList>.person>.bubble{grid-column:1;grid-row:1}
+#balanceList>.person>.grow{grid-column:2;grid-row:1;min-width:0}
+#balanceList>.person>.amount{
+ grid-column:3;grid-row:1;align-self:start;
+ min-width:112px;text-align:right;font-size:16px;
+ white-space:nowrap;padding-top:2px;
+}
+#balanceList>.person>.amount .muted{text-align:right}
+#balanceList>.person>[id^="balance-detail-"]{grid-column:1/-1;width:100%!important}
+@media(max-width:420px){
+ #balanceList>.person{grid-template-columns:38px minmax(0,1fr) auto;column-gap:9px}
+ #balanceList>.person>.amount{min-width:94px;font-size:14px}
+ #balanceList>.person>.grow>strong{font-size:14px}
+ #balanceList>.person>.grow>.muted{font-size:12px}
+}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo">↔</div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -1694,7 +1755,7 @@ function openExpenseActionSheet(id){
  if(e.receipt_path)buttons.push(`<button type="button" class="secondary" data-sheet-receipt="${escapeHtml(e.receipt_path)}">View receipt</button>`);
  if(canManageExpense(e)){buttons.push(`<button type="button" class="secondary" data-sheet-edit="${id}">Edit expense</button>`,`<button type="button" class="danger" data-sheet-delete="${id}">Delete expense</button>`)}
  content.innerHTML=buttons.join('');
- sheet.classList.remove('hidden');sheet.setAttribute('aria-hidden','false');
+ sheet.classList.remove('hidden');sheet.setAttribute('aria-hidden','false');openActionSheetVisibility();
  content.querySelector('[data-sheet-detail]')?.addEventListener('click',()=>{closeExpenseActionSheet();openExpenseDetail(id)});
  content.querySelector('[data-sheet-duplicate]')?.addEventListener('click',()=>{closeExpenseActionSheet();startDuplicateExpense(id)});
  content.querySelector('[data-sheet-receipt]')?.addEventListener('click',()=>{const path=content.querySelector('[data-sheet-receipt]').dataset.sheetReceipt;closeExpenseActionSheet();viewReceipt(path)});
@@ -1714,7 +1775,7 @@ function openMemberActionSheet(userId){
  }
  if(!actions.length)return;
  content.innerHTML=actions.join('');
- sheet.classList.remove('hidden');sheet.setAttribute('aria-hidden','false');
+ sheet.classList.remove('hidden');sheet.setAttribute('aria-hidden','false');openActionSheetVisibility();
  content.querySelector('[data-member-claim]')?.addEventListener('click',async()=>{
   const btn=content.querySelector('[data-member-claim]');btn.disabled=true;
   const {data,error}=await sb.rpc('create_guest_claim',{p_trip_id:activeTrip.id,p_guest_id:userId});btn.disabled=false;
@@ -1734,7 +1795,10 @@ function openMemberActionSheet(userId){
   closeExpenseActionSheet();await loadTrips();activeTrip=trips.find(t=>t.id===activeTrip?.id)||activeTrip;await loadTripData();notice(memberName(userId)+' is now a co-owner.');
  });
 }
-function closeExpenseActionSheet(){const sheet=$('expenseActionSheet');if(sheet){sheet.classList.add('hidden');sheet.setAttribute('aria-hidden','true');const heading=sheet.querySelector('.expense-sheet-heading');if(heading)heading.textContent='Expense actions'}}
+function closeExpenseActionSheet(){const sheet=$('expenseActionSheet');if(sheet){sheet.classList.add('hidden');sheet.setAttribute('aria-hidden','true');document.body.classList.remove('action-sheet-open');const heading=sheet.querySelector('.expense-sheet-heading');if(heading)heading.textContent='Expense actions'}}
+function openActionSheetVisibility(){document.body.classList.add('action-sheet-open')}
+document.addEventListener('pointerdown',e=>{const backdrop=$('expenseActionSheet');if(backdrop&&!backdrop.classList.contains('hidden')&&e.target===backdrop)closeExpenseActionSheet()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeExpenseActionSheet()});
 function openExpenseDetail(id){const e=expenses.find(x=>x.id===id);if(!e)return;const ownShares=shares.filter(x=>x.expense_id===id&&Number(x.amount)>0);const total=ownShares.reduce((a,x)=>a+Number(x.amount),0);const canEdit=canManageExpense(e);$('expenseDetailTitle').textContent=e.description;$('expenseDetailContent').innerHTML=`<div class="notice" style="margin-top:0"><div class="muted">Total expense</div><div style="font-size:28px;font-weight:850">${money(e.amount)}</div><div class="muted">${escapeHtml(e.category||'Other')} · Paid by ${escapeHtml(memberName(e.payer_id))}${e.created_by?' · Recorded by '+escapeHtml(memberName(e.created_by)):' · Recorder not available'}${e.created_at?' · '+new Date(e.created_at).toLocaleString():''}</div></div><h3 style="margin-bottom:4px">Who shares this expense?</h3>${ownShares.length?ownShares.map(sh=>`<div class="row between" style="padding:8px 0;border-bottom:1px solid var(--line)"><span>${escapeHtml(memberName(sh.user_id))}${sh.user_id===e.payer_id?' · payer':''}</span><strong>${money(sh.amount)}</strong></div>`).join(''):'<div class="muted">No share rows found for this expense.</div>'}<div class="row between" style="padding:10px 0"><span class="muted">Allocated total</span><strong class="${Math.abs(total-Number(e.amount))<0.011?'positive':'negative'}">${money(total)}${Math.abs(total-Number(e.amount))<0.011?' · balanced':' · review allocation'}</strong></div><div class="row" style="flex-wrap:wrap;margin-top:12px">${e.receipt_path?`<button type="button" class="secondary" id="detailViewReceipt">View receipt</button>`:''}<button type="button" class="secondary" id="detailDuplicateExpense">Duplicate expense</button>${canEdit?`<button type="button" class="secondary" id="detailEditExpense">Edit expense</button><button type="button" class="danger" id="detailDeleteExpense">Delete expense</button>`:''}</div>`;$('expenseDetailModal').classList.remove('hidden');$('closeExpenseDetail').focus();if($('detailViewReceipt'))$('detailViewReceipt').onclick=()=>viewReceipt(e.receipt_path);if($('detailDuplicateExpense'))$('detailDuplicateExpense').onclick=()=>{closeExpenseDetail();startDuplicateExpense(id)};if($('detailEditExpense'))$('detailEditExpense').onclick=()=>{closeExpenseDetail();startEditExpense(id)};if($('detailDeleteExpense'))$('detailDeleteExpense').onclick=()=>{closeExpenseDetail();deleteExpense(id)}}
 function closeExpenseDetail(){$('expenseDetailModal').classList.add('hidden')}
 function renderActivityTimeline(){if(!$('activityTimeline'))return;const items=[...expenses.map(e=>({kind:'expense',date:e.created_at||null,id:e.id,label:`${memberName(e.payer_id)} paid for ${e.description}`,actor:e.created_by?memberName(e.created_by):null,amount:Number(e.amount),category:e.category||'Other'})),...payments.map(p=>({kind:'payment',date:p.created_at||null,label:`${memberName(p.from_user_id)} paid ${memberName(p.to_user_id)}`,actor:p.recorded_by?memberName(p.recorded_by):null,amount:Number(p.amount)}))].sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).slice(0,20);$('activityTimeline').innerHTML=items.length?items.map(x=>`<div class="activity-item"><div class="bubble">${x.kind==='payment'?'✓':catIcon(x.category)}</div><div class="grow"><strong>${escapeHtml(x.label)}</strong><div class="muted">${x.date?new Date(x.date).toLocaleString():'Date unavailable'} · ${x.kind==='payment'?'Settlement recorded':'Expense added'}</div>${x.actor?`<div class="muted">Recorded by ${escapeHtml(x.actor)}</div>`:''}${x.kind==='expense'?`<button type="button" class="secondary role-action" data-expense-detail="${x.id}">View details</button>`:''}</div><strong class="amount">${money(x.amount)}</strong></div>`).join(''):'<div class="empty">New expenses and settlement payments will appear here.</div>';wireExpenseActions($('activityTimeline'))}
