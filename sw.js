@@ -1,4 +1,4 @@
-const CACHE_NAME = 'splittrip-shell-r14-7-32-1';
+const CACHE_NAME = 'splittrip-shell-r14-7-32-3';
 const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',

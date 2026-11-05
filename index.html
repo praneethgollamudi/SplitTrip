@@ -1464,6 +1464,18 @@ button:disabled{opacity:.58}
 @media(prefers-reduced-motion:no-preference){button,a,.card,.stat{transition:border-color .16s ease,background-color .16s ease,box-shadow .16s ease}}
 </style>
 
+
+<style id="r147323-dashboard-activity-icon-fit">
+/* R14.7.32.3: give category glyphs comfortable breathing room in Recent activity */
+#dashboardActivity .expense{gap:12px;padding:13px 0;overflow:visible}
+#dashboardActivity .expense>.bubble{box-sizing:border-box;width:48px;height:48px;min-width:48px;flex:0 0 48px;font-size:18px;line-height:1;overflow:visible;border-radius:14px}
+#dashboardActivity .expense>.grow{min-width:0}
+@media(max-width:480px){
+  #dashboardActivity .expense{gap:11px;padding:12px 0}
+  #dashboardActivity .expense>.bubble{width:46px;height:46px;min-width:46px;flex-basis:46px;font-size:17px}
+  #dashboardActivity .expense>.amount{font-size:14px}
+}
+</style>
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo" aria-label="SplitTrip linked-rings logo"><svg viewBox="0 0 64 40" role="img" aria-hidden="true"><path d="M25 8H19a12 12 0 0 0 0 24h10a12 12 0 0 0 9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M39 8h6a12 12 0 0 1 0 24H35a12 12 0 0 1-9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/></svg></div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
@@ -2060,7 +2072,17 @@ $('showAddItinerary')?.addEventListener('click',()=>{show('addItineraryCard',tru
 $('itineraryForm')?.addEventListener('submit',e=>{e.preventDefault();if(!activeTrip||!user)return;const item={id:'plan-'+Date.now(),title:$('itineraryTitle').value.trim(),type:$('itineraryType').value,status:$('itineraryStatus').value,date:$('itineraryDate').value,time:$('itineraryTime').value,location:$('itineraryLocation').value.trim(),reference:$('itineraryReference').value.trim(),cost:$('itineraryCost').value,currency:$('itineraryCurrency').value,notes:$('itineraryNotes').value.trim()};if(!item.title||!item.date){notice('Add a title and date for this plan.',true);return}itineraryItems.push(item);saveItineraryLocal();e.target.reset();show('addItineraryCard',false);renderItinerary();setItineraryView('plans');notice('Plan saved in this browser. It has not been added to shared expenses.')});
 
 function switchSplitTripTab(t){if(!t)return;const main=t==='settle'?'balances':t==='ask'?'home':t;document.querySelectorAll('.nav [data-tab]').forEach(x=>x.classList.toggle('active',x.dataset.tab===main));['home','expenses','settle','balances','members','ask','itinerary'].forEach(x=>{const panel=$('tab-'+x);if(panel)panel.classList.toggle('hidden',x!==t)});if(t==='itinerary')renderItinerary();window.scrollTo({top:0,behavior:'auto'});}
-document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>switchSplitTripTab(b.dataset.tab)));function setExpenseValidation(message,focusId){const box=$('expenseValidation');if(!box)return;box.textContent=message||'';box.classList.toggle('hidden',!message);if(message&&focusId){const field=$(focusId);if(field){field.setAttribute('aria-invalid','true');field.focus({preventScroll:true});field.scrollIntoView({behavior:'smooth',block:'center'});}}}let expenseDraftDirty=false;function markExpenseDraftDirty(){if($('desc').value.trim()||$('amt').value||document.querySelector('.split-check:checked'))expenseDraftDirty=true}['desc','amt','payer','category','splitMode','splitMembers'].forEach(id=>$(id)?.addEventListener('input',markExpenseDraftDirty));window.addEventListener('beforeunload',e=>{if(expenseDraftDirty){e.preventDefault();e.returnValue='';}});function clearExpenseValidation(){const box=$('expenseValidation');if(box){box.textContent='';box.classList.add('hidden')}['desc','amt','payer','category','splitMode'].forEach(id=>$(id)?.removeAttribute('aria-invalid'))}['desc','amt','payer','category','splitMode','splitMembers'].forEach(id=>$(id)?.addEventListener('input',clearExpenseValidation));document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{if(editingExpenseId)return;if(!$('desc').value.trim())$('desc').value=b.dataset.preset;$('category').value=b.dataset.category;lastExpenseCategory=b.dataset.category;document.querySelectorAll('[data-preset]').forEach(x=>x.classList.toggle('preset-selected',x===b));clearExpenseValidation();$('quickAddHint').textContent='Quick Add · '+b.dataset.category+' selected. Description preserved. Confirm amount, payer and split before saving.'});document.querySelectorAll('[data-split-preset]').forEach(b=>b.onclick=()=>{const preset=b.dataset.splitPreset;if(preset==='same'){const t=lastExpenseTemplate;if(!t){notice('Save or duplicate an expense first to reuse its participants.',true);return}const ids=(t.shareIds||[]).filter(id=>members.some(m=>m.user_id===id));$('splitMode').value=t.splitMode||'equal';renderShareInputs(ids,t.shareAmounts||{});$('advancedExpenseOptions').open=true;$('quickAddHint').textContent='Reused the last expense’s participants and allocation values. Review before saving.'}else{$('splitMode').value=preset;renderShareInputs();$('advancedExpenseOptions').open=preset!=='equal';$('quickAddHint').textContent=preset==='equal'?'Equal split selected. Review participants before saving.':'Custom amount split selected. Enter each participant’s amount and ensure the total matches.'}updateSplitPresetState();clearExpenseValidation()});$('splitMode').addEventListener('change',updateSplitPresetState);['amt','payer'].forEach(id=>$(id)?.addEventListener('input',updateExpenseSplitPreview));$('amt')?.addEventListener('change',updateExpenseSplitPreview);$('splitMembers')?.addEventListener('input',updateExpenseSplitPreview);$('splitMembers')?.addEventListener('change',updateExpenseSplitPreview);updateSplitPresetState();updateExpenseSplitPreview();const createTripPanel=$('createTripPanel'),joinTripPanel=$('joinTripPanel');$('showCreateTrip').onclick=()=>{createTripPanel.classList.remove('hidden');joinTripPanel.classList.add('hidden');$('tripName').focus()};$('showJoinTrip').onclick=()=>{joinTripPanel.classList.remove('hidden');createTripPanel.classList.add('hidden');$('inviteCode').focus()};document.querySelectorAll('[data-close-trip-form]').forEach(b=>b.onclick=()=>b.closest('.trip-form-card').classList.add('hidden'));document.querySelectorAll('[data-tab=balances]').forEach(b=>b.addEventListener('click',()=>setTimeout(renderFirstTripGuide,0)));if(inviteFromUrl){$('inviteCode').value=inviteFromUrl.toUpperCase();joinTripPanel.classList.remove('hidden')}window.addEventListener('offline',()=>notice('You appear to be offline. Changes may not sync until connectivity returns.',true));window.addEventListener('online',()=>{notice('Connection restored. Refresh the trip to confirm the latest data.');if(activeTrip)loadTripData()});window.addEventListener('unhandledrejection',e=>{console.error('Unhandled app operation failed',e.reason);notice('An operation did not finish. Check your connection, refresh the trip, and retry if needed.',true)});window.addEventListener('error',()=>notice('Something unexpected happened. Refresh the page if the screen looks incorrect.',true));
+document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>switchSplitTripTab(b.dataset.tab)));function setExpenseValidation(message,focusId){const box=$('expenseValidation');if(!box)return;box.textContent=message||'';box.classList.toggle('hidden',!message);if(message&&focusId){const field=$(focusId);if(field){field.setAttribute('aria-invalid','true');field.focus({preventScroll:true});field.scrollIntoView({behavior:'smooth',block:'center'});}}}let expenseDraftDirty=false;function markExpenseDraftDirty(){if($('desc').value.trim()||$('amt').value||document.querySelector('.split-check:checked'))expenseDraftDirty=true}['desc','amt','payer','category','splitMode','splitMembers'].forEach(id=>$(id)?.addEventListener('input',markExpenseDraftDirty));window.addEventListener('beforeunload',e=>{if(expenseDraftDirty){e.preventDefault();e.returnValue='';}});function clearExpenseValidation(){const box=$('expenseValidation');if(box){box.textContent='';box.classList.add('hidden')}['desc','amt','payer','category','splitMode'].forEach(id=>$(id)?.removeAttribute('aria-invalid'))}['desc','amt','payer','category','splitMode','splitMembers'].forEach(id=>$(id)?.addEventListener('input',clearExpenseValidation));document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>{if(editingExpenseId)return;if(!$('desc').value.trim())$('desc').value=b.dataset.preset;$('category').value=b.dataset.category;lastExpenseCategory=b.dataset.category;document.querySelectorAll('[data-preset]').forEach(x=>x.classList.toggle('preset-selected',x===b));clearExpenseValidation();$('quickAddHint').textContent='Quick Add · '+b.dataset.category+' selected. Description preserved. Confirm amount, payer and split before saving.'});document.querySelectorAll('[data-split-preset]').forEach(b=>b.onclick=()=>{const preset=b.dataset.splitPreset;if(preset==='same'){const t=lastExpenseTemplate;if(!t){notice('Save or duplicate an expense first to reuse its participants.',true);return}const ids=(t.shareIds||[]).filter(id=>members.some(m=>m.user_id===id));$('splitMode').value=t.splitMode||'equal';renderShareInputs(ids,t.shareAmounts||{});$('advancedExpenseOptions').open=true;$('quickAddHint').textContent='Reused the last expense’s participants and allocation values. Review before saving.'}else{$('splitMode').value=preset;renderShareInputs();$('advancedExpenseOptions').open=preset!=='equal';$('quickAddHint').textContent=preset==='equal'?'Equal split selected. Review participants before saving.':'Custom amount split selected. Enter each participant’s amount and ensure the total matches.'}updateSplitPresetState();clearExpenseValidation()});$('splitMode').addEventListener('change',updateSplitPresetState);['amt','payer'].forEach(id=>$(id)?.addEventListener('input',updateExpenseSplitPreview));$('amt')?.addEventListener('change',updateExpenseSplitPreview);$('splitMembers')?.addEventListener('input',updateExpenseSplitPreview);$('splitMembers')?.addEventListener('change',updateExpenseSplitPreview);updateSplitPresetState();updateExpenseSplitPreview();const createTripPanel=$('createTripPanel'),joinTripPanel=$('joinTripPanel');$('showCreateTrip').onclick=()=>{createTripPanel.classList.remove('hidden');joinTripPanel.classList.add('hidden');$('tripName').focus()};$('showJoinTrip').onclick=()=>{joinTripPanel.classList.remove('hidden');createTripPanel.classList.add('hidden');$('inviteCode').focus()};document.querySelectorAll('[data-close-trip-form]').forEach(b=>b.onclick=()=>b.closest('.trip-form-card').classList.add('hidden'));document.querySelectorAll('[data-tab=balances]').forEach(b=>b.addEventListener('click',()=>setTimeout(renderFirstTripGuide,0)));if(inviteFromUrl){$('inviteCode').value=inviteFromUrl.toUpperCase();joinTripPanel.classList.remove('hidden')}window.addEventListener('offline',()=>notice('You appear to be offline. Changes may not sync until connectivity returns.',true));window.addEventListener('online',()=>{notice('Connection restored. Refresh the trip to confirm the latest data.');if(activeTrip)loadTripData()});window.addEventListener('unhandledrejection',e=>{
+  const reason=e && e.reason;
+  console.error('SplitTrip unhandled async error:', reason && (reason.stack || reason.message) || reason);
+  notice('An app operation did not finish. Check your connection and try again; details were logged for diagnosis.',true);
+});window.addEventListener('error',e=>{
+  // Ignore failed images, stylesheets and other resource loads; they are not app exceptions.
+  if(e && e.target && e.target !== window) return;
+  const detail=(e && (e.message || (e.error && e.error.message))) || 'Unknown JavaScript error';
+  console.error('SplitTrip runtime error:', detail, e && e.filename, e && e.lineno);
+  notice('A part of the app ran into an error. Refresh the page; if it happens again, share the browser console error with support.',true);
+});
 document.addEventListener('click',e=>{const newCreate=e.target.closest('[data-new-user-create]');if(newCreate){$('showCreateTrip')?.click();return}const newJoin=e.target.closest('[data-new-user-join]');if(newJoin){$('showJoinTrip')?.click();return}const add=e.target.closest('[data-guide-add]');if(add){openQuickAddExpense();return}const invite=e.target.closest('[data-guide-invite]');if(invite){document.querySelector('[data-tab=members]')?.click();if(activeTrip?.role==='owner')show('addMemberPanel',true);return}const viewBalances=e.target.closest('[data-guide-balances]');if(viewBalances){if(expenses.length>0){try{const key=guideBalancesKey();if(key)localStorage.setItem(key,'done')}catch{}}document.querySelector('[data-tab=balances]')?.click();renderFirstTripGuide();return}const showGuide=e.target.closest('[data-guide-show]');if(showGuide){try{const key=firstTripGuideKey();if(key)localStorage.removeItem(key)}catch{}renderFirstTripGuide();$('firstTripGuide')?.scrollIntoView({behavior:'smooth',block:'start'});return}const dismiss=e.target.closest('[data-guide-dismiss]');if(dismiss){try{const key=firstTripGuideKey();if(key)localStorage.setItem(key,'dismissed')}catch{}$('firstTripGuide')?.classList.add('hidden')}});
 
 // R14.4: command palette — read-only search with safe navigation actions.
@@ -2416,6 +2438,55 @@ document.querySelectorAll('[data-assistant-prompt]').forEach(b=>b.onclick=()=>{$
 #st-pwa-status .st-pwa-message{flex:1;min-width:0}
 #st-pwa-status button{padding:8px 11px;border-radius:10px;background:#d7f58a;color:#17352a;font-size:12px;white-space:nowrap}
 @media(min-width:760px){#st-pwa-status{bottom:18px}}
+
+/* R14.7.32.2 — dark-mode first-trip guide contrast */
+body[data-theme="dark"] .first-trip-guide,
+body[data-theme="dark"] .new-user-trip-guide {
+  background: linear-gradient(145deg, #203538 0%, #263c35 100%) !important;
+  border-color: #405b53 !important;
+  color: var(--ink) !important;
+}
+body[data-theme="dark"] .first-trip-guide h3,
+body[data-theme="dark"] .new-user-trip-guide h3,
+body[data-theme="dark"] .new-user-guide-heading strong,
+body[data-theme="dark"] .first-trip-guide b,
+body[data-theme="dark"] .new-user-trip-guide strong {
+  color: #e5f1ed !important;
+}
+body[data-theme="dark"] .first-trip-guide .muted,
+body[data-theme="dark"] .new-user-trip-guide .muted,
+body[data-theme="dark"] .first-trip-guide p,
+body[data-theme="dark"] .new-user-trip-guide p,
+body[data-theme="dark"] .new-user-footnote {
+  color: #b7cbc4 !important;
+}
+body[data-theme="dark"] .first-trip-step,
+body[data-theme="dark"] .new-user-choice-grid article {
+  background: #263b3e !important;
+  border-color: #435b5d !important;
+  color: #dce9e4 !important;
+}
+body[data-theme="dark"] .first-trip-step.is-done {
+  background: #29443a !important;
+  border-color: #52745d !important;
+}
+body[data-theme="dark"] .guide-progress {
+  background: #344d3a !important;
+  color: #d4edbd !important;
+}
+body[data-theme="dark"] .guide-progress-track {
+  background: #405253 !important;
+}
+body[data-theme="dark"] .first-trip-actions button,
+body[data-theme="dark"] .new-user-trip-guide button {
+  border-color: #526b6d !important;
+}
+body[data-theme="dark"] .first-trip-actions button.secondary,
+body[data-theme="dark"] .new-user-trip-guide button.secondary {
+  background: #294044 !important;
+  color: #e2eeea !important;
+}
+
 </style>
 <div id="st-pwa-status" role="status" aria-live="polite"><span class="st-pwa-message" id="st-pwa-message"></span><button id="st-pwa-action" type="button" hidden></button><button id="st-pwa-dismiss" type="button" aria-label="Dismiss" style="background:transparent;color:#fff;padding:4px 7px">✕</button></div>
 <script id="r14732-pwa-controller">
