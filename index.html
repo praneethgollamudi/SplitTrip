@@ -1981,6 +1981,80 @@ body[data-theme="dark"] .r14741-closure-card .muted{color:#b9cbc5!important}
 body[data-theme="dark"]{color-scheme:dark}
 </style>
 
+
+<style id="r1483-responsive-consistency">
+/* R14.8.3 — responsive consistency and viewport containment */
+*,*::before,*::after{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:clip}
+#workspace,.shell,#workspace>.tab-panel,#workspace section,
+#workspace .card,#workspace .st-tool-page{min-width:0;max-width:100%}
+#workspace img,#workspace video,#workspace canvas{max-width:100%;height:auto}
+#workspace .row{min-width:0;flex-wrap:wrap}
+#workspace .row>.grow{min-width:0}
+#workspace input,#workspace select,#workspace textarea{max-width:100%;min-width:0}
+#workspace button{max-width:100%;overflow-wrap:anywhere}
+#workspace table{max-width:100%}
+#workspace .table-wrap,#workspace .table-scroll,
+#workspace .ledger-wrap,#workspace .report-table-wrap{
+  max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;
+  -webkit-overflow-scrolling:touch;
+}
+#workspace .st-tool-page{overflow-wrap:anywhere}
+#workspace .st-tool-page-head{min-width:0}
+#workspace .st-tool-page-head h2{overflow-wrap:anywhere}
+#workspace .st-tool-page-head p{overflow-wrap:anywhere}
+#workspace .st-tool-page [id$="Content"]>*{min-width:0;max-width:100%}
+#workspace .nav{isolation:isolate}
+#workspace .nav button{min-width:0;overflow:hidden;text-overflow:clip}
+.command-backdrop,.expense-sheet-backdrop,.detail-panel,.merge-dialog-backdrop{
+  overscroll-behavior:contain;
+}
+@media(max-width:760px){
+  .shell{padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}
+  #workspace{padding-left:0;padding-right:0}
+  #workspace .card{border-radius:16px}
+  #workspace .st-tool-page{padding:12px}
+  #workspace .st-tool-page-head{gap:8px}
+  #workspace .st-tool-page-head h2{font-size:clamp(17px,4.8vw,21px)}
+  #workspace .st-tool-page-head p{font-size:12px}
+  #workspace .st-tool-page .st-tool-back{flex-shrink:0}
+  #workspace .nav button{white-space:nowrap}
+  #expenseDetailModal{align-items:flex-end;padding:8px 8px calc(72px + env(safe-area-inset-bottom))!important}
+  #expenseDetailModal .detail-sheet{
+    width:100%;max-width:100%;
+    max-height:calc(100dvh - 84px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow-y:auto;overscroll-behavior:contain;
+    padding:14px 14px calc(16px + env(safe-area-inset-bottom));
+  }
+  #commandPalette{padding:8px}
+  #commandPalette .command-dialog{
+    width:100%;max-width:100%;max-height:calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overflow-y:auto;overscroll-behavior:contain;
+  }
+  #memberMergeDialog .merge-dialog{width:calc(100% - 16px);max-width:100%;max-height:calc(100dvh - 24px);overflow-y:auto}
+}
+@media(max-width:420px){
+  #workspace .st-tool-page{padding:10px}
+  #workspace .st-tool-page-head{align-items:flex-start}
+  #workspace .st-tool-page-head .st-tool-back{min-height:34px;padding:6px 9px;font-size:12px}
+  #workspace .st-tool-page-head h2{font-size:17px}
+  #workspace .card{padding:12px}
+  #workspace .nav{gap:2px!important}
+  #workspace .nav button{font-size:clamp(8px,2.45vw,10px)!important;padding-left:1px!important;padding-right:1px!important}
+  #splitTripQuickAdd{max-width:calc(100vw - 24px)}
+}
+@media(min-width:761px){
+  #workspace{width:min(100%,1120px);margin-inline:auto}
+  #workspace .st-tool-page{padding:22px}
+  #workspace .st-tool-page [id$="Content"]{width:100%}
+  #expenseDetailModal{align-items:center}
+  #expenseDetailModal .detail-sheet{max-height:calc(100dvh - 48px)}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo" aria-label="SplitTrip linked-rings logo"><svg viewBox="0 0 64 40" role="img" aria-hidden="true"><path d="M25 8H19a12 12 0 0 0 0 24h10a12 12 0 0 0 9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M39 8h6a12 12 0 0 1 0 24H35a12 12 0 0 1-9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/></svg></div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
