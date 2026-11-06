@@ -1,4 +1,4 @@
-const CACHE_NAME = 'splittrip-shell-r14-7-32-3';
+const CACHE_NAME = 'splittrip-shell-r14-7-46-2';
 const APP_SHELL = [
   './index.html',
   './manifest.webmanifest',
@@ -27,7 +27,6 @@ self.addEventListener('message', event => {
 self.addEventListener('fetch', event => {
   const request = event.request;
   const url = new URL(request.url);
-  // Never intercept Supabase, third-party, non-GET, or cross-origin traffic.
   if (request.method !== 'GET' || url.origin !== self.location.origin) return;
   if (url.pathname.includes('/rest/v1/') || url.pathname.includes('/auth/v1/') || url.pathname.includes('/storage/v1/')) return;
   if (request.mode === 'navigate') {
@@ -46,7 +45,6 @@ self.addEventListener('fetch', event => {
     })());
     return;
   }
-  // Cache only the explicitly versioned app shell assets; leave all other requests alone.
   if (APP_SHELL.some(path => new URL(path, self.registration.scope).href === request.url)) {
     event.respondWith((async () => (await caches.match(request)) || fetch(request))());
   }
