@@ -2055,6 +2055,146 @@ html,body{max-width:100%;overflow-x:clip}
 }
 </style>
 
+
+<style id="r1484-accessibility-visual-consistency">
+/* R14.8.4 — shared typography, controls, focus and theme parity */
+
+/* Typography rhythm */
+:root{
+  --st-control-radius:12px;
+  --st-focus-ring:0 0 0 3px rgba(112,166,91,.32);
+}
+#workspace h1,#workspace h2,#workspace h3,
+#workspace .section-title{
+  text-wrap:balance;
+  overflow-wrap:anywhere;
+}
+#workspace p,#workspace .muted,#workspace .hint{
+  text-wrap:pretty;
+}
+#workspace .card>h2,#workspace .card>h3{line-height:1.3}
+#workspace .field label,#workspace label{line-height:1.4}
+#workspace .field small,#workspace .hint{line-height:1.45}
+
+/* Consistent interactive controls and touch target sizing */
+#workspace button,
+#workspace input,
+#workspace select,
+#workspace textarea,
+#commandPalette button,
+#expenseDetailModal button,
+#memberMergeDialog button{
+  border-radius:var(--st-control-radius);
+}
+#workspace button,
+#commandPalette button,
+#expenseDetailModal button,
+#memberMergeDialog button{
+  min-height:40px;
+}
+#workspace input,#workspace select{min-height:42px}
+#workspace textarea{min-height:88px}
+#workspace button:disabled,
+#workspace input:disabled,
+#workspace select:disabled,
+#workspace textarea:disabled{
+  cursor:not-allowed;opacity:.58;
+}
+#workspace button:focus-visible,
+#workspace a:focus-visible,
+#workspace input:focus-visible,
+#workspace select:focus-visible,
+#workspace textarea:focus-visible,
+#commandPalette button:focus-visible,
+#commandPalette input:focus-visible,
+#expenseDetailModal button:focus-visible,
+#memberMergeDialog button:focus-visible{
+  outline:2px solid #75a95f;
+  outline-offset:2px;
+  box-shadow:var(--st-focus-ring);
+}
+#workspace .nav button:focus-visible{outline-offset:-3px}
+#workspace .st-tool-back{min-height:40px}
+#workspace .r14746-tool-card{min-height:84px}
+#workspace .r14746-tool-card:focus-visible{outline-offset:3px}
+
+/* Light theme: unify neutral surfaces while retaining semantic color cues */
+body[data-theme="light"] .st-tool-page,
+body[data-theme="light"] #tab-tools .r14746-tools-group{
+  background:#fbfdf9;
+  border-color:#e1e9df;
+  color:#24352f;
+}
+body[data-theme="light"] .st-tool-page-head{border-color:#e1e9df}
+body[data-theme="light"] .st-tool-page .card,
+body[data-theme="light"] #commandPalette .command-dialog,
+body[data-theme="light"] #expenseDetailModal .detail-sheet,
+body[data-theme="light"] #memberMergeDialog .merge-dialog{
+  color:#24352f;
+}
+body[data-theme="light"] #workspace input,
+body[data-theme="light"] #workspace select,
+body[data-theme="light"] #workspace textarea{
+  color:#24352f;border-color:#d5dfd8;
+}
+body[data-theme="light"] #workspace input::placeholder,
+body[data-theme="light"] #workspace textarea::placeholder{color:#74837b}
+
+/* Dark theme: same hierarchy, readable muted copy and consistent control edges */
+body[data-theme="dark"] #workspace .st-tool-page,
+body[data-theme="dark"] #workspace #tab-tools .r14746-tools-group{
+  background:#192d2f!important;
+  border-color:#40575a!important;
+  color:#edf6f2!important;
+}
+body[data-theme="dark"] #workspace .st-tool-page-head{border-color:#40575a!important}
+body[data-theme="dark"] #workspace .st-tool-page-head h2,
+body[data-theme="dark"] #workspace .card>h2,
+body[data-theme="dark"] #workspace .card>h3,
+body[data-theme="dark"] #workspace .section-title{
+  color:#edf6f2!important;
+}
+body[data-theme="dark"] #workspace .muted,
+body[data-theme="dark"] #workspace .hint,
+body[data-theme="dark"] #workspace .field small{
+  color:#b9cbc5!important;
+}
+body[data-theme="dark"] #workspace button,
+body[data-theme="dark"] #workspace input,
+body[data-theme="dark"] #workspace select,
+body[data-theme="dark"] #workspace textarea{
+  border-color:#52696b;
+}
+body[data-theme="dark"] #workspace button:disabled{opacity:.52}
+body[data-theme="dark"] #workspace button:focus-visible,
+body[data-theme="dark"] #workspace a:focus-visible,
+body[data-theme="dark"] #workspace input:focus-visible,
+body[data-theme="dark"] #workspace select:focus-visible,
+body[data-theme="dark"] #workspace textarea:focus-visible{
+  outline-color:#b4dc8d;
+  box-shadow:0 0 0 3px rgba(180,220,141,.24);
+}
+body[data-theme="dark"] #workspace .nav button:focus-visible{outline-color:#b4dc8d}
+
+/* Small screens: comfortable targets without forcing oversized cards */
+@media(max-width:600px){
+  #workspace button:not(.nav button){min-height:40px}
+  #workspace .st-tool-back{min-height:38px}
+  #workspace .r14746-tool-card{min-height:76px}
+  #workspace .field{min-width:0}
+}
+@media(max-width:360px){
+  #workspace button:not(.nav button){padding-inline:9px}
+  #workspace .st-tool-back{padding-inline:8px}
+}
+@media(prefers-contrast:more){
+  #workspace button,#workspace input,#workspace select,#workspace textarea,
+  #commandPalette .command-dialog,#expenseDetailModal .detail-sheet{
+    border-width:2px;
+  }
+}
+</style>
+
 </head><body><main class="shell">
 <header class="hero"><div class="row brand"><div class="logo" aria-label="SplitTrip linked-rings logo"><svg viewBox="0 0 64 40" role="img" aria-hidden="true"><path d="M25 8H19a12 12 0 0 0 0 24h10a12 12 0 0 0 9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><path d="M39 8h6a12 12 0 0 1 0 24H35a12 12 0 0 1-9-4" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/></svg></div><div class="grow"><div style="font-size:23px;font-weight:800;letter-spacing:-.7px">SplitTrip</div><div class="sub">Shared expenses. Zero awkward settlements.</div></div><div class="row" style="gap:6px"><button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">☾</button><button id="globalAccountOpen" class="avatar-button hidden" type="button" aria-label="Open account settings" title="Account">P</button><span class="pill" id="modePill">CONNECTING</span></div></div><div class="sub" id="signedInAs" style="margin-top:12px">Shared trip ledger</div><div class="total"><span class="sub">Total group spending</span><strong id="total">₹0.00</strong><div class="row between sub"><span id="memberCount">0 members</span><span id="expenseCount">0 expenses</span></div></div></header>
 <section id="authPanel" class="auth"><h2 class="section-title" id="authTitle" style="margin-top:0">Sign in to SplitTrip</h2><p class="muted" id="authDescription">Sign in with your email and password.</p><form id="passwordAuthForm"><div class="field hidden" id="authNameField"><label for="authDisplayName">Display name</label><input id="authDisplayName" maxlength="40" placeholder="e.g. Praneeth" autocomplete="nickname"></div><div class="field"><label for="email">Email address</label><input id="email" type="email" required placeholder="you@example.com" autocomplete="username"></div><div class="field"><label for="authPassword">Password</label><input id="authPassword" type="password" minlength="8" required autocomplete="current-password" placeholder="At least 8 characters"></div><div class="split-options"><button type="submit" id="passwordSignIn">Sign in</button><button type="button" class="secondary" id="passwordSignUp">Create account</button><button type="button" class="secondary hidden" id="backToSignIn">Back to sign in</button></div></form><div class="muted" id="authHint" style="margin-top:10px" aria-live="polite">New to SplitTrip? Create an account to start or join a trip.</div><button type="button" class="secondary hidden" id="resendSignupConfirmation" style="margin-top:8px">Resend confirmation email</button></section>
