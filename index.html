@@ -1755,9 +1755,9 @@ body[data-theme="light"] #splitTripOfflineOutbox small{color:#52776b}
 
 <!-- SplitTrip R14.7.42: trip lifecycle polish -->
 
-<style id="r147471-mobile-navigation-ios-install">
+<style id="r147472-mobile-navigation-fix">
 @media(max-width:600px){
-  #workspace .nav{grid-template-columns:repeat(5,minmax(0,1fr)) !important;gap:3px !important}
+  #workspace .nav{display:grid !important;grid-template-columns:repeat(5,minmax(0,1fr)) !important;gap:3px !important}
   #workspace .nav button{min-width:0 !important;padding:9px 2px !important;font-size:clamp(9px,2.6vw,12px) !important;white-space:nowrap !important}
   #splitTripQuickAdd{bottom:calc(116px + env(safe-area-inset-bottom,0px)) !important;right:12px !important;padding:11px 14px !important;font-size:13px !important}
 }
@@ -2364,34 +2364,7 @@ function printFinancialHealthReport(){
  const w=window.open('','_blank');if(!w){notice('Your browser blocked the report window. Allow pop-ups for SplitTrip and try again.',true);return}
  const report=`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(activeTrip.name)} — SplitTrip Financial Report</title><style>
 *{box-sizing:border-box}body{font:14px/1.45 Arial,sans-serif;color:#1d2a24;margin:0;background:#fff}.page{max-width:900px;margin:0 auto;padding:34px 38px}.brand{font-size:13px;font-weight:800;letter-spacing:2px;color:#397b57}.head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;border-bottom:2px solid #dce8df;padding-bottom:18px}.head h1{font-size:26px;margin:5px 0}.muted{color:#68756e;font-size:12px}.stamp{text-align:right;font-size:11px;color:#68756e}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0}.metric{border:1px solid #dfe7e1;border-radius:9px;padding:12px}.metric span{display:block;font-size:11px;color:#68756e}.metric strong{display:block;font-size:18px;margin-top:4px;overflow-wrap:anywhere}.status{display:inline-block;margin-top:6px;border-radius:20px;padding:3px 9px;background:#edf5ef;color:#286341;font-size:11px;font-weight:bold}.section{margin-top:22px;break-inside:avoid}.section h2{font-size:15px;margin:0 0 9px}.section p{font-size:12px;color:#68756e;margin:5px 0 10px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;padding:8px 7px;border-bottom:1px solid #e5ebe6;vertical-align:top}th{background:#f3f7f4;color:#526158;font-size:10px;text-transform:uppercase;letter-spacing:.04em}.num{text-align:right;white-space:nowrap}.note{margin-top:24px;padding:12px;border-radius:8px;background:#f4f7f5;color:#58665e;font-size:11px}.footer{margin-top:22px;border-top:1px solid #e2e9e4;padding-top:10px;color:#7a857e;font-size:10px;display:flex;justify-content:space-between}@media(max-width:620px){.page{padding:20px 14px}.summary{grid-template-columns:repeat(2,1fr)}.head{display:block}.stamp{text-align:left;margin-top:12px}table{font-size:10px}th,td{padding:6px 4px}}@media print{.page{max-width:none;padding:0}.section,.metric{break-inside:avoid}body{print-color-adjust:exact;-webkit-print-color-adjust:exact}@page{size:A4;margin:14mm}}
-</style></head><body><main class="page"><header class="head"><div><div class="brand">SPLITTRIP</div><h1>Trip Financial Report</h1><div>${esc(activeTrip.name)}</div><div class="muted">${members.length} members · ${expenses.length} recorded expenses</div></div><div class="stamp">Generated ${esc(exported)}<br>Based on records currently loaded</div></header><section class="summary"><div class="metric"><span>Actual trip spend</span><strong>${money(total)}</strong></div><div class="metric"><span>Total budget</span><strong>${budget?money(budget):'Not set'}</strong><span class="status">${esc(status)}</span></div><div class="metric"><span>${remaining<-.005?'Over budget by':'Budget remaining'}</span><strong>${budget?money(Math.abs(remaining)):'—'}</strong></div><div class="metric"><span>Outstanding suggested transfers</span><strong>${money(plan.reduce((s,t)=>s+Number(t.amount||0),0))}</strong></div></section><section class="section"><h2>Category spending</h2><table><thead><tr><th>Category</th><th class="num">Actual spend</th><th class="num">Allocated budget</th><th class="num">Used</th></tr></thead><tbody>${categoryRows}</tbody></table></section><section class="section"><h2>Member-wise payments and shares</h2><p>Paid shows expenses paid upfront; share shows each member's assigned expense share. Net balance incorporates recorded settlements.</p><table><thead><tr><th>Member</th><th class="num">Paid</th><th class="num">Share</th><th class="num">Net balance</th><th>Status</th></tr></thead><tbody>${memberRows||'<tr><td colspan="5">No member balances available.</td></tr>'}</tbody></table></section><section class="section"><h2>Outstanding settlement suggestions</h2><table><thead><tr><th>From</th><th>To</th><th class="num">Amount</th><th>Status</th></tr></thead><tbody>${outstandingRows||'<tr><td colspan="4">No outstanding suggested transfers.</td></tr>'}</tbody></table></section><section class="section"><h2>Recorded settlement payments</h2><table><thead><tr><th>Date</th><th>From</th><th>To</th><th class="num">Amount</th><th>Status</th></tr></thead><tbody>${paymentRows||'<tr><td colspan="5">No settlement payments recorded.</td></tr>'}</tbody></table></section><div class="note"><strong>Important:</strong> Actual trip spend is calculated from recorded expenses. Settlement payments are shown separately and are not added to expense spend. Outstanding transfers are suggested settlements, not completed payments. SplitTrip does not move money. This report reflects the data currently loaded for this trip at the time of export.</div><footer class="footer"><span>SplitTrip · Trip financial report</span><span>Generated ${esc(exported)}</span></footer></main><script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script>
-<script id="r147471-ios-install-guidance">
-(function(){
-  try {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true;
-    if (!isIOS || isStandalone) return;
-    const bar = document.getElementById('st-pwa-status');
-    const message = document.getElementById('st-pwa-message');
-    const action = document.getElementById('st-pwa-action');
-    if (!bar || !message || !action) return;
-    function showIOSInstallHelp(){
-      if (bar.dataset.kind === 'offline' || bar.dataset.kind === 'update') return;
-      message.textContent = 'Install SplitTrip: tap Share in Safari, then choose “Add to Home Screen”.';
-      action.hidden = false;
-      action.textContent = 'Got it';
-      action.onclick = function(){ bar.dataset.visible = 'false'; };
-      bar.dataset.kind = 'ios-install';
-      bar.dataset.visible = 'true';
-    }
-    window.addEventListener('load', function(){window.setTimeout(showIOSInstallHelp,1800);},{once:true});
-  } catch (error) { console.warn('iOS install guidance unavailable:',error); }
-})();
-</script>
-
-</body></html>`;
+</style></head><body><main class="page"><header class="head"><div><div class="brand">SPLITTRIP</div><h1>Trip Financial Report</h1><div>${esc(activeTrip.name)}</div><div class="muted">${members.length} members · ${expenses.length} recorded expenses</div></div><div class="stamp">Generated ${esc(exported)}<br>Based on records currently loaded</div></header><section class="summary"><div class="metric"><span>Actual trip spend</span><strong>${money(total)}</strong></div><div class="metric"><span>Total budget</span><strong>${budget?money(budget):'Not set'}</strong><span class="status">${esc(status)}</span></div><div class="metric"><span>${remaining<-.005?'Over budget by':'Budget remaining'}</span><strong>${budget?money(Math.abs(remaining)):'—'}</strong></div><div class="metric"><span>Outstanding suggested transfers</span><strong>${money(plan.reduce((s,t)=>s+Number(t.amount||0),0))}</strong></div></section><section class="section"><h2>Category spending</h2><table><thead><tr><th>Category</th><th class="num">Actual spend</th><th class="num">Allocated budget</th><th class="num">Used</th></tr></thead><tbody>${categoryRows}</tbody></table></section><section class="section"><h2>Member-wise payments and shares</h2><p>Paid shows expenses paid upfront; share shows each member's assigned expense share. Net balance incorporates recorded settlements.</p><table><thead><tr><th>Member</th><th class="num">Paid</th><th class="num">Share</th><th class="num">Net balance</th><th>Status</th></tr></thead><tbody>${memberRows||'<tr><td colspan="5">No member balances available.</td></tr>'}</tbody></table></section><section class="section"><h2>Outstanding settlement suggestions</h2><table><thead><tr><th>From</th><th>To</th><th class="num">Amount</th><th>Status</th></tr></thead><tbody>${outstandingRows||'<tr><td colspan="4">No outstanding suggested transfers.</td></tr>'}</tbody></table></section><section class="section"><h2>Recorded settlement payments</h2><table><thead><tr><th>Date</th><th>From</th><th>To</th><th class="num">Amount</th><th>Status</th></tr></thead><tbody>${paymentRows||'<tr><td colspan="5">No settlement payments recorded.</td></tr>'}</tbody></table></section><div class="note"><strong>Important:</strong> Actual trip spend is calculated from recorded expenses. Settlement payments are shown separately and are not added to expense spend. Outstanding transfers are suggested settlements, not completed payments. SplitTrip does not move money. This report reflects the data currently loaded for this trip at the time of export.</div><footer class="footer"><span>SplitTrip · Trip financial report</span><span>Generated ${esc(exported)}</span></footer></main><script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script></body></html>`;
  w.document.open();w.document.write(report);w.document.close();notice('Trip report opened. Choose “Save as PDF” in the print dialog to create your PDF.');
 }
 function renderSettlementOptimizerSummary(){const count=$('settlementTransferCount'),foot=$('settlementOptimizerFootnote');if(!count)return;const balances=calcBalances(),plan=settlementsCalc(),netSum=Math.round(balances.reduce((s,b)=>s+b.net,0)*100)/100;count.textContent=plan.length+' transfer'+(plan.length===1?'':'s');if(foot)foot.textContent=Math.abs(netSum)>.02?'Balance totals do not reconcile to zero ('+money(netSum)+'). Check expense shares and payments before using this plan.':plan.length?'Suggested plan from current loaded balances. Verify each transfer; no payment is initiated.':'All loaded balances are settled, or no transfers are needed.'}
@@ -3218,6 +3191,34 @@ body[data-theme="dark"] .new-user-trip-guide button.secondary {
       }catch(error){console.warn('SplitTrip PWA setup unavailable:',error);}
     });
   }
+})();
+</script>
+
+
+<script id="r147472-ios-install-guidance">
+(function(){
+  try {
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var standalone = window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+    if (!isIOS || standalone) return;
+    var bar = document.getElementById('st-pwa-status');
+    var message = document.getElementById('st-pwa-message');
+    var action = document.getElementById('st-pwa-action');
+    if (!bar || !message || !action) return;
+    function showHelp(){
+      if (bar.dataset.kind === 'offline' || bar.dataset.kind === 'update') return;
+      message.textContent = 'Install SplitTrip: in Safari, tap Share, then choose Add to Home Screen.';
+      action.hidden = false;
+      action.textContent = 'Got it';
+      action.onclick = function(){ bar.dataset.visible = 'false'; };
+      bar.dataset.kind = 'ios-install';
+      bar.dataset.visible = 'true';
+    }
+    if (document.readyState === 'complete') setTimeout(showHelp, 1800);
+    else window.addEventListener('load', function(){ setTimeout(showHelp, 1800); }, {once:true});
+  } catch (err) { console.warn('iOS install guidance unavailable:', err); }
 })();
 </script>
 
