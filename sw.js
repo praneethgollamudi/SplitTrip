@@ -1,51 +1,6 @@
-const CACHE_NAME = 'splittrip-shell-r14-7-46-2';
-const APP_SHELL = [
-  './index.html',
-  './manifest.webmanifest',
-  './favicon.svg',
-  './favicon.svg',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/icon-512-maskable.png'
-];
-self.addEventListener('install', event => {
-  event.waitUntil((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    await cache.addAll(APP_SHELL);
-  })());
-});
-self.addEventListener('activate', event => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.filter(key => key.startsWith('splittrip-shell-') && key !== CACHE_NAME).map(key => caches.delete(key)));
-    await self.clients.claim();
-  })());
-});
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
-});
-self.addEventListener('fetch', event => {
-  const request = event.request;
-  const url = new URL(request.url);
-  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
-  if (url.pathname.includes('/rest/v1/') || url.pathname.includes('/auth/v1/') || url.pathname.includes('/storage/v1/')) return;
-  if (request.mode === 'navigate') {
-    event.respondWith((async () => {
-      try {
-        const response = await fetch(request);
-        if (response && response.ok) {
-          const cache = await caches.open(CACHE_NAME);
-          cache.put('./index.html', response.clone());
-        }
-        return response;
-      } catch (error) {
-        const cache = await caches.open(CACHE_NAME);
-        return (await cache.match('./index.html')) || Response.error();
-      }
-    })());
-    return;
-  }
-  if (APP_SHELL.some(path => new URL(path, self.registration.scope).href === request.url)) {
-    event.respondWith((async () => (await caches.match(request)) || fetch(request))());
-  }
-});
+/* SplitTrip R14.7.46.2 — offline app-shell service worker */
+const CACHE_NAME='splittrip-shell-r14-7-47-1';
+const APP_SHELL=['./index.html','./manifest.webmanifest','./favicon.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-512-maskable.png'];
+self.addEventListener('install',event=>{event.waitUntil((async()=>{const c=await caches.open(CACHE_NAME);await c.add('./index.html');await Promise.allSettled(APP_SHELL.filter(x=>x!=='./index.html').map(x=>c.add(x)));await self.skipWaiting()})())});
+self.addEventListener('activate',event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('splittrip-shell-')&&k!==CACHE_NAME).map(k=>caches.delete(k)));await self.clients.claim()})())});
+self.addEventListener('fetch',event=>{const r=event.request,u=new URL(r.url);if(r.method!=='GET'||u.origin!==self.location.origin||/\/(rest|auth|storage)\/v1\//.test(u.pathname))return;if(r.mode==='navigate'){event.respondWith((async()=>{const c=await caches.open(CACHE_NAME);try{const x=await fetch(r);if(x&&x.ok)await c.put('./index.html',x.clone());return x}catch{const x=await c.match('./index.html');return x||new Response('Connect once and open SplitTrip before using it offline.',{status:503})}})());return}const urls=APP_SHELL.map(x=>new URL(x,self.registration.scope).href);if(urls.includes(r.url))event.respondWith(caches.match(r).then(x=>x||fetch(r))) });
