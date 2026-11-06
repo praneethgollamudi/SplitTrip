@@ -1778,89 +1778,207 @@ body[data-theme="light"] #splitTripOfflineOutbox small{color:#52776b}
 @media(max-width:600px){.st-tool-page-head{gap:8px}.st-tool-page-head h2{font-size:19px}.st-tool-back{padding:8px 10px;font-size:13px}}
 </style>
 
-<style id="r1482-dark-surface-contrast-hotfix">
-/* R14.8.2 — correct hard-coded light surfaces in dark theme */
+<style id="r1482-global-dark-surface-audit">
+/* R14.8.2 — global dark-theme surface and text contrast audit */
+
+/* Neutral cards, rows, panels and disclosure surfaces */
+body[data-theme="dark"] .stat,
+body[data-theme="dark"] .dashboard-stat,
+body[data-theme="dark"] .dashboard-transfer-stat,
+body[data-theme="dark"] .share-row,
+body[data-theme="dark"] .split-helper,
+body[data-theme="dark"] .release7-status,
+body[data-theme="dark"] .r8-role,
+body[data-theme="dark"] .trip-list-card,
+body[data-theme="dark"] .empty,
+body[data-theme="dark"] .advanced-options,
+body[data-theme="dark"] .expense-filter-details,
+body[data-theme="dark"] .natural-entry-details,
+body[data-theme="dark"] .merge-dialog,
+body[data-theme="dark"] .merge-candidate,
+body[data-theme="dark"] .trip-action-card,
+body[data-theme="dark"] .personal-trip-finance-grid>div,
+body[data-theme="dark"] .all-trip-totals>div,
+body[data-theme="dark"] .member-role-guide,
+body[data-theme="dark"] .itinerary-date,
+body[data-theme="dark"] .discovery-source,
+body[data-theme="dark"] .itinerary-empty,
+body[data-theme="dark"] .trip-tools-entry,
+body[data-theme="dark"] .receipt-selection-preview,
+body[data-theme="dark"] .settlement-progress-stat,
+body[data-theme="dark"] .note,
+body[data-theme="dark"] .expense-filter-details[open] summary,
+body[data-theme="dark"] .trip-options summary,
+body[data-theme="dark"] #advancedExpenseOptions,
+body[data-theme="dark"] .natural-entry,
+body[data-theme="dark"] .first-trip-step,
+body[data-theme="dark"] .new-user-choice-grid article,
+body[data-theme="dark"] .r14743-onboarding-step{
+  background:#203638!important;
+  color:#e8f2ef!important;
+  border-color:#40575a!important;
+}
+body[data-theme="dark"] .share-row.selected,
+body[data-theme="dark"] .merge-candidate.selected,
+body[data-theme="dark"] .first-trip-step.is-done{
+  background:#29483e!important;
+  color:#e5f5ed!important;
+  border-color:#527968!important;
+}
+
+/* Inputs and selectors embedded in feature-specific cards */
+body[data-theme="dark"] .field input,
+body[data-theme="dark"] .field select,
+body[data-theme="dark"] .hero input,
+body[data-theme="dark"] .bulk-row input,
+body[data-theme="dark"] .bulk-row select,
+body[data-theme="dark"] .natural-entry input,
+body[data-theme="dark"] .expense-filters input,
+body[data-theme="dark"] .expense-filters select,
+body[data-theme="dark"] #expenseSort,
+body[data-theme="dark"] .expense-filter-quick input,
+body[data-theme="dark"] .trip-assistant-card input,
+body[data-theme="dark"] #expensePageSize,
+body[data-theme="dark"] .trip-list-controls input,
+body[data-theme="dark"] .trip-list-controls select,
+body[data-theme="dark"] .itinerary-form-grid input,
+body[data-theme="dark"] .itinerary-form-grid select,
+body[data-theme="dark"] .itinerary-form-grid textarea{
+  background:#203639!important;
+  color:#edf6f2!important;
+  border-color:#52696b!important;
+  color-scheme:dark;
+}
+body[data-theme="dark"] input::placeholder,
+body[data-theme="dark"] textarea::placeholder{
+  color:#a9bdb7!important;opacity:1!important;
+}
+
+/* Statuses keep their meaning but use dark-compatible surfaces */
+body[data-theme="dark"] #expenseValidation,
+body[data-theme="dark"] .release7-status.error,
+body[data-theme="dark"] .merge-error,
+body[data-theme="dark"] #budgetRadarStatus.over{
+  background:#482f32!important;color:#ffd0ca!important;border-color:#795056!important;
+}
+body[data-theme="dark"] .merge-warning,
+body[data-theme="dark"] .discovery-notice,
+body[data-theme="dark"] .r14741-archived-banner,
+body[data-theme="dark"] #budgetRadarCard #budgetRadarStatus.near,
+body[data-theme="dark"] .r8-archive{
+  background:#403b2c!important;color:#f5e8bd!important;border-color:#756844!important;
+}
+body[data-theme="dark"] .r8-archive.preview{
+  background:#482f32!important;color:#ffd0ca!important;border-color:#795056!important;
+}
+body[data-theme="dark"] #budgetRadarStatus.neutral{
+  background:#344447!important;color:#d2dfda!important;border-color:#526568!important;
+}
+
+/* Utility, help and small inline surfaces */
+body[data-theme="dark"] .quick-hint,
+body[data-theme="dark"] .preset-chip,
+body[data-theme="dark"] .member-actions .merge-action,
+body[data-theme="dark"] .trip-options summary,
+body[data-theme="dark"] kbd{
+  background:#2b4143!important;color:#e8f2ef!important;border-color:#52696b!important;
+}
+body[data-theme="dark"] .discovery-source .source-icon{
+  background:#344a43!important;color:#e5f5ed!important;
+}
+body[data-theme="dark"] .hero .total{
+  background:rgba(255,255,255,.09)!important;color:#edf6f2!important;
+}
+body[data-theme="dark"] .hero input{
+  background:rgba(16,35,37,.55)!important;color:#edf6f2!important;border-color:#587174!important;
+}
+body[data-theme="dark"] .trip-start-actions #showJoinTrip{
+  background:#294346!important;color:#edf6f2!important;border-color:#587174!important;
+}
+body[data-theme="dark"] .trip-start-actions #showCreateTrip{
+  background:#9d4c3d!important;color:#fff4ef!important;border-color:#c16b59!important;
+}
+body[data-theme="dark"] button.danger{
+  background:#512f32!important;color:#ffd0ca!important;border-color:#795056!important;
+}
+body[data-theme="dark"] .member-role-badge.guest,
+body[data-theme="dark"] .r14744-guest-status{
+  background:#403b2c!important;color:#f5e8bd!important;border-color:#756844!important;
+}
+body[data-theme="dark"] #tab-members #members .member-finance .member-net.negative{
+  background:#493735!important;color:#ffb0a5!important;border-color:#76504b!important;
+}
+body[data-theme="dark"] #tab-members #members .member-finance .member-net.neutral{
+  background:#344447!important;color:#d2dfda!important;border-color:#526568!important;
+}
+
+/* Tables, links, secondary labels and separators */
+body[data-theme="dark"] th{
+  background:#263d40!important;color:#e8f2ef!important;border-color:#40575a!important;
+}
+body[data-theme="dark"] td{color:#e8f2ef;border-color:#40575a}
+body[data-theme="dark"] .note{color:#c6d6d1!important}
+body[data-theme="dark"] .muted,
+body[data-theme="dark"] .hint,
+body[data-theme="dark"] .field small,
+body[data-theme="dark"] .quick-hint,
+body[data-theme="dark"] .sub{color:#b8c9c4}
+body[data-theme="dark"] .card h1,
+body[data-theme="dark"] .card h2,
+body[data-theme="dark"] .card h3,
+body[data-theme="dark"] .card strong,
+body[data-theme="dark"] .stat strong{color:#edf6f2}
+
+/* Global search/command palette — darken the dialog and every nested control */
+body[data-theme="dark"] .command-dialog{
+  background:#1b3032!important;color:#edf6f2!important;border-color:#496064!important;
+}
+body[data-theme="dark"] .command-dialog *{color:inherit}
+body[data-theme="dark"] .command-search-row{
+  background:#1b3032!important;border-color:#496064!important;color:#c5d8d0!important;
+}
+body[data-theme="dark"] .command-search-row input{
+  background:#1b3032!important;color:#edf6f2!important;caret-color:#d8f58b;
+}
+body[data-theme="dark"] .command-quick-actions button{
+  background:#263d40!important;color:#edf6f2!important;border-color:#496064!important;
+}
+body[data-theme="dark"] .command-result{
+  background:#22383b!important;color:#edf6f2!important;border:1px solid #3e575a!important;
+}
+body[data-theme="dark"] .command-result:hover,
+body[data-theme="dark"] .command-result[aria-selected="true"]{
+  background:#2b4848!important;
+}
+body[data-theme="dark"] .command-result-icon{
+  background:#34514b!important;color:#e6f4dc!important;
+}
+body[data-theme="dark"] .command-footer{
+  background:#1b3032!important;color:#b5c7c2!important;border-color:#496064!important;
+}
+body[data-theme="dark"] .command-dialog kbd{
+  background:#304649!important;color:#edf6f2!important;border-color:#587074!important;
+}
+
+/* Catch inline-light panels in the trip archive/closure workflow */
 body[data-theme="dark"] .r8-archive,
 body[data-theme="dark"] .r8-archive.preview,
 body[data-theme="dark"] .r14741-archived-banner,
 body[data-theme="dark"] .r14741-archive-card,
 body[data-theme="dark"] .r14741-closure-card{
-  background:#203638!important;
-  border-color:#6b6650!important;
-  color:#edf6f2!important;
+  background:#203638!important;color:#edf6f2!important;border-color:#6b6650!important;
 }
 body[data-theme="dark"] .r8-archive *,
 body[data-theme="dark"] .r14741-archived-banner *,
 body[data-theme="dark"] .r14741-archive-card *,
-body[data-theme="dark"] .r14741-closure-card *{
-  color:inherit;
-}
+body[data-theme="dark"] .r14741-closure-card *{color:inherit}
 body[data-theme="dark"] .r8-archive .muted,
 body[data-theme="dark"] .r14741-archived-banner .muted,
 body[data-theme="dark"] .r14741-archive-card .muted,
-body[data-theme="dark"] .r14741-closure-card .muted{
-  color:#b9cbc5!important;
-}
-body[data-theme="dark"] #commandPalette .command-dialog{
-  background:#1b3032!important;
-  color:#edf6f2!important;
-  border-color:#496064!important;
-}
-body[data-theme="dark"] #commandPalette .command-dialog *{color:inherit}
-body[data-theme="dark"] #commandPalette .command-heading .muted,
-body[data-theme="dark"] #commandPalette .command-empty,
-body[data-theme="dark"] #commandPalette .command-footer{
-  color:#b5c7c2!important;
-}
-body[data-theme="dark"] #commandPalette .command-search-row{
-  background:#1b3032!important;
-  border-color:#496064!important;
-  color:#c5d8d0!important;
-}
-body[data-theme="dark"] #commandPalette .command-search-row input{
-  background:#1b3032!important;
-  color:#edf6f2!important;
-  caret-color:#d8f58b;
-}
-body[data-theme="dark"] #commandPalette .command-quick-actions button{
-  background:#263d40!important;
-  color:#edf6f2!important;
-  border-color:#496064!important;
-}
-body[data-theme="dark"] #commandPalette .command-result{
-  background:#22383b!important;
-  color:#edf6f2!important;
-  border:1px solid #3e575a!important;
-}
-body[data-theme="dark"] #commandPalette .command-result:hover,
-body[data-theme="dark"] #commandPalette .command-result[aria-selected="true"]{
-  background:#2b4848!important;
-}
-body[data-theme="dark"] #commandPalette .command-result-icon{
-  background:#34514b!important;
-  color:#e6f4dc!important;
-}
-body[data-theme="dark"] #commandPalette kbd{
-  background:#304649!important;
-  color:#edf6f2!important;
-  border-color:#587074!important;
-}
-body[data-theme="dark"] #commandPalette .command-footer{
-  border-color:#496064!important;
-}
-body[data-theme="dark"] #commandPalette .command-search-row button{
-  background:#2b4143!important;
-  color:#edf6f2!important;
-  border-color:#587074!important;
-}
-/* Catch remaining pale utility cards without changing form controls or status colors. */
-body[data-theme="dark"] .st-tool-page .card,
-body[data-theme="dark"] .st-tool-page .r8-archive,
-body[data-theme="dark"] .st-tool-page .r14745-notification-card{
-  background-color:#203638;
-  color:#edf6f2;
-  border-color:#496064;
-}
+body[data-theme="dark"] .r14741-closure-card .muted{color:#b9cbc5!important}
+
+/* Maintain native dark rendering for browser-provided form controls */
+body[data-theme="dark"]{color-scheme:dark}
 </style>
 
 </head><body><main class="shell">
