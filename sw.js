@@ -1,5 +1,5 @@
 /* SplitTrip R14.7.46.2 — offline app-shell service worker */
-const CACHE_NAME = 'splittrip-shell-r14-8-4-accessibility-polish';
+const CACHE_NAME = 'splittrip-shell-r14-8-5-interaction-polish';
 const APP_SHELL=['./index.html','./manifest.webmanifest','./favicon.svg','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-512-maskable.png'];
 self.addEventListener('install',event=>{event.waitUntil((async()=>{const c=await caches.open(CACHE_NAME);await c.add('./index.html');await Promise.allSettled(APP_SHELL.filter(x=>x!=='./index.html').map(x=>c.add(x)));await self.skipWaiting()})())});
 self.addEventListener('activate',event=>{event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('splittrip-shell-')&&k!==CACHE_NAME).map(k=>caches.delete(k)));await self.clients.claim()})())});
