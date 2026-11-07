@@ -1550,6 +1550,15 @@ body[data-theme="dark"] hr,body[data-theme="dark"] .divider{border-color:var(--l
 body[data-theme="dark"] :where(button,a,input,select,textarea,[tabindex]):focus-visible{outline-color:#83e4c5!important}
 button:disabled{opacity:.58}
 @media(prefers-reduced-motion:no-preference){button,a,.card,.stat{transition:border-color .16s ease,background-color .16s ease,box-shadow .16s ease}}
+/* R14.8.7: keep the expanded member balance breakdown readable in dark mode. */
+body[data-theme="dark"] #balanceList [id^="balance-detail-"]{
+  background:#263c3e!important;
+  color:#e8f2ef!important;
+  border:1px solid #3a5052;
+}
+body[data-theme="dark"] #balanceList [id^="balance-detail-"] .muted{
+  color:#b5c7c2!important;
+}
 </style>
 
 
@@ -2908,7 +2917,7 @@ async function archiveActiveTrip(){
  if(isTripArchived())return;
  try{const queued=(await getOfflineExpenses()).filter(x=>String(x.trip_id)===String(activeTrip.id));if(queued.length){notice('Cannot close this trip yet: '+queued.length+' expense(s) are saved on this device but not synced. Connect and sync them first.',true);return}}catch(err){notice('Could not verify pending offline expenses, so the trip was not closed. '+(err?.message||''),true);return}
  const open=settlementsCalc();
- if(open.length){notice('This trip still has '+open.length+' outstanding suggested settlement(s). Record the payments before closing it.',true);document.querySelector('[data-tab=settle]')?.click();return}
+ if(open.length){notice('This trip still has '+open.length+' outstanding suggested settlement(s). Record the payments before closing it.',true);switchSplitTripTab('settle');return}
  if(!confirm('Close and archive “'+(activeTrip.name||'this trip')+'”? Everyone will retain read-only access to its expenses, balances, settlements and reports. The trip can be reopened later by an owner.'))return;
  const btn=$('r14741ArchiveAction');if(btn)btn.disabled=true;
  try{const {error}=await sb.rpc('archive_trip',{p_trip_id:activeTrip.id});if(error)throw error;await loadTrips();activeTrip=trips.find(t=>String(t.id)===String(activeTrip?.id))||activeTrip;await loadTripData();notice('Trip archived. Members can still view its history and reports.')}
@@ -3241,7 +3250,7 @@ $('expenseForm').onsubmit=async e=>{
   if(receiptPath&&editing)await sb.storage.from('splittrip-receipts').remove([receiptPath]);
   notice('Could not save expense: '+(err?.message||'Unknown error')+'. '+(editing?'Your previous expense and split were not changed.':'Your draft ID and receipt are retained so retrying the same expense cannot create a duplicate.'),true)
  }finally{saveButton.disabled=false;saveButton.textContent=oldLabel;saveAndAddAnotherRequested=false}
-};function openQuickAddExpense(){if(!activeTrip||!user){notice('Open a trip and wait for it to finish loading before adding an expense.',true);return}const form=$('expenseForm');if(!form){notice('The expense form is unavailable. Refresh the page and try again.',true);return}quickExpenseReturnFocus=document.activeElement;if(!editingExpenseId)resetExpenseForm();openQuickExpenseModal()}const quickAddButton=$('dashboardAddExpense');if(quickAddButton){quickAddButton.type='button';quickAddButton.addEventListener('click',openQuickAddExpense)}const stickyAddButton=$('splitTripQuickAdd');if(stickyAddButton)stickyAddButton.addEventListener('click',openQuickAddExpense);$('cancelEditExpense')?.addEventListener('click',closeQuickExpenseModal);$('openSettleFromBalances')?.addEventListener('click',()=>document.querySelector('[data-tab="settle"]').click());const repeatButton=$('repeatLastExpense');if(repeatButton)repeatButton.addEventListener('click',repeatLastExpense);$('dashboardViewBalances').onclick=()=>document.querySelector('[data-tab="balances"]').click();$('dashboardViewExpenses').onclick=()=>document.querySelector('[data-tab="expenses"]').click();$('dashboardViewSettle').onclick=()=>document.querySelector('[data-tab="settle"]').click();const transferStat=$('dashboardTransferStat');if(transferStat)transferStat.onclick=()=>document.querySelector('[data-tab="settle"]').click();
+};function openQuickAddExpense(){if(!activeTrip||!user){notice('Open a trip and wait for it to finish loading before adding an expense.',true);return}const form=$('expenseForm');if(!form){notice('The expense form is unavailable. Refresh the page and try again.',true);return}quickExpenseReturnFocus=document.activeElement;if(!editingExpenseId)resetExpenseForm();openQuickExpenseModal()}const quickAddButton=$('dashboardAddExpense');if(quickAddButton){quickAddButton.type='button';quickAddButton.addEventListener('click',openQuickAddExpense)}const stickyAddButton=$('splitTripQuickAdd');if(stickyAddButton)stickyAddButton.addEventListener('click',openQuickAddExpense);$('cancelEditExpense')?.addEventListener('click',closeQuickExpenseModal);$('openSettleFromBalances')?.addEventListener('click',()=>switchSplitTripTab('settle'));const repeatButton=$('repeatLastExpense');if(repeatButton)repeatButton.addEventListener('click',repeatLastExpense);$('dashboardViewBalances').onclick=()=>document.querySelector('[data-tab="balances"]').click();$('dashboardViewExpenses').onclick=()=>document.querySelector('[data-tab="expenses"]').click();$('dashboardViewSettle').onclick=()=>switchSplitTripTab('settle');const transferStat=$('dashboardTransferStat');if(transferStat)transferStat.onclick=()=>switchSplitTripTab('settle');
 function parseNaturalExpense(){const raw=$('naturalExpense').value.trim();if(!raw){$('naturalExpenseFeedback').textContent='Type an expense description first.';return}const amountMatch=raw.match(/(?:₹|rs\.?\s*|inr\s*)?([0-9]{1,3}(?:[, ][0-9]{3})+(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i);if(!amountMatch){$('naturalExpenseFeedback').textContent='Could not find an amount. You can still fill the fields manually.';return}const amount=Number(amountMatch[1].replace(/[, ]/g,''));if(!Number.isFinite(amount)||amount<=0){$('naturalExpenseFeedback').textContent='Please check the amount in your sentence.';return}let desc=raw.replace(amountMatch[0],' ').replace(/\b(split\s+(equally|evenly|among\s+everyone|between\s+everyone))\b/ig,' ').replace(/\b(paid\s+by|from)\s+[^,;]+/ig,' ').replace(/\b(equal\s+split|split\s+among\s+\d+)\b/ig,' ').replace(/[,-]+/g,' ').replace(/\s+/g,' ').trim();let payer=null;const payerMatch=raw.match(/\bpaid\s+by\s+([^,;]+)/i);if(payerMatch){const candidate=payerMatch[1].replace(/\b(split\s+.*|and\s+split.*)$/i,'').trim();payer=members.find(m=>memberName(m.user_id).toLowerCase()===candidate.toLowerCase())||members.find(m=>memberName(m.user_id).toLowerCase().includes(candidate.toLowerCase())&&candidate.length>=2);if(!payer){$('naturalExpenseFeedback').textContent='Amount detected, but payer “'+candidate+'” did not match a member. Please choose the payer manually.'}}const lower=raw.toLowerCase();let category='Other';if(/dinner|lunch|breakfast|food|restaurant|coffee|snack|drink|grocer|pizza|meal/.test(lower))category='Food & drinks';else if(/taxi|cab|uber|ola|fuel|petrol|parking|toll|bus|train|flight|transport/.test(lower))category='Transport';else if(/hotel|stay|room|resort|accommodation|airbnb/.test(lower))category='Accommodation';else if(/ticket|activity|museum|tour|boat|casino|club|entry/.test(lower))category='Activities';$('amt').value=amount.toFixed(2);$('desc').value=desc||raw.replace(amountMatch[0],'').trim()||'Group expense';$('category').value=category;if(payer)$('payer').value=payer.user_id;const countMatch=raw.match(/\bsplit\s+among\s+(\d+)\b/i);if(countMatch&&Number(countMatch[1])!==members.length){$('advancedExpenseOptions').open=true;$('naturalExpenseFeedback').textContent='Filled amount and description. The sentence says split among '+countMatch[1]+', but there are '+members.length+' trip members. Choose the exact participants in Split & receipt options before saving.'}else{$('naturalExpenseFeedback').textContent='Fields filled. Check the payer and participants, then save.'}document.querySelectorAll('[data-preset]').forEach(b=>b.classList.toggle('preset-selected',b.dataset.category===category&&b.dataset.preset.toLowerCase()===($('desc').value||'').toLowerCase()));$('expenseForm').scrollIntoView({behavior:'smooth',block:'start'})}$('parseNaturalExpense').onclick=parseNaturalExpense;$('naturalExpense').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();parseNaturalExpense()}});
 function resetExpensePageAndRender(){expenseCurrentPage=1;renderExpenseHistory()}
 ['expenseSearch','expensePayerFilter','expenseCategoryFilter','expenseDateFilter'].forEach(id=>$(id)?.addEventListener('input',resetExpensePageAndRender));
@@ -3358,7 +3367,7 @@ document.addEventListener('click',e=>{const newCreate=e.target.closest('[data-ne
  $('commandQuickActions').addEventListener('click',e=>{
   const b=e.target.closest('[data-command-action]');if(!b)return;const action=b.dataset.commandAction;closePalette();
   if(action==='add')openQuickAddExpense();
-  if(action==='settle')document.querySelector('[data-tab="settle"]')?.click();
+  if(action==='settle')switchSplitTripTab('settle');
   if(action==='invite'){document.querySelector('[data-tab="members"]')?.click();if(activeTrip?.role==='owner')show('addMemberPanel',true);else notice('Ask the trip owner to add a member.')}if(action==='itinerary')document.querySelector('[data-tab="itinerary"]')?.click()
  });
  document.addEventListener('keydown',e=>{
@@ -3366,7 +3375,7 @@ document.addEventListener('click',e=>{const newCreate=e.target.closest('[data-ne
   if(shortcut){e.preventDefault();if(backdrop.classList.contains('hidden'))openPalette();else closePalette();return}
   if(!backdrop.classList.contains('hidden')||isTyping(e.target)||e.altKey||e.ctrlKey||e.metaKey)return;
   if(key==='a'){e.preventDefault();openQuickAddExpense()}
-  if(key==='s'){e.preventDefault();document.querySelector('[data-tab="settle"]')?.click()}
+  if(key==='s'){e.preventDefault();switchSplitTripTab('settle')}
   if(key==='i'){e.preventDefault();document.querySelector('[data-tab="members"]')?.click();if(activeTrip?.role==='owner')show('addMemberPanel',true)}
   if(key==='/' ){e.preventDefault();openPalette()}
  });
